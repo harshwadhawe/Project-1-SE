@@ -1,0 +1,9 @@
+<h1>Parts</h1>
+<ul>
+  <% @parts.each do |p| %>
+    <li>
+      <%= link_to p.name, part_path(p) %>
+      — <%= p.brand %> • <%= p.type %>
+    </li>
+  <% end %>
+</ul>

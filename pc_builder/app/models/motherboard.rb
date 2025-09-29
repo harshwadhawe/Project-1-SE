@@ -1,0 +1,2 @@
+class Motherboard < Part
+end

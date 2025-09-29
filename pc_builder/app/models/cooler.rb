@@ -1,0 +1,2 @@
+class Cooler < Part
+end

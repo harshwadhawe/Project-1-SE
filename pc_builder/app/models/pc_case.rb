@@ -1,0 +1,2 @@
+class PcCase < Part
+end

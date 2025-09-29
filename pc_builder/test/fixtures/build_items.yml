@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  build: one
+  part: one
+  quantity: 1
+  note: MyText
+
+two:
+  build: two
+  part: two
+  quantity: 1
+  note: MyText
