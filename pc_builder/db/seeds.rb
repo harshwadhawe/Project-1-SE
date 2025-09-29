@@ -1,106 +1,240 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
+# This file should contain all the record creation needed to seed the database with its default values.
+# The data can then be loaded with the `bin/rails db:seed` command (or created alongside the database with `bin/rails db:setup`).
 #
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
-puts "Seeding database..."
+# To ensure the seed process is idempotent (can be run multiple times without creating duplicates),
+# we will destroy all existing parts first.
 
-User.find_or_create_by!(email: "harsh@example.com") do |u|
-  u.name = "Harsh"
+puts "Destroying existing parts..."
+Part.destroy_all
+puts "Existing parts destroyed."
+
+puts "Seeding new parts..."
+
+# Wrapping the creation in a transaction ensures that if any record fails, all previous creations in this block are rolled back.
+ActiveRecord::Base.transaction do
+  # ===================================================================
+  # CPUs
+  # ===================================================================
+  Cpu.create!([
+    {
+      brand: "Intel",
+      name: "Core i7-13700K",
+      model_number: "BX8071513700K",
+      price_cents: 38999,
+      wattage: 125,
+      cpu_cores: 16,
+      cpu_threads: 24,
+      cpu_core_clock: 3.4,
+      cpu_boost_clock: 5.4
+    },
+    {
+      brand: "AMD",
+      name: "Ryzen 7 7800X3D",
+      model_number: "100-100000910WOF",
+      price_cents: 39900,
+      wattage: 120,
+      cpu_cores: 8,
+      cpu_threads: 16,
+      cpu_core_clock: 4.2,
+      cpu_boost_clock: 5.0
+    }
+  ])
+
+  # ===================================================================
+  # # GPUs (Graphics Cards)
+  # ===================================================================
+  Gpu.create!([
+    {
+      brand: "NVIDIA",
+      name: "GeForce RTX 4070 SUPER",
+      model_number: "900-1G141-2534-000",
+      price_cents: 59999,
+      wattage: 220,
+      gpu_memory: 12,
+      gpu_memory_type: "GDDR6X",
+      gpu_core_clock_mhz: 1980,
+      gpu_core_boost_mhz: 2475
+    },
+    {
+      brand: "AMD",
+      name: "Radeon RX 7800 XT",
+      model_number: "MBA-7800XT-16G",
+      price_cents: 49900,
+      wattage: 263,
+      gpu_memory: 16,
+      gpu_memory_type: "GDDR6",
+      gpu_core_clock_mhz: 2124,
+      gpu_core_boost_mhz: 2430
+    }
+  ])
+
+  # ===================================================================
+  # Motherboards
+  # ===================================================================
+  Motherboard.create!([
+    {
+      brand: "ASUS",
+      name: "TUF GAMING Z790-PLUS WIFI",
+      model_number: "TUF GAMING Z790-PLUS WIFI",
+      price_cents: 22999,
+      wattage: 0,
+      mb_socket: "LGA1700",
+      mb_chipset: "Z790",
+      mb_form_factor: "ATX",
+      mb_ram_slots: 4,
+      mb_max_ram_gb: 128
+    },
+    {
+      brand: "Gigabyte",
+      name: "B650 AORUS ELITE AX",
+      model_number: "B650 AORUS ELITE AX",
+      price_cents: 21999,
+      wattage: 0,
+      mb_socket: "AM5",
+      mb_chipset: "B650",
+      mb_form_factor: "ATX",
+      mb_ram_slots: 4,
+      mb_max_ram_gb: 128
+    }
+  ])
+
+  # ===================================================================
+  # Memory (RAM)
+  # ===================================================================
+  Memory.create!([
+    {
+      brand: "G.Skill",
+      name: "Ripjaws S5",
+      model_number: "F5-6000J3238F16GX2-RS5K",
+      price_cents: 9499,
+      wattage: 0,
+      mem_type: "DDR5",
+      mem_kit_capacity_gb: 32,
+      mem_modules: 2,
+      mem_speed_mhz: 6000,
+      mem_first_word_latency: 10
+    },
+    {
+      brand: "Corsair",
+      name: "Vengeance LPX",
+      model_number: "CMK32GX4M2E3200C16",
+      price_cents: 6999,
+      wattage: 0,
+      mem_type: "DDR4",
+      mem_kit_capacity_gb: 32,
+      mem_modules: 2,
+      mem_speed_mhz: 3200,
+      mem_first_word_latency: 11
+    }
+  ])
+
+  # ===================================================================
+  # Storage
+  # ===================================================================
+  Storage.create!([
+    {
+      brand: "Samsung",
+      name: "980 Pro",
+      model_number: "MZ-V8P1T0B/AM",
+      price_cents: 9999,
+      wattage: 0,
+      stor_type: "SSD",
+      stor_interface: "NVMe PCIe 4.0",
+      stor_capacity_gb: 1000
+    },
+    {
+      brand: "Seagate",
+      name: "Barracuda Compute",
+      model_number: "ST2000DM008",
+      price_cents: 5499,
+      wattage: 0,
+      stor_type: "HDD",
+      stor_interface: "SATA III",
+      stor_capacity_gb: 2000
+    }
+  ])
+
+  # ===================================================================
+  # Coolers
+  # ===================================================================
+  Cooler.create!([
+    {
+      brand: "Noctua",
+      name: "NH-D15",
+      model_number: "NH-D15",
+      price_cents: 10995,
+      wattage: 0,
+      cooler_type: "Air",
+      cooler_fan_size_mm: 140,
+      cooler_sockets: "AM5, AM4, LGA1700, LGA1200"
+    },
+    {
+      brand: "Corsair",
+      name: "iCUE H150i ELITE CAPELLIX XT",
+      model_number: "CW-9060070-WW",
+      price_cents: 21999,
+      wattage: 0,
+      cooler_type: "Liquid",
+      cooler_fan_size_mm: 120,
+      cooler_sockets: "AM5, AM4, LGA1700, LGA1200"
+    }
+  ])
+
+  # ===================================================================
+  # Cases
+  # ===================================================================
+  Case.create!([
+    {
+      brand: "Lian Li",
+      name: "O11 Dynamic EVO",
+      model_number: "O11DEX",
+      price_cents: 16999,
+      wattage: 0,
+      case_type: "Mid Tower",
+      case_supported_mb: "ATX, Micro-ATX, Mini-ITX",
+      case_color: "Black"
+    },
+    {
+      brand: "Cooler Master",
+      name: "MasterBox NR200P",
+      model_number: "MCB-NR200P-KGNN-S00",
+      price_cents: 10499,
+      wattage: 0,
+      case_type: "SFF",
+      case_supported_mb: "Mini-ITX",
+      case_color: "Black"
+    }
+  ])
+
+  # ===================================================================
+  # PSUs (Power Supply Units)
+  # ===================================================================
+  Psu.create!([
+    {
+      brand: "Corsair",
+      name: "RM850e",
+      model_number: "CP-9020263-NA",
+      price_cents: 11999,
+      wattage: 850, # The main wattage is inherited from Part
+      psu_efficiency: "80+ Gold",
+      psu_modularity: "Full",
+      # psu_wattage is a string in your diagram, but the integer `wattage` field is more useful.
+      # If you need this field, you can set it to "850W".
+      psu_wattage: "850W"
+    },
+    {
+      brand: "SeaSonic",
+      name: "FOCUS Plus Gold",
+      model_number: "SSR-750FX",
+      price_cents: 10499,
+      wattage: 750,
+      psu_efficiency: "80+ Gold",
+      psu_modularity: "Full",
+      psu_wattage: "750W"
+    }
+  ])
 end
 
+puts "Finished seeding database."
+puts "Created #{Part.count} parts in total."
 
-Cpu.find_or_create_by!(brand: "Intel", name: "Core i7-14700K", model_number: "i7-14700K") do |p|
-  p.price_cents = 41900
-  p.wattage = 125
-end
-
-Cpu.find_or_create_by!(brand: "AMD", name: "Ryzen 7 7800X3D", model_number: "7800X3D") do |p|
-  p.price_cents  = 39900
-  p.wattage      = 120
-  p.cpu_cores    = 8
-  p.cpu_threads  = 16
-  p.cpu_base_ghz = 4.2
-  p.cpu_boost_ghz= 5.0
-  p.cpu_socket   = "AM5"
-  p.cpu_tdp_w    = 120
-  p.cpu_cache_mb = 104
-  p.cpu_igpu     = nil
-end
-
-
-# GPU
-Gpu.find_or_create_by!(brand: "NVIDIA", name: "RTX 4080 Super", model_number: "RTX4080S") do |p|
-  p.price_cents = 119900
-  p.wattage = 320
-end
-Gpu.find_or_create_by!(brand: "AMD", name: "Radeon RX 7900 XT", model_number: "RX7900XT") do |p|
-  p.price_cents = 89900
-  p.wattage = 300
-end
-
-# Motherboard
-Motherboard.find_or_create_by!(brand: "ASUS", name: "ROG Strix B650E-F", model_number: "B650E-F") do |p|
-  p.price_cents = 25900
-  p.wattage = 30
-end
-Motherboard.find_or_create_by!(brand: "MSI", name: "MAG Z790 Tomahawk", model_number: "Z790TOMAHAWK") do |p|
-  p.price_cents = 28900
-  p.wattage = 35
-end
-
-# Memory
-Memory.find_or_create_by!(brand: "G.Skill", name: "Trident Z5 RGB 32GB DDR5-6000", model_number: "F5-6000J3238F16GX2-TZ5RK") do |p|
-  p.price_cents = 16900
-  p.wattage = 10
-end
-Memory.find_or_create_by!(brand: "Corsair", name: "Vengeance DDR5 64GB (2x32GB)", model_number: "CMK64GX5M2B5600C40") do |p|
-  p.price_cents = 25900
-  p.wattage = 12
-end
-
-# Storage
-Storage.find_or_create_by!(brand: "Samsung", name: "990 Pro 2TB NVMe SSD", model_number: "MZ-V9P2T0BW") do |p|
-  p.price_cents = 21900
-  p.wattage = 8
-end
-Storage.find_or_create_by!(brand: "Western Digital", name: "Black SN850X 4TB NVMe", model_number: "WDS400T2X0E") do |p|
-  p.price_cents = 39900
-  p.wattage = 10
-end
-
-# Cooler
-Cooler.find_or_create_by!(brand: "Noctua", name: "NH-D15", model_number: "NH-D15") do |p|
-  p.price_cents = 9990
-  p.wattage = 5
-end
-Cooler.find_or_create_by!(brand: "Corsair", name: "iCUE H150i Elite Capellix XT", model_number: "CW-9060065-WW") do |p|
-  p.price_cents = 18900
-  p.wattage = 6
-end
-
-# Case (PcCase)
-PcCase.find_or_create_by!(brand: "Fractal Design", name: "Meshify 2", model_number: "FD-C-MES2A-03") do |p|
-  p.price_cents = 16900
-  p.wattage = 0
-end
-PcCase.find_or_create_by!(brand: "NZXT", name: "H7 Flow", model_number: "CM-H71FB-01") do |p|
-  p.price_cents = 13900
-  p.wattage = 0
-end
-
-# PSU
-Psu.find_or_create_by!(brand: "Corsair", name: "RM850x 850W Gold", model_number: "CP-9020200-NA") do |p|
-  p.price_cents = 13900
-  p.wattage = 0
-end
-Psu.find_or_create_by!(brand: "Seasonic", name: "Prime TX-1000 1000W Titanium", model_number: "SSR-1000TR") do |p|
-  p.price_cents = 24900
-  p.wattage = 0
-end
-
-puts "Seeded: #{User.count} users, #{Cpu.count} CPUs, #{Gpu.count} GPUs, #{Motherboard.count} motherboards, #{Memory.count} memory kits, #{Storage.count} storage drives, #{Cooler.count} coolers, #{PcCase.count} cases, #{Psu.count} PSUs"
