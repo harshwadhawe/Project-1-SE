@@ -1,0 +1,39 @@
+<h1>New Build</h1>
+
+<%= form_with model: @build do |form| %>
+  <div>
+    <%= form.label :name %><br>
+    <%= form.text_field :name %>
+    <% if @build.errors[:name].any? %>
+      <div style="color:red;"><%= @build.errors[:name].first %></div>
+    <% end %>
+  </div>
+
+  <h2>Choose Parts</h2>
+  <% @parts_by_category.each do |cat_name, parts| %>
+    <fieldset style="margin: 1rem 0; padding: 0.5rem; border: 1px solid #ccc;">
+      <legend><strong><%= cat_name %></strong></legend>
+
+      <% if parts.any? %>
+        <% parts.each do |p| %>
+          <div style="margin: 0.25rem 0;">
+            <%= check_box_tag "build[part_ids][]", p.id, false %>
+            <%= "#{p.brand} #{p.name}" %>
+            <% if p.model_number.present? %>(<%= p.model_number %>)<% end %>
+
+            <%= number_field_tag "build[quantities][#{p.id}]", 1,
+                  min: 1, style: "width: 4rem; margin-left:1rem;" %>
+          </div>
+        <% end %>
+      <% else %>
+        <em>No parts available in this category.</em>
+      <% end %>
+    </fieldset>
+  <% end %>
+
+  <div>
+    <%= form.submit "Create Build" %>
+  </div>
+<% end %>
+
+<%= link_to "Back", builds_path %>

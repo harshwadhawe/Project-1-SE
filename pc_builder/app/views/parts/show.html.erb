@@ -1,0 +1,14 @@
+<h1><%= @part.name %></h1>
+<p><strong>Brand:</strong> <%= @part.brand %></p>
+<p><strong>Model #:</strong> <%= @part.model_number %></p>
+<p><strong>Type:</strong> <%= @part.type %></p>
+<p><strong>Wattage:</strong> <%= @part.wattage || 0 %> W</p>
+<p><strong>Price:</strong> <%= number_to_currency((@part.price_cents || 0)/100.0) %></p>
+
+<hr>
+<% partial_name = "parts/details_#{@part.type.underscore}" %>
+<% begin %>
+  <%= render partial: partial_name, locals: { part: @part } %>
+<% rescue ActionView::MissingTemplate %>
+  <p><em>No extra specs available for this part.</em></p>
+<% end %>

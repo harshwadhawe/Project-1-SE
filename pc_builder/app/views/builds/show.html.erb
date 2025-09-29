@@ -1,0 +1,18 @@
+<h1><%= @build.name %></h1>
+
+<h2>Selected Parts</h2>
+<% if @build.build_items.any? %>
+  <ul>
+    <% @build.build_items.includes(:part).each do |bi| %>
+      <li>
+        <strong><%= bi.part.type %></strong> — 
+        <%= bi.part.brand %> <%= bi.part.name %> 
+        (Qty: <%= bi.quantity %>)
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No parts selected.</p>
+<% end %>
+
+<%= link_to "All Builds", builds_path %>

@@ -1,0 +1,2 @@
+class Gpu < Part
+end

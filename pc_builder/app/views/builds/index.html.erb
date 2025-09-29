@@ -1,0 +1,7 @@
+<h1>All Builds</h1>
+<%= link_to "New Build", new_build_path %>
+<ul>
+  <% @builds.each do |b| %>
+    <li><%= link_to b.name, b %> — <%= pluralize(b.parts.count, "part") %></li>
+  <% end %>
+</ul>
