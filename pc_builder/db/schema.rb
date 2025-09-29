@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_29_164608) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_29_201957) do
   create_table "build_items", force: :cascade do |t|
     t.integer "build_id", null: false
     t.integer "part_id", null: false
@@ -42,12 +42,34 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_29_164608) do
     t.datetime "updated_at", null: false
     t.integer "cpu_cores"
     t.integer "cpu_threads"
-    t.decimal "cpu_base_ghz", precision: 4, scale: 2
-    t.decimal "cpu_boost_ghz", precision: 4, scale: 2
-    t.string "cpu_socket"
-    t.integer "cpu_tdp_w"
-    t.integer "cpu_cache_mb"
-    t.string "cpu_igpu"
+    t.decimal "cpu_core_clock"
+    t.decimal "cpu_boost_clock"
+    t.integer "gpu_memory"
+    t.string "gpu_memory_type"
+    t.integer "gpu_core_clock_mhz"
+    t.integer "gpu_core_boost_mhz"
+    t.string "mb_socket"
+    t.string "mb_chipset"
+    t.string "mb_form_factor"
+    t.integer "mb_ram_slots"
+    t.integer "mb_max_ram_gb"
+    t.string "mem_type"
+    t.integer "mem_kit_capacity_gb"
+    t.integer "mem_modules"
+    t.integer "mem_speed_mhz"
+    t.integer "mem_first_word_latency"
+    t.string "stor_type"
+    t.string "stor_interface"
+    t.integer "stor_capacity_gb"
+    t.string "cooler_type"
+    t.integer "cooler_fan_size_mm"
+    t.string "cooler_sockets"
+    t.string "case_type"
+    t.string "case_supported_mb"
+    t.string "case_color"
+    t.string "psu_efficiency"
+    t.string "psu_modularity"
+    t.string "psu_wattage"
   end
 
   create_table "users", force: :cascade do |t|
