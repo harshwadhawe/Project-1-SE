@@ -7,7 +7,7 @@ class Cpu < Part
   after_validation :log_cpu_validation
 
   def specs_summary
-    summary = "#{cpu_cores}C/#{cpu_threads}T @ #{cpu_base_ghz}GHz (#{cpu_boost_ghz}GHz boost), #{cpu_tdp_w}W TDP"
+    summary = "#{cpu_cores}C/#{cpu_threads}T @ #{cpu_core_clock}GHz (#{cpu_boost_clock}GHz boost), #{wattage}W TDP"
     Rails.logger.debug "[CPU #{id}] Specs: #{summary}"
     summary
   end
@@ -19,7 +19,7 @@ class Cpu < Part
       Rails.logger.warn "[CPU VALIDATION] CPU validation failed for #{brand} #{name}: #{errors.full_messages.join(', ')}"
     else
       Rails.logger.debug "[CPU VALIDATION] CPU validation passed for #{brand} #{name}"
-      Rails.logger.debug "[CPU SPECS] #{brand} #{name}: #{cpu_cores}C/#{cpu_threads}T, #{cpu_base_ghz}/#{cpu_boost_ghz}GHz, #{cpu_tdp_w}W" if cpu_cores && cpu_threads
+      Rails.logger.debug "[CPU SPECS] #{brand} #{name}: #{cpu_cores}C/#{cpu_threads}T, #{cpu_core_clock}/#{cpu_boost_clock}GHz, #{wattage}W" if cpu_cores && cpu_threads
     end
   end
 end
