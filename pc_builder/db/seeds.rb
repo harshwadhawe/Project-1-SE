@@ -13,15 +13,25 @@ User.find_or_create_by!(email: "harsh@example.com") do |u|
   u.name = "Harsh"
 end
 
-# CPU
-Cpu.find_or_create_by!(brand: "AMD", name: "Ryzen 7 7800X3D", model_number: "7800X3D") do |p|
-  p.price_cents = 39900
-  p.wattage = 120
-end
+
 Cpu.find_or_create_by!(brand: "Intel", name: "Core i7-14700K", model_number: "i7-14700K") do |p|
   p.price_cents = 41900
   p.wattage = 125
 end
+
+Cpu.find_or_create_by!(brand: "AMD", name: "Ryzen 7 7800X3D", model_number: "7800X3D") do |p|
+  p.price_cents  = 39900
+  p.wattage      = 120
+  p.cpu_cores    = 8
+  p.cpu_threads  = 16
+  p.cpu_base_ghz = 4.2
+  p.cpu_boost_ghz= 5.0
+  p.cpu_socket   = "AM5"
+  p.cpu_tdp_w    = 120
+  p.cpu_cache_mb = 104
+  p.cpu_igpu     = nil
+end
+
 
 # GPU
 Gpu.find_or_create_by!(brand: "NVIDIA", name: "RTX 4080 Super", model_number: "RTX4080S") do |p|

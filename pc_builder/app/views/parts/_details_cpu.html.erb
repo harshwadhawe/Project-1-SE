@@ -1,0 +1,50 @@
+<h2>CPU Specs</h2>
+<table>
+  <tbody>
+    <%# Only show rows when data is present %>
+    <% if part.cpu_cores || part.cpu_threads %>
+      <tr>
+        <th style="text-align:left; padding-right:1rem;">Cores / Threads</th>
+        <td><%= [part.cpu_cores, part.cpu_threads].compact.join(" / ") %></td>
+      </tr>
+    <% end %>
+
+    <% if part.cpu_base_ghz || part.cpu_boost_ghz %>
+      <tr>
+        <th style="text-align:left; padding-right:1rem;">Base / Boost</th>
+        <td>
+          <%= [part.cpu_base_ghz && "#{part.cpu_base_ghz} GHz",
+               part.cpu_boost_ghz && "#{part.cpu_boost_ghz} GHz"].compact.join(" / ") %>
+        </td>
+      </tr>
+    <% end %>
+
+    <% if part.cpu_socket.present? %>
+      <tr>
+        <th style="text-align:left; padding-right:1rem;">Socket</th>
+        <td><%= part.cpu_socket %></td>
+      </tr>
+    <% end %>
+
+    <% if part.cpu_tdp_w %>
+      <tr>
+        <th style="text-align:left; padding-right:1rem;">TDP</th>
+        <td><%= part.cpu_tdp_w %> W</td>
+      </tr>
+    <% end %>
+
+    <% if part.cpu_cache_mb %>
+      <tr>
+        <th style="text-align:left; padding-right:1rem;">Cache</th>
+        <td><%= part.cpu_cache_mb %> MB</td>
+      </tr>
+    <% end %>
+
+    <% if part.cpu_igpu.present? %>
+      <tr>
+        <th style="text-align:left; padding-right:1rem;">Integrated GPU</th>
+        <td><%= part.cpu_igpu %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

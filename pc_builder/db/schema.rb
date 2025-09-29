@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_28_193357) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_29_164608) do
   create_table "build_items", force: :cascade do |t|
     t.integer "build_id", null: false
     t.integer "part_id", null: false
@@ -40,6 +40,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_28_193357) do
     t.integer "wattage"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "cpu_cores"
+    t.integer "cpu_threads"
+    t.decimal "cpu_base_ghz", precision: 4, scale: 2
+    t.decimal "cpu_boost_ghz", precision: 4, scale: 2
+    t.string "cpu_socket"
+    t.integer "cpu_tdp_w"
+    t.integer "cpu_cache_mb"
+    t.string "cpu_igpu"
   end
 
   create_table "users", force: :cascade do |t|
