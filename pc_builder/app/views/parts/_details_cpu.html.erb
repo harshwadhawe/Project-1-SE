@@ -1,46 +1,57 @@
+<!-- app/views/parts/_details_cpu.html.erb -->
 <h2>CPU Specs</h2>
 <table>
   <tbody>
-    <%# Only show rows when data is present %>
-    <% if part.cpu_cores || part.cpu_threads %>
+    <%# Show only when data is present %>
+
+    <% if part.respond_to?(:cpu_cores) && (part.cpu_cores.present? || part.cpu_threads.present?) %>
       <tr>
         <th style="text-align:left; padding-right:1rem;">Cores / Threads</th>
         <td><%= [part.cpu_cores, part.cpu_threads].compact.join(" / ") %></td>
       </tr>
     <% end %>
 
-    <% if part.cpu_base_ghz || part.cpu_boost_ghz %>
+    <% if part.has_attribute?(:cpu_core_clock) || part.has_attribute?(:cpu_boost_clock) %>
+      <% base = part.try(:cpu_core_clock) %>
+      <% boost = part.try(:cpu_boost_clock) %>
+      <% if base.present? || boost.present? %>
+        <tr>
+          <th style="text-align:left; padding-right:1rem;">Base / Boost</th>
+          <td>
+            <%= [
+                  (base.present?  ? "#{number_with_precision(base,  precision: 2, strip_insignificant_zeros: true)} GHz"  : nil),
+                  (boost.present? ? "#{number_with_precision(boost, precision: 2, strip_insignificant_zeros: true)} GHz" : nil)
+                ].compact.join(" / ") %>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+
+    <%# Parts has a generic wattage column; use it as CPU TDP if present %>
+    <% if part.has_attribute?(:wattage) && part.wattage.present? %>
       <tr>
-        <th style="text-align:left; padding-right:1rem;">Base / Boost</th>
-        <td>
-          <%= [part.cpu_base_ghz && "#{part.cpu_base_ghz} GHz",
-               part.cpu_boost_ghz && "#{part.cpu_boost_ghz} GHz"].compact.join(" / ") %>
-        </td>
+        <th style="text-align:left; padding-right:1rem;">TDP</th>
+        <td><%= part.wattage %> W</td>
       </tr>
     <% end %>
 
-    <% if part.cpu_socket.present? %>
+    <%# The following fields don't exist in your current schema.
+        Keep them resilient with has_attribute? so future migrations won't break. %>
+    <% if part.has_attribute?(:cpu_socket) && part.cpu_socket.present? %>
       <tr>
         <th style="text-align:left; padding-right:1rem;">Socket</th>
         <td><%= part.cpu_socket %></td>
       </tr>
     <% end %>
 
-    <% if part.cpu_tdp_w %>
-      <tr>
-        <th style="text-align:left; padding-right:1rem;">TDP</th>
-        <td><%= part.cpu_tdp_w %> W</td>
-      </tr>
-    <% end %>
-
-    <% if part.cpu_cache_mb %>
+    <% if part.has_attribute?(:cpu_cache_mb) && part.cpu_cache_mb.present? %>
       <tr>
         <th style="text-align:left; padding-right:1rem;">Cache</th>
         <td><%= part.cpu_cache_mb %> MB</td>
       </tr>
     <% end %>
 
-    <% if part.cpu_igpu.present? %>
+    <% if part.has_attribute?(:cpu_igpu) && part.cpu_igpu.present? %>
       <tr>
         <th style="text-align:left; padding-right:1rem;">Integrated GPU</th>
         <td><%= part.cpu_igpu %></td>
