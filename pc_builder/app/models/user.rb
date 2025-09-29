@@ -1,9 +1,42 @@
 class User < ApplicationRecord
-  before_validation { self.email = email.to_s.strip.downcase }
+  before_validation :normalize_email
+  before_create :log_user_creation
+  after_create :log_user_created
+  before_destroy :log_user_destruction
+  after_validation :log_validation_results
+  
   validates :name, presence: true
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false },
                     'valid_email_2/email': true
 
   has_many :builds, dependent: :nullify
+
+  private
+
+  def normalize_email
+    old_email = email
+    self.email = email.to_s.strip.downcase
+    Rails.logger.debug "[USER VALIDATION] Email normalized: '#{old_email}' -> '#{email}'" if old_email != email
+  end
+
+  def log_user_creation
+    Rails.logger.info "[USER CREATE] Creating new user: #{name} (#{email})"
+  end
+
+  def log_user_created
+    Rails.logger.info "[USER CREATED] Successfully created user ID: #{id} - #{name} (#{email})"
+  end
+
+  def log_user_destruction
+    Rails.logger.warn "[USER DESTROY] Destroying user ID: #{id} - #{name} (#{email}) with #{builds.count} builds"
+  end
+
+  def log_validation_results
+    if errors.any?
+      Rails.logger.warn "[USER VALIDATION] Validation failed for user '#{name}' (#{email}): #{errors.full_messages.join(', ')}"
+    else
+      Rails.logger.debug "[USER VALIDATION] Validation passed for user '#{name}' (#{email})"
+    end
+  end
 end

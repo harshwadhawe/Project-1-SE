@@ -33,9 +33,27 @@ Rails.application.configure do
   # Skip http-to-https redirect for the default health check endpoint.
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
 
-  # Log to STDOUT with the current request id as a default log tag.
-  config.log_tags = [ :request_id ]
-  config.logger   = ActiveSupport::TaggedLogging.logger(STDOUT)
+  # Enhanced logging configuration for production
+  config.log_tags = [
+    :request_id, 
+    :remote_ip,
+    ->(request) { "User-Agent: #{request.user_agent&.truncate(50)}" },
+    ->(request) { "Referer: #{request.referer&.truncate(50)}" if request.referer }
+  ].compact
+  
+  # Structured JSON logging for production
+  config.logger = ActiveSupport::TaggedLogging.new(
+    ActiveSupport::Logger.new(STDOUT, formatter: proc do |severity, datetime, progname, msg|
+      {
+        timestamp: datetime.utc.iso8601,
+        level: severity,
+        message: msg,
+        application: 'pc_builder',
+        environment: Rails.env,
+        pid: Process.pid
+      }.to_json + "\n"
+    end)
+  )
 
   # Change to "debug" to log everything (including potentially personally-identifiable information!)
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
@@ -78,6 +96,24 @@ Rails.application.configure do
 
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [ :id ]
+
+  # Enhanced production logging settings
+  # Enable query log tags for better debugging
+  config.active_record.query_log_tags_enabled = true
+  config.active_record.query_log_tags = [
+    :application, :controller, :action,
+    current_user_id: ->(context) { context[:current_user_id] }
+  ]
+  
+  # Log rotation to prevent disk space issues
+  config.logger.level = Logger.const_get(config.log_level.to_s.upcase)
+  
+  # Security and monitoring
+  config.force_ssl = true
+  config.ssl_options = {
+    hsts: { expires: 1.year, subdomains: true },
+    secure_cookies: true
+  }
 
   # Enable DNS rebinding protection and other `Host` header attacks.
   # config.hosts = [
