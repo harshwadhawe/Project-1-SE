@@ -711,7 +711,7 @@ ActiveRecord::Base.transaction do
   # ===================================================================
   # Cases (10 items)
   # ===================================================================
-  Case.create!([
+  PcCase.create!([
     {
       brand: "Lian Li",
       name: "O11 Dynamic EVO",
