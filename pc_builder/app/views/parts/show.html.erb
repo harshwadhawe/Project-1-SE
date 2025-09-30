@@ -3,7 +3,7 @@
 <p><strong>Model #:</strong> <%= @part.model_number %></p>
 <p><strong>Type:</strong> <%= @part.type %></p>
 <p><strong>Wattage:</strong> <%= @part.wattage || 0 %> W</p>
-<p><strong>Price:</strong> <%= number_to_currency((@part.price_cents || 0)/100.0) %></p>
+<p><strong>Price:</strong> <%= number_to_currency(@part.price || 0) %></p>
 
 <hr>
 <% partial_name = "parts/details_#{@part.type.underscore}" %>

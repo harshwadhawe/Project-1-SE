@@ -25,8 +25,9 @@ class PartsController < ApplicationController
     Rails.logger.info "[PARTS SHOW] Loading part ID: #{params[:id]} for user: #{current_user&.id || 'guest'}"
     @part = Part.find(params[:id])
     Rails.logger.info "[PARTS SHOW] Successfully loaded part: #{@part.type} - #{@part.brand} #{@part.name}"
-    Rails.logger.debug "[PARTS SHOW] Part details - Price: #{@part.price}, Wattage: #{@part.wattage}W"
+    Rails.logger.debug "[PARTS SHOW] Part details - Price: #{@part.price_in_dollars}, Wattage: #{@part.wattage}W"
   end
+
 
   private
 
