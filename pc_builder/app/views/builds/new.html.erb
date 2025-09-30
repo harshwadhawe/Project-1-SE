@@ -1,28 +1,375 @@
-<div class="container mx-auto px-4 py-8 max-w-lg">
-  <h1 class="text-3xl font-bold text-gray-800 mb-6">
-    Start a New PC Build
-  </h1>
+<!-- PC Builder Interface -->
+<div class="min-h-screen bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">
+        <i class="fas fa-tools mr-3 text-indigo-600"></i>Build Your PC
+      </h1>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        Select components for your custom PC build. 
+        <% if current_user %>
+          <span class="text-green-600 font-semibold">Logged in</span> - You can save and share your build!
+        <% else %>
+          No login required to start building. <a href="<%= login_path %>" class="text-indigo-600 underline">Login</a> to save and share your builds.
+        <% end %>
+      </p>
+    </div>
 
-  <%= form_with(model: @build, class: "bg-white shadow-md rounded-lg p-8") do |form| %>
-
-    <% if @build.errors.any? %>
-      <div id="error_explanation" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-        <strong class="font-bold"><%= pluralize(@build.errors.count, "error") %> prohibited this build from being saved:</strong>
-        <ul class="mt-2 list-disc list-inside">
-          <% @build.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
+    <!-- Build Name Form -->
+    <div class="bg-white rounded-lg shadow-sm border p-6 mb-8">
+      <%= form_with(model: @build, class: "flex flex-col sm:flex-row gap-4") do |form| %>
+        <div class="flex-1">
+          <%= form.text_field :name, 
+                placeholder: "Name your build (e.g., Gaming Beast 2025)", 
+                class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-lg" %>
+        </div>
+        <div class="flex gap-3">
+          <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-200">
+            <i class="fas fa-rocket mr-2"></i>Start Building
+          </button>
+          
+          <!-- Share Button - Active only when logged in -->
+          <% if current_user %>
+            <button type="button" 
+                    class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200"
+                    onclick="shareModal.showModal()">
+              <i class="fas fa-share-alt mr-2"></i>Share Build
+            </button>
+          <% else %>
+            <button type="button" 
+                    class="bg-gray-400 text-gray-200 font-semibold px-6 py-3 rounded-lg cursor-not-allowed"
+                    disabled
+                    title="Login to enable sharing">
+              <i class="fas fa-share-alt mr-2"></i>Share Build
+            </button>
           <% end %>
-        </ul>
+        </div>
+      <% end %>
+
+      <% if @build.errors.any? %>
+        <div class="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+          <strong>Please fix these errors:</strong>
+          <ul class="mt-2 list-disc list-inside">
+            <% @build.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Component Selection Grid -->
+    <div class="grid lg:grid-cols-2 gap-8">
+      <% @categories.each_with_index do |(category_name, model_class), index| %>
+        <div class="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow duration-200">
+          <!-- Category Header -->
+          <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 rounded-t-lg">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <i class="text-2xl text-indigo-600
+                  <% case category_name
+                     when "CPU" %>fas fa-microchip
+                  <% when "GPU" %>fas fa-gamepad
+                  <% when "Motherboard" %>fas fa-bolt
+                  <% when "Memory" %>fas fa-brain
+                  <% when "Storage" %>fas fa-hdd
+                  <% when "Cooler" %>fas fa-snowflake
+                  <% when "PcCase" %>fas fa-cube
+                  <% when "PSU" %>fas fa-plug
+                  <% end %>"></i>
+                <h3 class="text-xl font-semibold text-gray-900">
+                  <%= category_name == "PcCase" ? "Case" : category_name %>
+                </h3>
+              </div>
+              <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                <%= @parts_by_category[category_name].count %> options
+              </span>
+            </div>
+          </div>
+
+          <!-- Selected Component Display -->
+          <div class="px-6 py-4 border-b border-gray-100">
+            <div id="selected-<%= category_name.downcase %>" class="hidden">
+              <div class="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
+                <div>
+                  <p class="font-medium text-green-900" id="selected-<%= category_name.downcase %>-name"></p>
+                  <p class="text-sm text-green-700" id="selected-<%= category_name.downcase %>-price"></p>
+                </div>
+                <button type="button" 
+                        onclick="removeComponent('<%= category_name.downcase %>')"
+                        class="text-red-600 hover:text-red-800 text-sm font-medium">
+                  Remove
+                </button>
+              </div>
+            </div>
+            <div id="placeholder-<%= category_name.downcase %>" class="text-gray-500 text-sm italic">
+              No <%= category_name.downcase %> selected
+            </div>
+          </div>
+
+          <!-- Component Options -->
+          <div class="p-6">
+            <div class="space-y-3 max-h-64 overflow-y-auto">
+              <% @parts_by_category[category_name].limit(8).each do |part| %>
+                <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors duration-200 cursor-pointer"
+                     onclick="selectComponent('<%= category_name.downcase %>', '<%= part.id %>', '<%= j(part.brand) %> <%= j(part.name) %>', '<%= number_to_currency(part.price_cents / 100.0) %>')">
+                  <div class="flex-1 min-w-0">
+                    <p class="font-medium text-gray-900 truncate">
+                      <%= part.brand %> <%= part.name %>
+                    </p>
+                    <p class="text-sm text-gray-500 truncate">
+                      <%= part.model_number %>
+                    </p>
+                  </div>
+                  <div class="text-right">
+                    <p class="font-semibold text-indigo-600">
+                      <%= number_to_currency(part.price_cents / 100.0) %>
+                    </p>
+                    <% if part.wattage && part.wattage > 0 %>
+                      <p class="text-xs text-gray-500">
+                        <%= part.wattage %>W
+                      </p>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+            
+            <!-- View All Button -->
+            <div class="mt-4 text-center">
+              <% 
+                case category_name
+                when "PcCase"
+                  view_path = pc_cases_path
+                when "PSU"
+                  view_path = psus_path
+                else
+                  view_path = send("#{category_name.downcase.pluralize}_path")
+                end
+              %>
+              <%= link_to "View All #{category_name.pluralize}", view_path, 
+                    class: "text-indigo-600 hover:text-indigo-800 text-sm font-medium" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Build Summary -->
+    <div id="build-summary" class="hidden mt-8 bg-white rounded-lg shadow-sm border p-6">
+      <h3 class="text-xl font-semibold text-gray-900 mb-4">
+        <i class="fas fa-calculator mr-2 text-indigo-600"></i>Build Summary
+      </h3>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Total Cost</p>
+          <p id="total-cost" class="text-2xl font-bold text-gray-900">$0.00</p>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-gray-500">Total Wattage</p>
+          <p id="total-wattage" class="text-2xl font-bold text-gray-900">0W</p>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-gray-500">Components</p>
+          <p id="component-count" class="text-2xl font-bold text-gray-900">0/8</p>
+        </div>
       </div>
-    <% end %>
-
-    <div class="mb-4">
-      <%= form.label :name, "Build Name", class: "block text-gray-700 text-sm font-bold mb-2" %>
-      <%= form.text_field :name, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline", placeholder: "e.g., My Gaming Rig" %>
     </div>
-
-    <div class="flex items-center justify-end">
-      <%= form.submit "Create Build", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer" %>
-    </div>
-  <% end %>
+  </div>
 </div>
+
+<!-- Share Modal (only shown when logged in) -->
+<% if current_user %>
+<dialog id="shareModal" class="p-6 rounded-lg shadow-xl border-0 backdrop:bg-black backdrop:bg-opacity-50">
+  <div class="max-w-md">
+    <h3 class="text-lg font-semibold mb-4">
+      <i class="fas fa-share-alt mr-2 text-green-600"></i>Share Your Build
+    </h3>
+    <p class="text-gray-600 mb-4">Your build JSON will be generated and a shareable link will be created.</p>
+    <div class="flex gap-3 justify-end">
+      <button onclick="shareModal.close()" 
+              class="px-4 py-2 text-gray-600 hover:text-gray-800">
+        Cancel
+      </button>
+      <button onclick="generateShareLink()" 
+              class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg">
+        Generate Link
+      </button>
+    </div>
+  </div>
+</dialog>
+<% end %>
+
+<!-- JavaScript for Build Management -->
+<script>
+  let selectedComponents = {};
+  let totalCost = 0;
+  let totalWattage = 0;
+
+  function selectComponent(category, partId, name, price) {
+    selectedComponents[category] = {
+      id: partId,
+      name: name,
+      price: price
+    };
+    
+    // Update UI
+    document.getElementById(`selected-${category}`).classList.remove('hidden');
+    document.getElementById(`placeholder-${category}`).classList.add('hidden');
+    document.getElementById(`selected-${category}-name`).textContent = name;
+    document.getElementById(`selected-${category}-price`).textContent = price;
+    
+    updateBuildSummary();
+  }
+
+  function removeComponent(category) {
+    delete selectedComponents[category];
+    
+    // Update UI
+    document.getElementById(`selected-${category}`).classList.add('hidden');
+    document.getElementById(`placeholder-${category}`).classList.remove('hidden');
+    
+    updateBuildSummary();
+  }
+
+  function updateBuildSummary() {
+    const componentCount = Object.keys(selectedComponents).length;
+    
+    if (componentCount > 0) {
+      document.getElementById('build-summary').classList.remove('hidden');
+      
+      // Calculate totals (simplified - in real app, you'd fetch actual data)
+      totalCost = Object.values(selectedComponents).reduce((sum, comp) => {
+        return sum + parseFloat(comp.price.replace('$', '').replace(',', ''));
+      }, 0);
+      
+      document.getElementById('total-cost').textContent = `$${totalCost.toFixed(2)}`;
+      document.getElementById('component-count').textContent = `${componentCount}/8`;
+    } else {
+      document.getElementById('build-summary').classList.add('hidden');
+    }
+  }
+
+  <% if current_user %>
+  function generateShareLink() {
+    const buildName = document.querySelector('input[name="build[name]"]').value || 'My PC Build';
+    
+    if (Object.keys(selectedComponents).length === 0) {
+      alert('Please select at least one component before sharing!');
+      return;
+    }
+
+    const buildData = {
+      name: buildName,
+      components: selectedComponents,
+      totalCost: totalCost,
+      user: '<%= current_user.name %>',
+      timestamp: new Date().toISOString()
+    };
+    
+    // Show loading state
+    const shareButton = document.querySelector('button[onclick="generateShareLink()"]');
+    const originalText = shareButton.textContent;
+    shareButton.textContent = 'Generating...';
+    shareButton.disabled = true;
+    
+    // Send to server to create actual build and share link
+    fetch('/builds', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+      },
+      body: JSON.stringify({
+        build: {
+          name: buildName
+        }
+      })
+    })
+    .then(response => {
+      if (!response.ok) throw new Error('Failed to create build');
+      return response.json ? response.json() : Promise.resolve({});
+    })
+    .catch(() => {
+      // Fallback: create a temporary build for sharing
+      return { build_id: Date.now() }; // Temporary ID for demo
+    })
+    .then(data => {
+      // Now share the build
+      const buildId = data.build_id || Date.now();
+      
+      return fetch(`/builds/${buildId}/share`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({
+          components_data: JSON.stringify(selectedComponents)
+        })
+      });
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // Show success with shareable link
+        const shareUrl = data.share_url;
+        const modal = document.getElementById('shareModal');
+        modal.innerHTML = `
+          <div class="max-w-md">
+            <h3 class="text-lg font-semibold mb-4"><i class="fas fa-check-circle mr-2 text-green-600"></i>Share Link Created!</h3>
+            <p class="text-gray-600 mb-4">Your build has been saved and is ready to share:</p>
+            <div class="bg-gray-50 p-3 rounded border mb-4">
+              <code class="text-sm break-all">${shareUrl}</code>
+            </div>
+            <div class="flex gap-3 justify-end">
+              <button onclick="copyToClipboard('${shareUrl}'); shareModal.close();" 
+                      class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg">
+                <i class="fas fa-clipboard mr-2"></i>Copy Link
+              </button>
+              <button onclick="window.open('${shareUrl}', '_blank')" 
+                      class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
+                <i class="fas fa-eye mr-2"></i>Preview
+              </button>
+              <button onclick="shareModal.close()" 
+                      class="px-4 py-2 text-gray-600 hover:text-gray-800">
+                Close
+              </button>
+            </div>
+          </div>
+        `;
+      } else {
+        throw new Error(data.error || 'Failed to create share link');
+      }
+    })
+    .catch(error => {
+      console.error('Share error:', error);
+      alert('Failed to create share link: ' + error.message);
+    })
+    .finally(() => {
+      // Restore button state
+      shareButton.textContent = originalText;
+      shareButton.disabled = false;
+    });
+  }
+
+  function copyToClipboard(text) {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Link copied to clipboard!');
+      });
+    } else {
+      // Fallback
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      alert('Link copied to clipboard!');
+    }
+  }
+  <% end %>
+</script>

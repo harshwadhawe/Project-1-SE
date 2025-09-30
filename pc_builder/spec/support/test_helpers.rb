@@ -1,7 +1,10 @@
 # spec/support/test_helpers.rb
 module TestHelpers
-  def make_user(email: "harsh@example.com", name: "Harsh")
-    User.find_or_create_by!(email:) { |u| u.name = name }
+  def make_user(email: "harsh@example.com", name: "Harsh", password: "password123")
+    User.find_or_create_by!(email:) do |u| 
+      u.name = name
+      u.password = password
+    end
   end
 
   def cpu(attrs = {})
@@ -35,7 +38,7 @@ module TestHelpers
   end
 
   def pc_case(attrs = {})
-    Case.create!({ brand: "Fractal", name: "Meshify 2", model_number: "FD-C-MES2A-03",
+    PcCase.create!({ brand: "Fractal", name: "Meshify 2", model_number: "FD-C-MES2A-03",
                      price_cents: 16900, wattage: 0 }.merge(attrs))
   end
 

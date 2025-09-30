@@ -1,6 +1,8 @@
 class PcCasesController < ApplicationController
-    def index
-    @cases = PcCase.all
+  skip_before_action :authenticate_user!
+  
+  def index
+    @pc_cases = PcCase.all
     @build_id = params[:build_id]
   end
 

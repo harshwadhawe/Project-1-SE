@@ -1,4 +1,6 @@
 class HomeController < ApplicationController
+  # Allow home page access without authentication
+  skip_before_action :authenticate_user!, only: [:index]
   before_action :log_home_action
 
   def index
@@ -42,9 +44,5 @@ class HomeController < ApplicationController
 
   def log_home_action
     Rails.logger.info "[HOME CONTROLLER] Action: #{action_name}, User: #{current_user&.id || 'guest'}"
-  end
-
-  def current_user
-    @current_user ||= User.find_by(id: session[:user_id])
   end
 end

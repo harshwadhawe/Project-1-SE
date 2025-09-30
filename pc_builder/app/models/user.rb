@@ -1,4 +1,7 @@
 class User < ApplicationRecord
+  # Authentication
+  has_secure_password
+  
   before_validation :normalize_email
   before_create :log_user_creation
   after_create :log_user_created
@@ -9,8 +12,30 @@ class User < ApplicationRecord
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false },
                     'valid_email_2/email': true
+  validates :password, length: { minimum: 6 }, if: -> { new_record? || !password.nil? }
 
   has_many :builds, dependent: :nullify
+  
+  # JWT token methods
+  def self.jwt_secret
+    Rails.application.secret_key_base
+  end
+  
+  def generate_jwt_token
+    payload = {
+      user_id: id,
+      exp: 24.hours.from_now.to_i
+    }
+    JWT.encode(payload, self.class.jwt_secret, 'HS256')
+  end
+  
+  def self.decode_jwt_token(token)
+    decoded = JWT.decode(token, jwt_secret, true, { algorithm: 'HS256' })
+    user_id = decoded[0]['user_id']
+    find(user_id)
+  rescue JWT::DecodeError, JWT::ExpiredSignature, ActiveRecord::RecordNotFound
+    nil
+  end
 
   private
 

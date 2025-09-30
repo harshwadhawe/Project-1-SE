@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_29_201957) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_30_154447) do
   create_table "build_items", force: :cascade do |t|
     t.integer "build_id", null: false
     t.integer "part_id", null: false
@@ -28,6 +28,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_29_201957) do
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "share_token"
+    t.text "shared_data"
+    t.datetime "shared_at"
     t.index ["user_id"], name: "index_builds_on_user_id"
   end
 
@@ -77,6 +80,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_29_201957) do
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "password_digest"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

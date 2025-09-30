@@ -1,4 +1,7 @@
 class BuildsController < ApplicationController
+  # Allow browsing and creating builds without authentication
+  # Only require auth for saving/sharing builds
+  skip_before_action :authenticate_user!, only: [:index, :show, :new, :create, :shared]
   before_action :load_categories, only: [:new, :create]
   before_action :log_build_action
 
@@ -43,12 +46,64 @@ class BuildsController < ApplicationController
 
   def create
     @build = Build.new(build_params)
+    
+    # Set user if logged in, otherwise create anonymous build
+    @build.user = current_user if current_user
 
     if @build.save
-      redirect_to build_path(@build), notice: 'Build was successfully created.'
+      respond_to do |format|
+        format.html { redirect_to build_path(@build), notice: 'Build was successfully created.' }
+        format.json { render json: { success: true, build_id: @build.id, message: 'Build created successfully' } }
+      end
     else
-      render :new, status: :unprocessable_entity
+      respond_to do |format|
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: { success: false, errors: @build.errors.full_messages }, status: :unprocessable_entity }
+      end
     end
+  end
+
+  # Sharing functionality - requires authentication
+  def share
+    @build = Build.find(params[:id])
+    
+    # Only allow sharing if user is logged in and owns the build or build is anonymous
+    unless current_user && (@build.user == current_user || @build.user.nil?)
+      return render json: { error: 'Unauthorized' }, status: :unauthorized
+    end
+
+    components_data = JSON.parse(params[:components_data] || '{}')
+    build_data = @build.create_shareable_data!(components_data)
+    
+    share_url = @build.share_url(request.base_url)
+    
+    Rails.logger.info "[SHARE] Build #{@build.id} shared by user #{current_user.id}"
+    
+    render json: {
+      success: true,
+      share_url: share_url,
+      share_token: @build.share_token,
+      build_data: build_data
+    }
+  rescue JSON::ParserError => e
+    Rails.logger.error "[SHARE] Invalid JSON in components_data: #{e.message}"
+    render json: { error: 'Invalid component data' }, status: :bad_request
+  rescue => e
+    Rails.logger.error "[SHARE] Failed to share build: #{e.message}"
+    render json: { error: 'Failed to create share link' }, status: :internal_server_error
+  end
+
+  # View shared build - no authentication required
+  def shared
+    @build = Build.find(params[:id])
+    
+    unless @build.shared? && @build.share_token == params[:token]
+      flash[:error] = "Invalid or expired share link"
+      redirect_to root_path and return
+    end
+
+    @shared_data = @build.parsed_shared_data
+    Rails.logger.info "[SHARED] Viewing shared build #{@build.id} with token #{params[:token]}"
   end
 
   private
@@ -80,22 +135,5 @@ class BuildsController < ApplicationController
     
     total_parts = @parts_by_category.values.flatten.count
     Rails.logger.info "[LOAD CATEGORIES] Loaded #{@categories.count} categories with #{total_parts} total parts"
-  end
-
-  # --- quick auth helpers (see B below for Sessions controller) ---
-  def current_user
-    return @current_user if defined?(@current_user)
-    
-    @current_user = User.find_by(id: session[:user_id])
-    Rails.logger.debug "[AUTH] Current user lookup: #{@current_user ? "found user ID #{@current_user.id}" : 'no user found'}"
-    @current_user
-  end
-
-  def default_user
-    Rails.logger.info "[AUTH] Creating/finding default user"
-    User.find_or_create_by!(email: "harsh@example.com") { |u| u.name = "Harsh" }.tap do |u|
-      session[:user_id] ||= u.id
-      Rails.logger.info "[AUTH] Set session user_id to #{u.id} for default user"
-    end
   end
 end

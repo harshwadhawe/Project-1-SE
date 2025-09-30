@@ -1,6 +1,8 @@
 class PsusController < ApplicationController
-    def index
-    @power_supplies = Psu.all
+  skip_before_action :authenticate_user!
+  
+  def index
+    @psus = Psu.all
     @build_id = params[:build_id]
   end
 

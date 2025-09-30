@@ -40,11 +40,25 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  root "builds#index"
-  resources :users, only: [:index, :show]
+  root "home#index"
+  
+  # Authentication routes
+  get '/signup', to: 'users#new'
+  get '/login', to: 'sessions#new'
+  post '/login', to: 'sessions#create'
+  delete '/logout', to: 'sessions#destroy'
+  
+  resources :users, only: [:index, :show, :new, :create]
   resources :parts, only: [:index, :show]
   
-  resources :builds
+  resources :builds do
+    member do
+      post :share
+      get :shared
+    end
+    resources :build_items, only: [:create]
+  end
+  
   resources :cpus, only: [:index, :show]
   resources :gpus, only: [:index, :show]
   resources :motherboards, only: [:index, :show]
@@ -53,9 +67,5 @@ Rails.application.routes.draw do
   resources :coolers, only: [:index, :show]
   resources :pc_cases, only: [:index, :show]
   resources :psus, only: [:index, :show]
-
-  resources :builds, only: [:show] do
-    resources :build_items, only: [:create]
-  end
 
 end
