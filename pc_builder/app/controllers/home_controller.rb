@@ -11,7 +11,7 @@ class HomeController < ApplicationController
       "Memory"     => Memory,
       "Storage"    => Storage,
       "Cooler"     => Cooler,
-      "Case"       => PcCase,
+      "PcCase"       => PcCase,
       "PSU"        => Psu
     }
     

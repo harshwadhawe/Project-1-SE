@@ -35,7 +35,7 @@ module TestHelpers
   end
 
   def pc_case(attrs = {})
-    PcCase.create!({ brand: "Fractal", name: "Meshify 2", model_number: "FD-C-MES2A-03",
+    Case.create!({ brand: "Fractal", name: "Meshify 2", model_number: "FD-C-MES2A-03",
                      price_cents: 16900, wattage: 0 }.merge(attrs))
   end
 

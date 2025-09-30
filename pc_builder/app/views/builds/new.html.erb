@@ -1,39 +1,28 @@
-<h1>New Build</h1>
+<div class="container mx-auto px-4 py-8 max-w-lg">
+  <h1 class="text-3xl font-bold text-gray-800 mb-6">
+    Start a New PC Build
+  </h1>
 
-<%= form_with model: @build do |form| %>
-  <div>
-    <%= form.label :name %><br>
-    <%= form.text_field :name %>
-    <% if @build.errors[:name].any? %>
-      <div style="color:red;"><%= @build.errors[:name].first %></div>
+  <%= form_with(model: @build, class: "bg-white shadow-md rounded-lg p-8") do |form| %>
+
+    <% if @build.errors.any? %>
+      <div id="error_explanation" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+        <strong class="font-bold"><%= pluralize(@build.errors.count, "error") %> prohibited this build from being saved:</strong>
+        <ul class="mt-2 list-disc list-inside">
+          <% @build.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
     <% end %>
-  </div>
 
-  <h2>Choose Parts</h2>
-  <% @parts_by_category.each do |cat_name, parts| %>
-    <fieldset style="margin: 1rem 0; padding: 0.5rem; border: 1px solid #ccc;">
-      <legend><strong><%= cat_name %></strong></legend>
+    <div class="mb-4">
+      <%= form.label :name, "Build Name", class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= form.text_field :name, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline", placeholder: "e.g., My Gaming Rig" %>
+    </div>
 
-      <% if parts.any? %>
-        <% parts.each do |p| %>
-          <div style="margin: 0.25rem 0;">
-            <%= check_box_tag "build[part_ids][]", p.id, false %>
-            <%= "#{p.brand} #{p.name}" %>
-            <% if p.model_number.present? %>(<%= p.model_number %>)<% end %>
-
-            <%= number_field_tag "build[quantities][#{p.id}]", 1,
-                  min: 1, style: "width: 4rem; margin-left:1rem;" %>
-          </div>
-        <% end %>
-      <% else %>
-        <em>No parts available in this category.</em>
-      <% end %>
-    </fieldset>
+    <div class="flex items-center justify-end">
+      <%= form.submit "Create Build", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer" %>
+    </div>
   <% end %>
-
-  <div>
-    <%= form.submit "Create Build" %>
-  </div>
-<% end %>
-
-<%= link_to "Back", builds_path %>
+</div>

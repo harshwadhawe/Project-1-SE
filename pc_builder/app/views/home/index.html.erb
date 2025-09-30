@@ -4,7 +4,7 @@
 <table border="1" cellpadding="8" cellspacing="0">
   <tr>
     <th>Category</th>
-    <th>Sample Parts</th>
+    <th>Selected Parts</th>
     <th>Actions</th>
   </tr>
 
@@ -22,18 +22,11 @@
           <em>No parts available</em>
         <% end %>
       </td>
-      <td><%= link_to "View all #{name.pluralize}", parts_path(q: name) %></td>
+      <td>
+      <% index_path_helper = "#{name.downcase.pluralize}_path" %>
+      <%= link_to "View All", send(index_path_helper) %>
+      </td>
     </tr>
   <% end %>
 </table>
 
-<h2>Recent Builds</h2>
-<% if @recent_builds.any? %>
-  <ul>
-    <% @recent_builds.each do |b| %>
-      <li><%= link_to b.name, build_path(b) %></li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>No builds yet. <%= link_to "Create one", new_build_path %></p>
-<% end %>
