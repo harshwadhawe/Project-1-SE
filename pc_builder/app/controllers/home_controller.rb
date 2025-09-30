@@ -6,13 +6,13 @@ class HomeController < ApplicationController
     
     @categories = {
       "Cpu"        => Cpu,
-      "GPU"        => Gpu,
+      "Gpu"        => Gpu,
       "Motherboard"=> Motherboard,
       "Memory"     => Memory,
       "Storage"    => Storage,
       "Cooler"     => Cooler,
-      "Case"       => PcCase,
-      "PSU"        => Psu
+      "PcCase"       => PcCase,
+      "Psu"        => Psu
     }
     
     Rails.logger.info "[HOME INDEX] Loading sample parts from #{@categories.count} categories"

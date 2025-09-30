@@ -1,5 +1,5 @@
 <!-- app/views/parts/_details_cpu.html.erb -->
-<h2>CPU Specs</h2>
+<h2>Cpu Specs</h2>
 <table>
   <tbody>
     <%# Show only when data is present %>
@@ -27,7 +27,7 @@
       <% end %>
     <% end %>
 
-    <%# Parts has a generic wattage column; use it as CPU TDP if present %>
+    <%# Parts has a generic wattage column; use it as Cpu TDP if present %>
     <% if part.has_attribute?(:wattage) && part.wattage.present? %>
       <tr>
         <th style="text-align:left; padding-right:1rem;">TDP</th>
@@ -53,7 +53,7 @@
 
     <% if part.has_attribute?(:cpu_igpu) && part.cpu_igpu.present? %>
       <tr>
-        <th style="text-align:left; padding-right:1rem;">Integrated GPU</th>
+        <th style="text-align:left; padding-right:1rem;">Integrated Gpu</th>
         <td><%= part.cpu_igpu %></td>
       </tr>
     <% end %>

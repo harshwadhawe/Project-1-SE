@@ -78,14 +78,14 @@ class BuildsController < ApplicationController
   def load_categories
     Rails.logger.debug "[LOAD CATEGORIES] Loading part categories and parts"
     @categories = {
-      "CPU"         => Cpu,
-      "GPU"         => Gpu,
+      "Cpu"         => Cpu,
+      "Gpu"         => Gpu,
       "Motherboard" => Motherboard,
       "Memory"      => Memory,
       "Storage"     => Storage,
       "Cooler"      => Cooler,
-      "Case"        => PcCase,
-      "PSU"         => Psu
+      "PcCase"        => PcCase,
+      "Psu"         => Psu
     }
     @parts_by_category = @categories.transform_values { |k| k.order(:brand, :name).limit(50) }
     

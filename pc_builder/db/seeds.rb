@@ -13,7 +13,7 @@ puts "Seeding new parts..."
 # Wrapping the creation in a transaction ensures that if any record fails, all previous creations in this block are rolled back.
 ActiveRecord::Base.transaction do
   # ===================================================================
-  # CPUs (10 items)
+  # Cpus (10 items)
   # ===================================================================
   Cpu.create!([
     {
@@ -129,7 +129,7 @@ ActiveRecord::Base.transaction do
   ])
 
   # ===================================================================
-  # GPUs (Graphics Cards) (10 items)
+  # Gpus (Graphics Cards) (10 items)
   # ===================================================================
   Gpu.create!([
     {
@@ -709,7 +709,7 @@ ActiveRecord::Base.transaction do
   ])
 
   # ===================================================================
-  # Cases (10 items)
+  # PcCases (10 items)
   # ===================================================================
   PcCase.create!([
     {
@@ -815,7 +815,7 @@ ActiveRecord::Base.transaction do
   ])
 
   # ===================================================================
-  # PSUs (Power Supply Units) (10 items)
+  # Psus (Power Supply Units) (10 items)
   # ===================================================================
   Psu.create!([
     {

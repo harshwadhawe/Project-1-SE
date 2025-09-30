@@ -75,7 +75,7 @@ classDiagram
     cooler_fan_size_mm: integer     #e.g., 120, 140
     cooler_sockets: string          #e.g., "AM5, LGA1700, AM4"
   }
-  class Case{
+  class PcCase{
     case_type: string               #size, e.g. "Mid Tower", "SFF" (Small Form Factor)
     case_supported_mb: string       #e.g., "ATX, Micro-ATX, Mini-ITX"
     case_color: string              #e.g., "Black", "White"
@@ -96,5 +96,5 @@ classDiagram
   Part <|-- Memory
   Part <|-- Storage
   Part <|-- Cooler
-  Part <|-- Case
+  Part <|-- PcCase
   Part <|-- PSU

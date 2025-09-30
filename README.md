@@ -4,7 +4,7 @@
 
 PC Builder is a Ruby on Rails application that allows users to:
 
-* Browse PC components (CPU, GPU, Motherboard, Memory, Storage, Cooler, Case, PSU).
+* Browse PC components (CPU, GPU, Motherboard, Memory, Storage, Cooler, PcCase, PSU).
 * View extra specifications for each part type (e.g. CPU cores/threads, base/boost clocks).
 * Create builds by selecting parts from each category and assigning quantities.
 * Manage users and builds.
@@ -47,7 +47,7 @@ PC Builder is a Ruby on Rails application that allows users to:
     * `Memory` – placeholder
     * `Storage` – placeholder
     * `Cooler` – placeholder
-    * `PcCase` – renamed from `Case` to avoid Ruby keyword
+    * `PcCase` – renamed from `PcCase` to avoid Ruby keyword
     * `Psu` – placeholder
 
 ---
