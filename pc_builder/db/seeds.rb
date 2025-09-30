@@ -921,5 +921,24 @@ ActiveRecord::Base.transaction do
   ])
 end
 
+# ===================================================================
+# Test Users for Authentication Testing
+# ===================================================================
+puts "Creating test users..."
+
+# Create a test user for login testing
+test_user = User.find_or_create_by(email: "test@example.com") do |user|
+  user.name = "Test User"
+  user.password = "password123"
+  user.password_confirmation = "password123"
+end
+
+if test_user.persisted?
+  puts "✅ Test user created successfully: #{test_user.name} (#{test_user.email})"
+else
+  puts "❌ Failed to create test user: #{test_user.errors.full_messages.join(', ')}"
+end
+
 puts "Finished seeding database."
 puts "Created #{Part.count} parts in total."
+puts "Created #{User.count} users in total."

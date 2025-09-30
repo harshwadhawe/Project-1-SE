@@ -19,10 +19,90 @@
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    
+    <%# Add Tailwind CSS %>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <%# Add Font Awesome for consistent icons %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+    
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex">
+            <div class="flex-shrink-0 flex items-center">
+              <%= link_to root_path, class: "text-xl font-bold text-gray-900" do %>
+                PC Builder
+              <% end %>
+            </div>
+          </div>
+          
+          <!-- Authentication Links -->
+          <div class="flex items-center space-x-4">
+            <% if current_user %>
+              <div class="flex items-center space-x-3">
+                <div class="hidden sm:block text-right">
+                  <p class="text-sm font-medium text-gray-700">Welcome back!</p>
+                  <p class="text-xs text-gray-500"><%= current_user.name %></p>
+                </div>
+                
+                <!-- Mobile: Simple logout button -->
+                <div class="sm:hidden">
+                  <%= link_to logout_path, 
+                        method: :delete,
+                        data: { 
+                          turbo_method: :delete,
+                          confirm: "Logout?" 
+                        },
+                        class: "bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded text-sm font-medium",
+                        title: "Logout" do %>
+                    <i class="fas fa-sign-out-alt"></i>
+                  <% end %>
+                </div>
+                
+                <!-- Desktop: Full logout button -->
+                <div class="hidden sm:block">
+                  <%= link_to logout_path, 
+                        method: :delete,
+                        data: { 
+                          turbo_method: :delete,
+                          confirm: "Are you sure you want to logout?" 
+                        },
+                        class: "bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center space-x-2 hover:shadow-md",
+                        title: "Click to logout" do %>
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                  <% end %>
+                </div>
+              </div>
+            <% else %>
+              <%= link_to "Login", login_path, 
+                    class: "text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200" %>
+              <%= link_to "Sign Up", signup_path, 
+                    class: "bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    <% if flash.any? %>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+        <% flash.each do |type, message| %>
+          <div class="rounded-md p-4 mb-4 <%= type == 'notice' || type == 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800' %>">
+            <%= message %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <!-- Main Content -->
     <%= yield %>
   </body>
 </html>

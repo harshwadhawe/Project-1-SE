@@ -1,4 +1,6 @@
 class PartsController < ApplicationController
+  # Allow browsing parts without authentication
+  skip_before_action :authenticate_user!, only: [:index, :show]
   before_action :log_parts_action
 
   def index

@@ -30,6 +30,52 @@ class Build < ApplicationRecord
     summary
   end
 
+  # Sharing functionality
+  def generate_share_token!
+    self.share_token = SecureRandom.urlsafe_base64(12)
+    self.shared_at = Time.current
+    save!
+    Rails.logger.info "[BUILD #{id}] Generated share token: #{share_token}"
+    share_token
+  end
+
+  def create_shareable_data!(components_data = {})
+    build_data = {
+      id: id,
+      name: name,
+      components: components_data,
+      total_cost: total_cost,
+      total_wattage: total_wattage,
+      parts_count: parts.count,
+      user_name: user&.name || "Anonymous",
+      created_at: created_at,
+      shared_at: Time.current
+    }
+    
+    self.shared_data = build_data.to_json
+    generate_share_token!
+    
+    Rails.logger.info "[BUILD #{id}] Created shareable data with #{components_data.keys.count} components"
+    build_data
+  end
+
+  def shared?
+    share_token.present? && shared_at.present?
+  end
+
+  def share_url(base_url = "")
+    return nil unless shared?
+    "#{base_url}/builds/#{id}/shared?token=#{share_token}"
+  end
+
+  def parsed_shared_data
+    return {} unless shared_data.present?
+    JSON.parse(shared_data)
+  rescue JSON::ParserError => e
+    Rails.logger.error "[BUILD #{id}] Failed to parse shared data: #{e.message}"
+    {}
+  end
+
   private
 
   def log_build_creation

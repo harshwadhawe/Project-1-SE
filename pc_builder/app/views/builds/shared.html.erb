@@ -1,0 +1,194 @@
+<!-- Shared Build View -->
+<div class="min-h-screen bg-gray-50">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <div class="flex items-center justify-center space-x-2 mb-4">
+        <i class="fas fa-share-alt text-3xl text-indigo-600"></i>
+        <h1 class="text-3xl font-bold text-gray-900">Shared PC Build</h1>
+      </div>
+      <p class="text-lg text-gray-600">
+        <span class="font-semibold text-indigo-600"><%= @shared_data['user_name'] %></span> 
+        shared this build with you
+      </p>
+      <p class="text-sm text-gray-500 mt-2">
+        Created on <%= Date.parse(@shared_data['created_at']).strftime("%B %d, %Y") %>
+        • Shared on <%= Date.parse(@shared_data['shared_at']).strftime("%B %d, %Y") %>
+      </p>
+    </div>
+
+    <!-- Build Info Card -->
+    <div class="bg-white rounded-lg shadow-sm border p-6 mb-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-4">
+        <i class="fas fa-desktop mr-2 text-indigo-600"></i><%= @shared_data['name'] || 'Untitled Build' %>
+      </h2>
+      
+      <!-- Build Summary -->
+      <div class="grid md:grid-cols-3 gap-6 mb-6">
+        <div class="text-center p-4 bg-gray-50 rounded-lg">
+          <p class="text-sm font-medium text-gray-500">Total Cost</p>
+          <p class="text-2xl font-bold text-indigo-600">
+            <%= number_to_currency((@shared_data['total_cost'] || 0) / 100.0) %>
+          </p>
+        </div>
+        <div class="text-center p-4 bg-gray-50 rounded-lg">
+          <p class="text-sm font-medium text-gray-500">Total Wattage</p>
+          <p class="text-2xl font-bold text-green-600">
+            <%= @shared_data['total_wattage'] || 0 %>W
+          </p>
+        </div>
+        <div class="text-center p-4 bg-gray-50 rounded-lg">
+          <p class="text-sm font-medium text-gray-500">Components</p>
+          <p class="text-2xl font-bold text-purple-600">
+            <%= @shared_data['parts_count'] || 0 %> parts
+          </p>
+        </div>
+      </div>
+
+      <!-- Share Actions -->
+      <div class="flex flex-col sm:flex-row gap-3 justify-center border-t pt-6">
+        <%= link_to new_build_path, 
+              class: "inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg text-center transition-colors duration-200" do %>
+          <i class="fas fa-rocket mr-2"></i>Build Your Own PC
+        <% end %>
+        
+        <button onclick="copyShareLink()" 
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200">
+          <i class="fas fa-clipboard mr-2"></i>Copy Link
+        </button>
+        
+        <% if current_user %>
+          <%= link_to "#", 
+                class: "bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-lg text-center transition-colors duration-200",
+                onclick: "alert('Save functionality coming soon!')" do %>
+            <i class="fas fa-save mr-2"></i>Save to My Builds
+          <% end %>
+        <% else %>
+          <%= link_to login_path, 
+                class: "bg-gray-600 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg text-center transition-colors duration-200" do %>
+            <i class="fas fa-lock mr-2"></i>Login to Save
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Components List -->
+    <div class="bg-white rounded-lg shadow-sm border">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h3 class="text-xl font-semibold text-gray-900">
+          <i class="fas fa-tools mr-2 text-indigo-600"></i>Selected Components
+        </h3>
+      </div>
+      
+      <div class="p-6">
+        <% if @shared_data['components'] && @shared_data['components'].any? %>
+          <div class="grid md:grid-cols-2 gap-6">
+            <% @shared_data['components'].each do |category, component| %>
+              <div class="border border-gray-200 rounded-lg p-4">
+                <div class="flex items-center space-x-2 mb-3">
+                  <i class="text-xl
+                    <% case category.downcase
+                       when "cpu" %>fas fa-microchip text-indigo-600
+                    <% when "gpu" %>fas fa-gamepad text-green-600
+                    <% when "motherboard" %>fas fa-bolt text-yellow-600
+                    <% when "memory" %>fas fa-brain text-purple-600
+                    <% when "storage" %>fas fa-hdd text-blue-600
+                    <% when "cooler" %>fas fa-snowflake text-cyan-600
+                    <% when "pccase", "case" %>fas fa-cube text-gray-600
+                    <% when "psu" %>fas fa-plug text-red-600
+                    <% else %>fas fa-tools text-gray-600
+                    <% end %>"></i>
+                  <h4 class="font-semibold text-gray-900 capitalize">
+                    <%= category.humanize %>
+                  </h4>
+                </div>
+                
+                <div class="bg-gray-50 rounded p-3">
+                  <p class="font-medium text-gray-900 mb-1">
+                    <%= component['name'] %>
+                  </p>
+                  <p class="text-sm text-green-600 font-semibold">
+                    <%= component['price'] %>
+                  </p>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="text-center py-8 text-gray-500">
+            <i class="fas fa-cube text-4xl block mb-4 text-gray-400"></i>
+            <p class="text-lg">No components selected in this build</p>
+            <p class="text-sm">This appears to be an empty or incomplete build.</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Raw JSON Data (for debugging/transparency) -->
+    <% if Rails.env.development? %>
+      <details class="mt-8">
+        <summary class="cursor-pointer text-sm text-gray-500 hover:text-gray-700">
+          <i class="fas fa-search mr-1"></i>View Raw Build Data (Development Mode)
+        </summary>
+        <pre class="mt-2 p-4 bg-gray-100 rounded text-xs overflow-auto">
+<%= JSON.pretty_generate(@shared_data) %>
+        </pre>
+      </details>
+    <% end %>
+  </div>
+</div>
+
+<!-- JavaScript for copying share link -->
+<script>
+  function copyShareLink() {
+    const shareUrl = window.location.href;
+    
+    if (navigator.clipboard && window.isSecureContext) {
+      // Use modern clipboard API
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        showCopyFeedback('Link copied to clipboard!');
+      }).catch(() => {
+        fallbackCopy(shareUrl);
+      });
+    } else {
+      // Fallback for older browsers or non-secure contexts
+      fallbackCopy(shareUrl);
+    }
+  }
+
+  function fallbackCopy(text) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.opacity = '0';
+    document.body.appendChild(textArea);
+    textArea.select();
+    
+    try {
+      document.execCommand('copy');
+      showCopyFeedback('Link copied to clipboard!');
+    } catch (err) {
+      showCopyFeedback('Could not copy link. Please copy manually: ' + text);
+    }
+    
+    document.body.removeChild(textArea);
+  }
+
+  function showCopyFeedback(message) {
+    // Create temporary notification
+    const notification = document.createElement('div');
+    notification.textContent = message;
+    notification.className = 'fixed top-4 right-4 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg z-50 transition-opacity duration-300';
+    
+    document.body.appendChild(notification);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+      notification.style.opacity = '0';
+      setTimeout(() => {
+        document.body.removeChild(notification);
+      }, 300);
+    }, 3000);
+  }
+</script>

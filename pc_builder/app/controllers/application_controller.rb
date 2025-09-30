@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
   before_action :log_request_start
+  before_action :authenticate_user!
   after_action :log_request_end
   around_action :log_performance
 
@@ -10,13 +11,49 @@ class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, with: :handle_record_not_found
   rescue_from ActionController::ParameterMissing, with: :handle_parameter_missing
 
+  protected
+
+  def current_user
+    return @current_user if defined?(@current_user)
+    
+    @current_user = if jwt_token.present?
+      User.decode_jwt_token(jwt_token)
+    else
+      nil
+    end
+    
+    Rails.logger.debug "[AUTH] Current user: #{@current_user&.id || 'none'} (#{@current_user&.email})" if @current_user
+    @current_user
+  end
+  helper_method :current_user
+
+  def authenticate_user!
+    unless current_user
+      Rails.logger.warn "[AUTH] Unauthorized access attempt to #{request.fullpath}"
+      
+      respond_to do |format|
+        format.html { 
+          flash[:alert] = "Please log in to access this page"
+          redirect_to login_path 
+        }
+        format.json { 
+          render json: { error: 'Authentication required' }, status: :unauthorized 
+        }
+      end
+    end
+  end
+
+  def jwt_token
+    @jwt_token ||= cookies.signed[:jwt_token]
+  end
+
   private
 
   def log_request_start
     Rails.logger.info "[REQUEST START] #{request.method} #{request.fullpath} - IP: #{request.remote_ip} - User-Agent: #{request.user_agent&.truncate(100)}"
     Rails.logger.info "[REQUEST PARAMS] #{sanitized_params}" unless params.empty?
     session_id_str = session.id.respond_to?(:to_s) ? session.id.to_s : session.id.inspect
-    Rails.logger.info "[SESSION INFO] User ID: #{session[:user_id] || 'guest'}, Session ID: #{session_id_str&.truncate(10)}"
+    Rails.logger.info "[SESSION INFO] User ID: #{current_user&.id || 'guest'}, Session ID: #{session_id_str&.truncate(10)}"
   end
 
   def log_request_end
