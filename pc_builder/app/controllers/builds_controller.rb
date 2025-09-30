@@ -11,6 +11,27 @@ class BuildsController < ApplicationController
   def show
     Rails.logger.info "[BUILD SHOW] Loading build ID: #{params[:id]} for user: #{current_user&.id || 'guest'}"
     @build = Build.find(params[:id])
+    @build_id = @build["id"]
+    @sample_parts = {}
+    @categories = {
+      "Cpu"        => Cpu,
+      "Gpu"        => Gpu,
+      "Motherboard"=> Motherboard,
+      "Memory"     => Memory,
+      "Storage"    => Storage,
+      "Cooler"     => Cooler,
+      "PcCase"       => PcCase,
+      "Psu"        => Psu
+    }
+    @build.parts.each do |part|
+        @sample_parts[part.class.name] = part
+        Rails.logger.info "#{part.name}"
+        Rails.logger.info "#{part.brand}"
+        Rails.logger.info "#{part.class.name}"
+        # count = @sample_parts[name].count
+        # Rails.logger.debug "[BUILDS INDEX] Loaded #{count} sample #{name} parts"
+    end
+    Rails.logger.info "#{@sample_parts}"
     Rails.logger.info "[BUILD SHOW] Successfully loaded build '#{@build.name}' with #{@build.parts.count} parts"
   end
 
@@ -21,43 +42,11 @@ class BuildsController < ApplicationController
   end
 
   def create
-    Rails.logger.info "[BUILD CREATE] Starting build creation with params: #{build_params.inspect}"
-    Rails.logger.info "[BUILD CREATE] User: #{current_user&.id || 'creating default user'}"
-    
-    @build = Build.new(build_params)            # ONLY :name here
-    @build.user = current_user || default_user  # attach a user
-    
-    Rails.logger.info "[BUILD CREATE] Assigned user ID: #{@build.user.id} to build '#{@build.name}'"
+    @build = Build.new(build_params)
 
     if @build.save
-      Rails.logger.info "[BUILD CREATE] Successfully saved build ID: #{@build.id}"
-      
-      selected_ids = Array(params.dig(:build, :part_ids)).reject(&:blank?)
-      qty_hash     = (params.dig(:build, :quantities) || {}) # <- read directly from params
-      
-      Rails.logger.info "[BUILD CREATE] Adding #{selected_ids.count} parts to build"
-      Rails.logger.debug "[BUILD CREATE] Selected part IDs: #{selected_ids.inspect}"
-      Rails.logger.debug "[BUILD CREATE] Quantities: #{qty_hash.inspect}"
-
-      selected_ids.each do |pid|
-        qty = qty_hash[pid.to_s].presence || "1"
-        Rails.logger.debug "[BUILD CREATE] Adding part ID: #{pid}, quantity: #{qty}"
-        build_item = BuildItem.create!(build: @build, part_id: pid.to_i, quantity: qty.to_i)
-        Rails.logger.debug "[BUILD CREATE] Created BuildItem ID: #{build_item.id}"
-      end
-
-      # optional: cache total_wattage
-      if @build.respond_to?(:total_wattage)
-        total_wattage = @build.parts.sum(:wattage)
-        @build.update!(total_wattage: total_wattage)
-        Rails.logger.info "[BUILD CREATE] Updated total wattage: #{total_wattage}W"
-      end
-
-      Rails.logger.info "[BUILD CREATE] Build '#{@build.name}' created successfully with #{@build.parts.count} parts"
-      redirect_to @build, notice: "Build created successfully!"
+      redirect_to build_path(@build), notice: 'Build was successfully created.'
     else
-      Rails.logger.warn "[BUILD CREATE] Failed to save build: #{@build.errors.full_messages.join(', ')}"
-      Rails.logger.warn "[BUILD CREATE] Build params were: #{build_params.inspect}"
       render :new, status: :unprocessable_entity
     end
   end
@@ -84,7 +73,7 @@ class BuildsController < ApplicationController
       "Memory"      => Memory,
       "Storage"     => Storage,
       "Cooler"      => Cooler,
-      "Case"        => PcCase,
+      "PcCase"        => PcCase,
       "PSU"         => Psu
     }
     @parts_by_category = @categories.transform_values { |k| k.order(:brand, :name).limit(50) }

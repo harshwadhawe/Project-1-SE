@@ -1,6 +1,6 @@
 require "test_helper"
 
-class PcCaseTest < ActiveSupport::TestCase
+class CaseTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

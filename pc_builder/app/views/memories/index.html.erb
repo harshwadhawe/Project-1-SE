@@ -1,0 +1,65 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">
+      Memory Catalog
+    </h1>
+  </div>
+  
+  <div class="bg-white shadow-md rounded-lg overflow-hidden">
+    <table class="min-w-full leading-normal">
+      <thead>
+        <tr class="border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+          <th class="px-5 py-3">Brand</th>
+          <th class="px-5 py-3">Name</th>
+       
+          <th class="px-5 py-3 text-center">Type</th>
+          <th class="px-5 py-3 text-center">Capacity (GB)</th>
+          <th class="px-5 py-3 text-center">Modules</th>
+          <th class="px-5 py-3 text-right">Speed (MHz)</th>
+          <th class="px-5 py-3 text-right">First Word Latency (ns)</th>
+          <th class="px-5 py-3 text-right">Price</th>
+          <th class="px-5 py-3"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @memories.each do |memory| %>
+          <tr class="hover:bg-gray-50 border-b border-gray-200">
+            <td class="px-5 py-5 text-sm">
+              <p class="text-gray-900 whitespace-no-wrap"><%= memory.brand %></p>
+            </td>
+            <td class="px-5 py-5 text-sm">
+              <p class="text-gray-900 whitespace-no-wrap font-semibold"><%= memory.name %></p>
+            </td>
+            <td class="px-5 py-5 text-sm text-center">
+              <p class="text-gray-900 whitespace-no-wrap"><%= memory.mem_type %></p>
+            </td>
+            <td class="px-5 py-5 text-sm text-center">
+              <p class="text-gray-900 whitespace-no-wrap font-semibold"><%= memory.mem_kit_capacity_gb %></p>
+            </td>
+            <td class="px-5 py-5 text-sm text-center">
+              <p class="text-gray-900 whitespace-no-wrap"><%= memory.mem_modules %></p>
+            </td>
+            <td class="px-5 py-5 text-sm text-right">
+              <p class="text-gray-900 whitespace-no-wrap"><%= memory.mem_speed_mhz %></p>
+            </td>
+            <td class="px-5 py-5 text-sm text-right">
+              <p class="text-gray-900 whitespace-no-wrap"><%= memory.mem_first_word_latency %></p>
+            </td>
+            <td class="px-5 py-5 text-sm text-right">
+              <%# Format price from cents to dollars %>
+              <p class="text-green-600 font-bold whitespace-no-wrap">$<%= '%.2f' % (memory.price_cents / 100.0) %></p>
+            </td>
+            <td class="px-5 py-5 text-sm text-center">
+              <%# This "Add" button only appears if a @build_id is present %>
+              <% if @build_id.present? %>
+                <%= button_to 'Add', build_build_items_path(build_id: @build_id, part_id: memory.id, part_class: memory.class.name),
+                              params: { part_id: memory.id },
+                              class: "bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded text-xs" %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

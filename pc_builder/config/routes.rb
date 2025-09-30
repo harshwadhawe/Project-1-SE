@@ -1,4 +1,24 @@
 Rails.application.routes.draw do
+  get "pc_cases/index"
+  get "pc_cases/show"
+  get "pccase/create"
+  get "build_items/create"
+  get "cases/index"
+  get "cases/show"
+  get "memories/index"
+  get "memories/show"
+  get "psus/index"
+  get "psus/show"
+  get "coolers/index"
+  get "coolers/show"
+  get "storages/index"
+  get "storages/show"
+  get "motherboards/index"
+  get "motherboards/show"
+  get "gpus/index"
+  get "gpus/show"
+  get "cpus/index"
+  get "cpus/show"
   get "builds/index"
   get "builds/show"
   get "builds/new"
@@ -20,9 +40,22 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  root "home#index"
+  root "builds#index"
   resources :users, only: [:index, :show]
   resources :parts, only: [:index, :show]
+  
   resources :builds
+  resources :cpus, only: [:index, :show]
+  resources :gpus, only: [:index, :show]
+  resources :motherboards, only: [:index, :show]
+  resources :memories, only: [:index, :show]
+  resources :storages, only: [:index, :show]
+  resources :coolers, only: [:index, :show]
+  resources :pc_cases, only: [:index, :show]
+  resources :psus, only: [:index, :show]
+
+  resources :builds, only: [:show] do
+    resources :build_items, only: [:create]
+  end
 
 end

@@ -1,18 +1,55 @@
-<h1><%= @build.name %></h1>
+<h1>PC Builder</h1>
 
-<h2>Selected Parts</h2>
-<% if @build.build_items.any? %>
-  <ul>
-    <% @build.build_items.includes(:part).each do |bi| %>
-      <li>
-        <strong><%= bi.part.type %></strong> — 
-        <%= bi.part.brand %> <%= bi.part.name %> 
-        (Qty: <%= bi.quantity %>)
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>No parts selected.</p>
-<% end %>
+<h2>Browse Categories</h2>
+<table border="1" cellpadding="8" cellspacing="0">
+  <tr>
+    <th>Category</th>
+    <th>Selected Parts</th>
+    <th>Price</th>
+    <th>Actions</th>
+  </tr>
 
-<%= link_to "All Builds", builds_path %>
+  <% total_cost = 0 %>
+  <% @categories.each do |klass, part| %>
+    <tr>
+      <td><strong><%= klass %></strong></td>
+      <td>
+        <% if @sample_parts[klass].present? %>
+          <%= "#{@sample_parts[klass].brand} #{@sample_parts[klass].name}" %>
+        <% else %>
+          <em>No parts selected</em>
+        <% end %>
+      </td>
+      <td>
+        <% if @sample_parts[klass].present? %>
+          <%= "$" '%.2f' % (@sample_parts[klass].price_cents / 100.0) %>
+          <% total_cost += @sample_parts[klass].price_cents %>
+        <% else %>
+          <%="$0.00"%>
+        <% end %>
+      </td>
+      <td>
+        <% if "#{klass}"!="PcCase"%>
+          <% resource_name = klass.tableize %>
+           <%= link_to "Add", send("#{resource_name}_path", { build_id: @build_id }) %>
+        <% else %>
+          <%= link_to "Add", send("pc_cases_path", { build_id: @build_id }) %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+      <td><strong><%= "Total" %></strong></td>
+      <td>
+      </td>
+      <td>
+      <%= "$" '%.2f' % (total_cost/ 100.0) %>
+      </td>
+      <td>
+      </td>
+    </tr>
+</table>
+
+<div>
+  <%= link_to "Back to other builds", builds_path %>
+</div>
