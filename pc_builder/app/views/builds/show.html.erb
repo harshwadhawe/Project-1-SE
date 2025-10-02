@@ -1,55 +1,105 @@
-<h1>PC Builder</h1>
+<div class="min-h-screen bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-<h2>Browse Categories</h2>
-<table border="1" cellpadding="8" cellspacing="0">
-  <tr>
-    <th>Category</th>
-    <th>Selected Parts</th>
-    <th>Price</th>
-    <th>Actions</th>
-  </tr>
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">
+        <i class="fas fa-desktop mr-3 text-indigo-600"></i>
+        <%= @build.name %>
+      </h1>
+      <p class="text-lg text-gray-600">
+        Created on <%= @build.created_at.strftime("%B %d, %Y") %>
+      </p>
+    </div>
 
-  <% total_cost = 0 %>
-  <% @categories.each do |klass, part| %>
-    <tr>
-      <td><strong><%= klass %></strong></td>
-      <td>
-        <% if @sample_parts[klass].present? %>
-          <%= "#{@sample_parts[klass].brand} #{@sample_parts[klass].name}" %>
-        <% else %>
-          <em>No parts selected</em>
-        <% end %>
-      </td>
-      <td>
-        <% if @sample_parts[klass].present? %>
-          <%= "$" '%.2f' % (@sample_parts[klass].price_cents / 100.0) %>
-          <% total_cost += @sample_parts[klass].price_cents %>
-        <% else %>
-          <%="$0.00"%>
-        <% end %>
-      </td>
-      <td>
-        <% if "#{klass}"!="PcCase"%>
-          <% resource_name = klass.tableize %>
-           <%= link_to "Add", send("#{resource_name}_path", { build_id: @build_id }) %>
-        <% else %>
-          <%= link_to "Add", send("pc_cases_path", { build_id: @build_id }) %>
-        <% end %>
-      </td>
-    </tr>
-  <% end %>
-  <tr>
-      <td><strong><%= "Total" %></strong></td>
-      <td>
-      </td>
-      <td>
-      <%= "$" '%.2f' % (total_cost/ 100.0) %>
-      </td>
-      <td>
-      </td>
-    </tr>
-</table>
+    <div class="mb-8 bg-white rounded-lg shadow-sm border p-6">
+      <h3 class="text-xl font-semibold text-gray-900 mb-4">
+        <i class="fas fa-calculator mr-2 text-indigo-600"></i>Build Summary
+      </h3>
+      <div class="grid md:grid-cols-3 gap-6 text-center">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Total Cost</p>
+          <p class="text-2xl font-bold text-gray-900">
+            <%= number_to_currency(@build.total_cost / 100.0) %>
+          </p>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-gray-500">Estimated Wattage</p>
+          <p class="text-2xl font-bold text-gray-900"><%= @build.total_wattage %>W</p>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-gray-500">Components</p>
+          <p class="text-2xl font-bold text-gray-900"><%= @build.parts.count %> / <%= @categories.count %></p>
+        </div>
+      </div>
+    </div>
 
-<div>
-  <%= link_to "Back to other builds", builds_path %>
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Selected Components</h2>
+      <div class="grid lg:grid-cols-2 gap-6">
+
+        <%# Loop through all CATEGORIES, not just selected parts %>
+        <% @categories.each do |category_name, model_class| %>
+          <div class="bg-white rounded-lg shadow-sm border flex flex-col">
+            <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 rounded-t-lg">
+              <div class="flex items-center space-x-3">
+                 <i class="text-2xl text-indigo-600
+                    <% case category_name
+                       when "Cpu" %>fas fa-microchip
+                    <% when "Gpu" %>fas fa-gamepad
+                    <% when "Motherboard" %>fas fa-bolt
+                    <% when "Memory" %>fas fa-brain
+                    <% when "Storage" %>fas fa-hdd
+                    <% when "Cooler" %>fas fa-snowflake
+                    <% when "PcCase" %>fas fa-cube
+                    <% when "Psu" %>fas fa-plug
+                    <% end %>"></i>
+                <h3 class="text-xl font-semibold text-gray-900">
+                  <%= category_name == "PcCase" ? "Case" : category_name %>
+                </h3>
+              </div>
+            </div>
+
+            <%# Check if a part for this category has been selected %>
+            <% if part = @sample_parts[category_name] %>
+              <div class="p-6 flex-grow">
+                <div class="flex items-center justify-between">
+                  <div class="flex-1 min-w-0">
+                    <p class="font-medium text-gray-900 truncate">
+                      <%= part.brand %> <%= part.name %>
+                    </p>
+                    <p class="text-sm text-gray-500 truncate">
+                      <%= part.model_number %>
+                    </p>
+                  </div>
+                  <div class="text-right">
+                    <p class="font-semibold text-indigo-600">
+                      <%= number_to_currency(part.price_cents / 100.0) %>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="px-6 py-3 bg-gray-50 border-t text-right rounded-b-lg">
+                <a href="#" class="text-red-600 hover:text-red-800 text-sm font-medium mr-4">Remove</a>
+                <a href="#" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">Change</a>
+              </div>
+            <% else %>
+              <div class="p-6 flex-grow flex flex-col items-center justify-center text-center">
+                <p class="text-gray-500 italic mb-4">No part selected</p>
+                <%
+                  # Logic to generate the correct path for the "Add" link
+                  path_name = category_name == "PcCase" ? "pc_cases_path" : "#{category_name.downcase.pluralize}_path"
+                %>
+                <%= link_to "Add a #{category_name}", send(path_name, { build_id: @build_id }), class: "bg-indigo-100 hover:bg-indigo-200 text-indigo-800 font-semibold px-4 py-2 rounded-lg transition-colors duration-200" %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+
+    <div class="mt-10 text-center">
+      <%= link_to "Back to All Builds", builds_path, class: "text-gray-600 hover:text-gray-800 font-medium" %>
+    </div>
+  </div>
 </div>

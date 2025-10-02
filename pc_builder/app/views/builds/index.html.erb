@@ -1,7 +1,63 @@
-<h1>All Builds</h1>
-<%= link_to "New Build", new_build_path %>
-<ul>
-  <% @builds.each do |b| %>
-    <li><%= link_to b.name, b %> — <%= pluralize(b.parts.count, "part") %></li>
-  <% end %>
-</ul>
+<div class="min-h-screen bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <div class="flex flex-col sm:flex-row justify-between items-center mb-8 pb-4 border-b">
+      <div>
+        <h1 class="text-4xl font-bold text-gray-900">
+          <i class="fas fa-list-ul mr-3 text-indigo-600"></i>All Builds
+        </h1>
+        <p class="mt-1 text-lg text-gray-600">Browse all your saved PC builds.</p>
+      </div>
+      <div>
+        <%= link_to new_build_path, class: "bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200 inline-block mt-4 sm:mt-0" do %>
+          <i class="fas fa-plus mr-2"></i>New Build
+        <% end %>
+      </div>
+    </div>
+
+    <div class="space-y-6">
+      <% if @builds.any? %>
+        <% @builds.each do |build| %>
+          <div class="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow duration-200">
+            <div class="p-6">
+              <div class="flex flex-col sm:flex-row justify-between">
+                <div class="flex-1 mb-4 sm:mb-0">
+                  <h2 class="text-2xl font-bold text-gray-900 hover:text-indigo-600">
+                    <%= link_to build.name, build_path(build) %>
+                  </h2>
+                  <div class="flex items-center space-x-4 mt-2 text-sm text-gray-500">
+                    <span>
+                      <i class="fas fa-calendar-alt mr-1"></i>
+                      Created on <%= build.created_at.strftime("%b %d, %Y") %>
+                    </span>
+                    <span>
+                      <i class="fas fa-box-open mr-1"></i>
+                      <%= build.parts.count %> <%= 'Part'.pluralize(build.parts.count) %>
+                    </span>
+                    <span>
+                      <i class="fas fa-dollar-sign mr-1"></i>
+                      <%= number_to_currency(build.total_cost / 100.0, precision: 0) %>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="flex items-center">
+                  <%= link_to "View Details", build_path(build), class: "bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold px-5 py-2 rounded-lg transition-colors duration-200" %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="text-center bg-white rounded-lg shadow-sm border p-12">
+          <i class="fas fa-folder-open text-5xl text-gray-400 mb-4"></i>
+          <h3 class="text-xl font-semibold text-gray-900">No Builds Yet</h3>
+          <p class="text-gray-500 mt-2">
+            You haven't created any builds. Start a new one to see it here.
+          </p>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</div>
