@@ -5,6 +5,10 @@ class Build < ApplicationRecord
 
   validates :name, presence: true
 
+
+  # NEW: cache item count before any dependent destroys kick in
+  set_callback :destroy, :before, :cache_build_item_count, prepend: true
+  
   before_create :log_build_creation
   after_create :log_build_created
   before_destroy :log_build_destruction
@@ -78,6 +82,11 @@ class Build < ApplicationRecord
 
   private
 
+  def cache_build_item_count
+    @build_items_count_at_destroy = BuildItem.where(build_id: id).count
+  end
+
+
   def log_build_creation
     Rails.logger.info "[BUILD CREATE] Creating new build: '#{name}' for user ID: #{user_id || 'none'}"
   end
@@ -87,7 +96,9 @@ class Build < ApplicationRecord
   end
 
   def log_build_destruction
-    Rails.logger.warn "[BUILD DESTROY] Destroying build ID: #{id} - '#{name}' with #{build_items.count} items"
+    # use cached value if present; fall back to live count
+    count = @build_items_count_at_destroy || BuildItem.where(build_id: id).count
+    Rails.logger.warn "[BUILD DESTROY] Destroying build ID: #{id} - '#{name}' with #{count} items"
   end
 
   def log_validation_results
