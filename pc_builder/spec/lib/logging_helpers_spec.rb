@@ -76,4 +76,62 @@ RSpec.describe "DatabaseLogger concern", type: :model do
     expect(logger_double).to have_received(:warn)
       .with("[DBLOGBUILD] Destroyed: ID:#{rec.id}").at_least(:once)
   end
+
+
+  it "computes record count across (respond_to?(:count) / array-without-count / scalar) in with_query_logging" do
+    # 1) respond_to?(:count) — already covered with an Array earlier, but assert explicitly
+    t0 = Time.current; t1 = t0 + 0.01
+    allow(Time).to receive(:current).and_return(t0, t1)
+    DbLogBuild.with_query_logging("countable") { [1, 2, 3] }
+    expect(logger_double).to have_received(:debug)
+      .with(a_string_including("[DBLOGBUILD_QUERY] Completed: countable - 3 records")).at_least(:once)
+
+    # 2) is_a?(Array) but does NOT respond_to?(:count) -> size path
+    class NoCountArray < Array
+      undef_method :count
+    end
+    arr = NoCountArray.new.concat([10, 20, 30])
+
+    t2 = Time.current; t3 = t2 + 0.01
+    allow(Time).to receive(:current).and_return(t2, t3)
+    DbLogBuild.with_query_logging("size_fallback") { arr }
+    expect(logger_double).to have_received(:debug)
+      .with(a_string_including("[DBLOGBUILD_QUERY] Completed: size_fallback - 3 records")).at_least(:once)
+
+    # 3) neither count nor array -> default to 1
+    obj = Object.new
+    t4 = Time.current; t5 = t4 + 0.01
+    allow(Time).to receive(:current).and_return(t4, t5)
+    DbLogBuild.with_query_logging("scalar_default") { obj }
+    expect(logger_double).to have_received(:debug)
+      .with(a_string_including("[DBLOGBUILD_QUERY] Completed: scalar_default - 1 records")).at_least(:once)
+  end
+
+  it "log_model_summary covers User/Build/Part-like(Build: Cpu)/BuildItem/else branches" do
+    # User branch
+    u = User.new(name: "Alice", email: "alice@example.com")
+    u.extend(DatabaseLogger)
+    expect(u.send(:log_model_summary)).to include("Alice", "alice@example.com")
+
+    # Build branch
+    b = Build.new(name: "B1", user_id: 5)
+    b.extend(DatabaseLogger)
+    expect(b.send(:log_model_summary)).to include("B1", "User:5")
+
+    # Part-like branch (Cpu inherits Part) — includes price_in_dollars
+    c = Cpu.new(brand: "AMD", name: "Ryzen", price_cents: 12_345, wattage: 65, cpu_cores: 6, cpu_threads: 12)
+    c.extend(DatabaseLogger)
+    expect(c.send(:log_model_summary)).to include("AMD", "Ryzen", "$") # don't rely on exact float formatting
+
+    # BuildItem branch
+    bi = BuildItem.new(build_id: 9, quantity: 2, part: Cpu.new(brand: "X", name: "Y"))
+    bi.extend(DatabaseLogger)
+    expect(bi.send(:log_model_summary)).to include("Y", "x2", "Build:9")
+
+    # else branch (no id method -> rescue 'new')
+    klass = Class.new
+    obj = klass.new
+    obj.extend(DatabaseLogger)
+    expect(obj.send(:log_model_summary)).to include("ID:new")
+  end
 end
