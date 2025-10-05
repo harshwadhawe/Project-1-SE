@@ -25,7 +25,13 @@ module DatabaseLogger
       result = yield
       
       duration = (Time.current - start_time) * 1000
-      count = result.respond_to?(:count) ? result.count : (result.is_a?(Array) ? result.size : 1)
+      count = if result.respond_to?(:count) && !result.is_a?(String)
+                result.count 
+              elsif result.is_a?(Array)
+                result.size
+              else
+                1
+              end
       
       Rails.logger.debug "[#{self.name.upcase}_QUERY] Completed: #{description} - #{count} records in #{duration.round(2)}ms"
       

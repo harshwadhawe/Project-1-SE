@@ -11,5 +11,9 @@ require 'rails_helper'
 #   end
 # end
 RSpec.describe StoragesHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'module inclusion' do
+    it 'includes the helper module' do
+      expect(helper.class.included_modules).to include(StoragesHelper)
+    end
+  end
 end
