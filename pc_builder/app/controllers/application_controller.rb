@@ -44,7 +44,10 @@ class ApplicationController < ActionController::Base
   end
 
   def jwt_token
-    @jwt_token ||= cookies.signed[:jwt_token]
+    return @jwt_token if defined?(@jwt_token)
+
+    signed = cookies.respond_to?(:signed) ? cookies.signed : nil
+    @jwt_token = signed && (signed[:jwt_token] || signed['jwt_token'])
   end
 
   private

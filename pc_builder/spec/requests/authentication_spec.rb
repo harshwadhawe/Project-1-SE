@@ -24,7 +24,7 @@ RSpec.describe "Authentication", type: :request do
           password_confirmation: "password123"
         }
       }
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
 
     it "rejects mismatched passwords" do
@@ -36,7 +36,7 @@ RSpec.describe "Authentication", type: :request do
           password_confirmation: "different"
         }
       }
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 
@@ -63,7 +63,7 @@ RSpec.describe "Authentication", type: :request do
           password: "wrong_password"
         }
       }
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
       expect(cookies[:jwt_token]).to be_blank
     end
 
@@ -74,7 +74,7 @@ RSpec.describe "Authentication", type: :request do
           password: "password123"
         }
       }
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 

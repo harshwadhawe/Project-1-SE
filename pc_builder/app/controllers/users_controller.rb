@@ -52,7 +52,7 @@ class UsersController < ApplicationController
     else
       Rails.logger.warn "[SIGNUP FAILED] User creation failed: #{@user.errors.full_messages.join(', ')}"
       flash.now[:error] = "Please fix the errors below"
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
