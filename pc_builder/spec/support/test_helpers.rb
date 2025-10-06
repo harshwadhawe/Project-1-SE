@@ -9,12 +9,14 @@ module TestHelpers
 
   def cpu(attrs = {})
     Cpu.create!({ brand: "AMD", name: "Ryzen 7 7800X3D", model_number: "7800X3D",
-                  price_cents: 39900, wattage: 120 }.merge(attrs))
+                  price_cents: 39900, wattage: 120, cpu_core_clock: 4.2, 
+                  cpu_boost_clock: 5.0, cpu_cores: 8, cpu_threads: 16 }.merge(attrs))
   end
 
   def gpu(attrs = {})
     Gpu.create!({ brand: "NVIDIA", name: "RTX 4080 Super", model_number: "RTX4080S",
-                  price_cents: 119900, wattage: 320 }.merge(attrs))
+                  price_cents: 119900, wattage: 320, gpu_memory: 16, 
+                  gpu_memory_type: "GDDR6X", gpu_core_clock_mhz: 2205, gpu_core_boost_mhz: 2550 }.merge(attrs))
   end
 
   def motherboard(attrs = {})
@@ -34,7 +36,8 @@ module TestHelpers
 
   def cooler(attrs = {})
     Cooler.create!({ brand: "Noctua", name: "NH-D15", model_number: "NH-D15",
-                     price_cents: 9990, wattage: 5 }.merge(attrs))
+                     price_cents: 9990, wattage: 5, cooler_type: "Air", 
+                     cooler_fan_size_mm: 140, cooler_sockets: "AM4,AM5,LGA1700" }.merge(attrs))
   end
 
   def pc_case(attrs = {})
