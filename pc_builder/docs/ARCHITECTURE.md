@@ -8,43 +8,58 @@ The PC Builder application is a Ruby on Rails web application that allows users 
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        CLIENT LAYER                        │
+│                        CLIENT LAYER                         │
 ├─────────────────────────────────────────────────────────────┤
-│  Web Browser (Chrome, Firefox, Safari, Edge)               │
-│  - HTML5, CSS3, JavaScript                                 │
-│  - Responsive Design (Mobile/Desktop)                      │
-│  - Hotwire/Turbo for SPA-like experience                  │
+│  Web Browser (Chrome, Firefox, Safari, Edge)                │
+│  - HTML5, CSS3, JavaScript                                  │
+│  - Responsive Design (Mobile/Desktop)                       │
+│  - Hotwire/Turbo for SPA-like experience                    │
 └─────────────────────┬───────────────────────────────────────┘
                       │ HTTP/HTTPS
                       ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                    APPLICATION LAYER                       │
+│                    APPLICATION LAYER                        │
 ├─────────────────────────────────────────────────────────────┤
-│                   Rails Application                        │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐        │
-│  │ Controllers │  │   Views     │  │   Routes    │        │
-│  │   (MVC-C)   │  │  (MVC-V)    │  │  (RESTful)  │        │
-│  └─────────────┘  └─────────────┘  └─────────────┘        │
+│                   Rails Application                         │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │
+│  │ Controllers │  │   Views     │  │   Routes    │          │
+│  │   (MVC-C)   │  │  (MVC-V)    │  │  (RESTful)  │          │
+│  └─────────────┘  └─────────────┘  └─────────────┘          │
 │                                                             │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐        │
-│  │   Models    │  │  Services   │  │  Helpers    │        │
-│  │  (MVC-M)    │  │ (Business)  │  │ (Utilities) │        │
-│  └─────────────┘  └─────────────┘  └─────────────┘        │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │
+│  │   Models    │  │  Services   │  │  Helpers    │          │
+│  │  (MVC-M)    │  │ (Business)  │  │ (Utilities) │          │
+│  └─────────────┘  └─────────────┘  └─────────────┘          │
 └─────────────────────┬───────────────────────────────────────┘
                       │ ActiveRecord ORM
                       ▼
-┌─────────────────────────────────────────────────────────────┐
-│                     DATA LAYER                             │
-├─────────────────────────────────────────────────────────────┤
-│               SQLite Database                               │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐        │
-│  │    Users    │  │   Builds    │  │    Parts    │        │
-│  └─────────────┘  └─────────────┘  └─────────────┘        │
-│                   │             │                          │
-│                   └─────────────┘                          │
-│                   │ Build Items │                          │
-│                   └─────────────┘                          │
-└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────┐
+│                     DATA LAYER                                      │
+├─────────────────────────────────────────────────────────────────────┤
+│               SQLite Database                                       │
+│                                                                     │
+│  ┌─────────────┐        ┌─────────────┐        ┌─────────────┐      │
+│  │    Users    │1──────*│   Builds    │        │    Parts    │      │
+│  │             │        │             │        │             │      │
+│  │ • id        │        │ • id        │        │ • id        │      │
+│  │ • name      │        │ • user_id   │        │ • type      │      │
+│  │ • email     │        │ • name      │        │ • name      │      │
+│  │ • password  │        │ • wattage   │        │ • brand     │      │
+│  └─────────────┘        │ • share_*   │        │ • price     │      │
+│                         └─────────────┘        │ • wattage   │      │
+│                                │1              └─────────────┘      │
+│                                │                       │*           │
+│                                │*                      │            │
+│                         ┌─────────────┐                │            │
+│                         │ Build Items │*──────────────┘1            │
+│                         │ (Junction)  │                             │
+│                         │ • build_id  │                             │       
+│                         │ • part_id   │                             │
+│                         │ • quantity  │                             │
+│                         │ • note      │                             │
+│                         └─────────────┘                             │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
 ```
 
 ## Component Architecture
@@ -111,8 +126,8 @@ app/
 
 ```
 ┌─────────────────┐         ┌─────────────────┐
-│      User       │1      *│     Build       │
-├─────────────────┤◆────────├─────────────────┤
+│      User       │1      * │     Build       │
+├─────────────────┤◆────── ├─────────────────┤
 │ id: integer     │         │ id: integer     │
 │ name: string    │         │ name: string    │
 │ email: string   │         │ user_id: integer│
@@ -120,9 +135,9 @@ app/
 │ created_at      │         │ share_token     │
 │ updated_at      │         │ shared_data     │
 └─────────────────┘         │ shared_at       │
-                           │ created_at      │
-                           │ updated_at      │
-                           └─────────────────┘
+                            │ created_at      │
+                            │ updated_at      │
+                            └─────────────────┘
                                     │
                                     │ 1
                                     │
@@ -160,15 +175,15 @@ app/
                     ┌───────────────┼───────────────┐
                     │               │               │
             ┌───────────┐   ┌───────────┐   ┌───────────┐
-            │    CPU    │   │    GPU    │   │ Motherboard│
+            │    CPU    │   │    GPU    │   │Motherboard│
             ├───────────┤   ├───────────┤   ├───────────┤
             │cpu_cores  │   │gpu_memory │   │mb_socket  │
             │cpu_threads│   │gpu_memory │   │mb_chipset │
             │core_clock │   │ _type     │   │mb_form    │
             │boost_clock│   │core_clock │   │ _factor   │
             └───────────┘   │ _mhz      │   │mb_ram     │
-                           └───────────┘   │ _slots    │
-                                          └───────────┘
+                            └───────────┘   │ _slots    │
+                                            └───────────┘
 ```
 
 ### 2. Database Entity-Relationship Diagram
@@ -218,7 +233,7 @@ app/
        │ 1. HTTP Request   │                   │
        ├──────────────────▶│                   │
        │                   │ 2. Route Match    │
-       │                   ├──────────────────▶│
+       │                   ├─────────────────▶│
        │                   │                   │
        │                   │                   │ 3. Process
        │                   │                   │    Request

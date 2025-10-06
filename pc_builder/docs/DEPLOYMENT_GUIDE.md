@@ -26,10 +26,6 @@ cd Project-1-SE/pc_builder
 # Install Ruby gems
 bundle install
 
-# Install JavaScript dependencies (if any)
-npm install  # or yarn install
-```
-
 #### 3. Database Setup
 ```bash
 # Create and migrate the database
