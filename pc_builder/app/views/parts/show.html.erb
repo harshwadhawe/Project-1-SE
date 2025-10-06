@@ -1,14 +1,35 @@
-<h1><%= @part.name %></h1>
-<p><strong>Brand:</strong> <%= @part.brand %></p>
-<p><strong>Model #:</strong> <%= @part.model_number %></p>
-<p><strong>Type:</strong> <%= @part.type %></p>
-<p><strong>Wattage:</strong> <%= @part.wattage || 0 %> W</p>
-<p><strong>Price:</strong> <%= number_to_currency(@part.price || 0) %></p>
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="bg-white border rounded-xl shadow-sm p-6">
+    <div class="flex items-start justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900"><%= @part.name %></h1>
+        <p class="mt-1 text-sm text-gray-500">
+          <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800 text-xs font-medium">
+            <%= @part.type %>
+          </span>
+        </p>
+      </div>
+      <div class="text-right">
+        <% price_text = number_to_currency(@part.price_cents.to_i / 100.0) %>
+        <p class="text-lg font-semibold text-gray-900"><%= price_text %></p>
+        <% if @part.wattage.present? %>
+          <p class="text-sm text-gray-500"><%= @part.wattage %>W</p>
+        <% end %>
+      </div>
+    </div>
 
-<hr>
-<% partial_name = "parts/details_#{@part.type.underscore}" %>
-<% begin %>
-  <%= render partial: partial_name, locals: { part: @part } %>
-<% rescue ActionView::MissingTemplate %>
-  <p><em>No extra specs available for this part.</em></p>
-<% end %>
+    <div class="mt-4 grid sm:grid-cols-2 gap-4 text-sm">
+      <p><span class="font-medium text-gray-600">Brand:</span> <span class="text-gray-900"><%= @part.brand %></span></p>
+      <p><span class="font-medium text-gray-600">Model #:</span> <span class="text-gray-900"><%= @part.model_number.presence || "—" %></span></p>
+    </div>
+
+    <hr class="my-6">
+
+    <% partial_name = "parts/details_#{@part.type.underscore}" %>
+    <% begin %>
+      <%= render partial: partial_name, locals: { part: @part } %>
+    <% rescue ActionView::MissingTemplate %>
+      <p class="text-gray-500"><em>No extra specs available for this part.</em></p>
+    <% end %>
+  </div>
+</div>

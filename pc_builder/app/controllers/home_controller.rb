@@ -38,6 +38,16 @@ class HomeController < ApplicationController
     @recent_builds.each do |build|
       Rails.logger.debug "[HOME INDEX] Recent build: '#{build.name}' by user #{build.user_id} with #{build.parts.count} parts"
     end
+
+        # Current user's builds (only if logged in)
+    if current_user
+      @user_builds = current_user.builds
+                      .includes(:build_items, :parts)
+                      .order(updated_at: :desc)
+                      .limit(4)
+      Rails.logger.info "[HOME INDEX] Loaded #{@user_builds.count} builds for user #{current_user.id}"
+    end
+
   end
 
   private
