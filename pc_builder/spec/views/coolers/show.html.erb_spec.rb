@@ -1,5 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe "coolers/show.html.erb", type: :view do
-  pending "add some examples to (or delete) #{__FILE__}"
+  before do
+    @cooler = assign(:cooler, cooler(brand: 'Noctua', name: 'NH-D15'))
+  end
+
+  it 'renders without errors' do
+    render
+    expect(rendered).to be_present
+  end
 end

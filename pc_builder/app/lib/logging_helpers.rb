@@ -98,7 +98,10 @@ class MemoryLogger
   def self.log_memory_usage(context = "")
     if defined?(GC)
       gc_stat = GC.stat
-      memory_usage = `ps -o pid,vsz,rss -p #{Process.pid}`.split("\n").last.split if RUBY_PLATFORM !~ /mswin|mingw|cygwin/
+      memory_usage = if RUBY_PLATFORM !~ /mswin|mingw|cygwin/
+                       ps_output = `ps -o pid,vsz,rss -p #{Process.pid}`.split("\n").last
+                       ps_output&.split
+                     end
       
       Rails.logger.info "[MEMORY#{context.present? ? " #{context}" : ""}] " \
                        "Objects: #{gc_stat[:heap_live_slots]}, " \
