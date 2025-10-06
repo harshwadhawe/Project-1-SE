@@ -8,7 +8,6 @@ Before deploying the PC Builder application, ensure you have the following insta
 
 - **Ruby**: Version 3.2+ (check with `ruby -v`)
 - **Rails**: Version 8.0.3+ (check with `rails -v`)
-- **Node.js**: Version 16+ (for asset compilation)
 - **SQLite3**: For development/testing
 - **Git**: For version control
 
