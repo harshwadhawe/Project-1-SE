@@ -114,7 +114,13 @@
             <div class="space-y-3 max-h-64 overflow-y-auto">
               <% @parts_by_category[category_name].limit(8).each do |part| %>
                 <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors duration-200 cursor-pointer"
-                     onclick="selectComponent('<%= category_name.downcase %>', '<%= part.id %>', '<%= j(part.brand) %> <%= j(part.name) %>', '<%= number_to_currency(part.price_cents / 100.0) %>')">
+                     onclick="selectComponent(
+                       '<%= category_name.downcase %>',
+                       '<%= part.id %>',
+                       '<%= j(part.brand) %> <%= j(part.name) %>',
+                       '<%= number_to_currency(part.price_cents / 100.0) %>',
+                       <%= part.wattage || 0 %>
+                     )">
                   <div class="flex-1 min-w-0">
                     <p class="font-medium text-gray-900 truncate">
                       <%= part.brand %> <%= part.name %>
@@ -208,11 +214,12 @@
   let totalCost = 0;
   let totalWattage = 0;
 
-  function selectComponent(category, partId, name, price) {
+  function selectComponent(category, partId, name, price, wattage) {
     selectedComponents[category] = {
       id: partId,
       name: name,
-      price: price
+      price: price,
+      wattage: Number(wattage) || 0
     };
     
     // Update UI
@@ -240,12 +247,18 @@
     if (componentCount > 0) {
       document.getElementById('build-summary').classList.remove('hidden');
       
-      // Calculate totals (simplified - in real app, you'd fetch actual data)
+      // Calculate totals
       totalCost = Object.values(selectedComponents).reduce((sum, comp) => {
-        return sum + parseFloat(comp.price.replace('$', '').replace(',', ''));
+        const n = parseFloat(String(comp.price).replace(/[$,]/g, '')) || 0;
+        return sum + n;
+      }, 0);
+
+      totalWattage = Object.values(selectedComponents).reduce((sum, comp) => {
+        return sum + (Number(comp.wattage) || 0);
       }, 0);
       
       document.getElementById('total-cost').textContent = `$${totalCost.toFixed(2)}`;
+      document.getElementById('total-wattage').textContent = `${totalWattage}W`;
       document.getElementById('component-count').textContent = `${componentCount}/8`;
     } else {
       document.getElementById('build-summary').classList.add('hidden');
@@ -265,6 +278,7 @@
       name: buildName,
       components: selectedComponents,
       totalCost: totalCost,
+      totalWattage: totalWattage,
       user: '<%= current_user.name %>',
       timestamp: new Date().toISOString()
     };
@@ -283,9 +297,7 @@
         'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
       },
       body: JSON.stringify({
-        build: {
-          name: buildName
-        }
+        build: { name: buildName }
       })
     })
     .then(response => {
@@ -307,6 +319,7 @@
           'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
         },
         body: JSON.stringify({
+          // Controller accepts String or Hash; we send String for compatibility
           components_data: JSON.stringify(selectedComponents)
         })
       });
