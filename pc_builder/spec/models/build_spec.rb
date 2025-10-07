@@ -8,21 +8,6 @@ RSpec.describe Build, type: :model do
     b.name = "My Build"
     expect(b).to be_valid
   end
-
-  it "associates parts via build_items and can compute total_wattage" do
-    u   = make_user
-    b   = Build.create!(name: "Perf Build", user: u)
-    p1  = cpu(wattage: 120)
-    p2  = gpu(wattage: 300)
-    BuildItem.create!(build: b, part: p1, quantity: 1)
-    BuildItem.create!(build: b, part: p2, quantity: 1)
-
-    expect(b.parts.count).to eq(2)
-    if b.respond_to?(:total_wattage)
-      b.update!(total_wattage: b.parts.sum(:wattage))
-      expect(b.total_wattage).to eq(420)
-    end
-  end
 end
 
 RSpec.describe Build, type: :model do
@@ -90,26 +75,32 @@ RSpec.describe Build, type: :model do
 
 
   # --- Associations + aggregate helpers ---------------------------------------
-  it "associates parts via build_items and computes totals/summary with logs" do
+  it "associates parts via build_items, computes totals, and computes total_wattage for only CPU and GPU" do
     u  = make_user
     b  = Build.create!(name: "Perf Build", user: u)
     p1 = cpu(wattage: 120, price_cents: 200_00)
     p2 = gpu(wattage: 300, price_cents: 300_00)
-    BuildItem.create!(build: b, part: p1, quantity: 1)
-    BuildItem.create!(build: b, part: p2, quantity: 1)
+    # Add a part that should be ignored by the wattage calculation
+    p3 = motherboard(wattage: 50, price_cents: 150_00)
+    
+    BuildItem.create!(build: b, part: p1)
+    BuildItem.create!(build: b, part: p2)
+    BuildItem.create!(build: b, part: p3)
 
-    expect(b.parts.count).to eq(2)
+    expect(b.parts.count).to eq(3)
 
+    # MODIFIED: Expectation is now only the sum of CPU and GPU wattage
     expect(b.total_wattage).to eq(420)
     expect(logger_double).to have_received(:debug)
-      .with("[BUILD #{b.id}] Calculated total wattage: 420W").at_least(:once)
+      .with("[BUILD #{b.id}] Calculated total wattage (CPU + GPU only): 420W").at_least(:once)
 
-    expect(b.total_cost).to eq(500_00)
+    # Total cost should still include all parts
+    expect(b.total_cost).to eq(650_00)
     expect(logger_double).to have_received(:debug)
-      .with("[BUILD #{b.id}] Calculated total cost: 50000 cents").at_least(:once)
+      .with("[BUILD #{b.id}] Calculated total cost: 65000 cents").at_least(:once)
 
     summary = b.parts_summary
-    expect(summary).to include("Cpu" => 1, "Gpu" => 1)
+    expect(summary).to include("Cpu" => 1, "Gpu" => 1, "Motherboard" => 1)
     expect(logger_double).to have_received(:debug)
       .with(a_string_including("[BUILD #{b.id}] Parts summary:")).at_least(:once)
   end
@@ -156,6 +147,7 @@ RSpec.describe Build, type: :model do
       expect(data[:name]).to eq("Bundle")
       expect(data[:components]).to eq(components)
       expect(data[:total_cost]).to eq(333_00)
+      # MODIFIED: total_wattage should still be correct as it only considers CPU and GPU
       expect(data[:total_wattage]).to eq(180)
       expect(data[:parts_count]).to eq(2)
       expect(data[:user_name]).to eq("Alice")

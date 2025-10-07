@@ -19,8 +19,9 @@ class Build < ApplicationRecord
   end
 
   def total_wattage
-    wattage = parts.sum(&:wattage) || 0
-    Rails.logger.debug "[BUILD #{id}] Calculated total wattage: #{wattage}W"
+    # MODIFIED: Filter parts to only include 'Cpu' and 'Gpu' types before summing.
+    wattage = parts.where(type: ['Cpu', 'Gpu']).sum(&:wattage) || 0
+    Rails.logger.debug "[BUILD #{id}] Calculated total wattage (CPU + GPU only): #{wattage}W"
     wattage
   end
 
