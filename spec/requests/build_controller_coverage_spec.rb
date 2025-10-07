@@ -156,4 +156,143 @@ RSpec.describe 'BuildsController full coverage', type: :request do
       expect(response).to have_http_status(:not_found)
     end
   end
+
+  describe 'index / show / new' do
+    it 'renders index and lists builds' do
+      get '/builds'
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include('Owner Build')
+    end
+
+    it 'renders show and iterates parts' do
+      # Attach a part so the show action loops over parts and logs attributes
+      build.build_items.create!(part: cpu)
+      get "/builds/#{build.id}"
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include('Owner Build')
+    end
+
+    it 'renders new and loads categories' do
+      get '/builds/new'
+      expect(response).to have_http_status(:ok)
+      # Weak presence check; view title/labels should include “Build”
+      expect(response.body).to include('Build')
+    end
+  end
+
+  describe 'create (HTML + JSON, success and failure)' do
+    it 'creates via HTML and redirects' do
+      as(owner)
+      post '/builds', params: { build: { name: 'New Build' } }
+      expect(response).to have_http_status(:found)
+      follow_redirect!
+      expect(response.body).to include('New Build')
+    end
+
+    it 'creates via JSON and returns payload' do
+      as(owner)
+      post '/builds', params: { build: { name: 'JSON Build' } }, headers: { 'ACCEPT' => 'application/json' }
+      expect(response).to have_http_status(:ok)
+      body = JSON.parse(response.body)
+      expect(body['success']).to eq(true)
+      expect(body['build_id']).to be_present
+      expect(body['message']).to match(/created/i)
+    end
+
+    it 'fails via HTML and renders :new with 422 (stubbed)' do
+      as(owner)
+      fake = Build.new # use a real AR object so form builders don’t choke
+      allow(Build).to receive(:new).and_return(fake)
+      allow(fake).to receive(:user=)
+      allow(fake).to receive(:save).and_return(false)
+
+      errors_double = instance_double(ActiveModel::Errors,
+                                      any?: true,
+                                      full_messages: ["Name can't be blank"])
+      allow(fake).to receive(:errors).and_return(errors_double)
+
+      post '/builds', params: { build: { name: '' } }
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response.body).to include('Build')
+    end
+
+
+    it 'fails via JSON and returns errors with 422 (stubbed save false)' do
+      as(owner)
+      fake = Build.new
+      allow(Build).to receive(:new).and_return(fake)
+      allow(fake).to receive(:user=)
+      allow(fake).to receive(:save).and_return(false)
+      allow(fake).to receive_message_chain(:errors, :full_messages).and_return(['Name can\'t be blank'])
+
+      post '/builds', params: { build: { name: '' } }, headers: { 'ACCEPT' => 'application/json' }
+      expect(response).to have_http_status(:unprocessable_content)
+      body = JSON.parse(response.body)
+      expect(body['success']).to eq(false)
+      expect(body['errors']).to include("Name can't be blank")
+    end
+  end
+
+  describe 'update JSON success' do
+    it 'updates and returns 302 HTML AND also works with JSON accept' do
+      as(owner)
+      patch "/builds/#{build.id}", params: { build: { name: 'Via JSON' } }, headers: { 'ACCEPT' => 'application/json' }
+      # Controller responds with redirect for HTML; for JSON accept it still runs same branch
+      expect(response).to have_http_status(:found)
+      follow_redirect!
+      expect(response.body).to include('Via JSON')
+    end
+  end
+
+  describe 'update JSON success' do
+    it 'updates and returns 302 HTML AND also works with JSON accept' do
+      as(owner)
+      patch "/builds/#{build.id}", params: { build: { name: 'Via JSON' } }, headers: { 'ACCEPT' => 'application/json' }
+      # Controller responds with redirect for HTML; for JSON accept it still runs same branch
+      expect(response).to have_http_status(:found)
+      follow_redirect!
+      expect(response.body).to include('Via JSON')
+    end
+  end
+
+  describe 'share (normalizations + update_columns rescue)' do
+    before { as(owner) }
+
+    it 'works with blank components_data (defaults to {})' do
+      post "/builds/#{build.id}/share", params: { id: build.id }
+      expect(response).to have_http_status(:ok)
+      body = JSON.parse(response.body)
+      expect(body['success']).to eq(true)
+      expect(body['build_data']).to be_a(Hash)
+    end
+
+    it 'works with components_data as JSON string' do
+      payload = { cpu: { id: cpu.id, name: cpu.name, wattage: 65 } }.to_json
+      post "/builds/#{build.id}/share", params: { components_data: payload }
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body)['success']).to eq(true)
+    end
+
+    it 'works with components_data as ActionController::Parameters' do
+      post "/builds/#{build.id}/share", params: { components_data: { gpu: { id: 1, name: 'G' } } }
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body)['success']).to eq(true)
+    end
+
+    it 'works with components_data as Hash and survives update_columns failure' do
+      allow_any_instance_of(Build).to receive(:update_columns).and_raise('oh no')
+      post "/builds/#{build.id}/share", params: { components_data: { memory: { name: 'RAM' } } }
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body)['success']).to eq(true)
+    end
+  end
+
+  describe 'shared (DB fallback parse failure -> 404)' do
+    it '404s when DB shared_data is invalid JSON' do
+      build.update!(shared_data: '{bad_json', share_token: nil, shared_at: Time.current)
+      get "/builds/#{build.id}/shared"
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
 end

@@ -234,4 +234,59 @@ RSpec.describe BuildItemsController, type: :request do
       end
     end
   end
+
+  describe 'DELETE /builds/:build_id/build_items/:id' do
+    let!(:item) { build.build_items.create!(part: cpu_part) }
+
+    it 'removes the item and flashes success' do
+      delete "/builds/#{build.id}/build_items/#{item.id}"
+      expect(response).to have_http_status(:see_other)
+      expect(response).to redirect_to(build_path(build))
+      follow_redirect!
+      expect(response.body).to include("#{cpu_part.name} was successfully removed")
+      expect(build.build_items.exists?(item.id)).to be false
+    end
+
+    it 'handles destroy failure and flashes alert' do
+      allow_any_instance_of(BuildItem).to receive(:destroy).and_return(false)
+      delete "/builds/#{build.id}/build_items/#{item.id}"
+      expect(response).to have_http_status(:see_other)
+      follow_redirect!
+      expect(response.body).to include("Failed to remove #{cpu_part.name}")
+      expect(build.build_items.exists?(item.id)).to be true
+    end
+
+    it '404s when build_id is invalid' do
+      delete "/builds/999999/build_items/#{item.id}"
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it '404s when item id is invalid' do
+      delete "/builds/#{build.id}/build_items/999999"
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it 'requires login for destroy' do
+      delete '/logout'
+      delete "/builds/#{build.id}/build_items/#{item.id}"
+      expect(response).to redirect_to(login_path)
+    end
+  end
+
+  describe 'POST /builds/:build_id/build_items (extra logging branch)' do
+    it 'logs blank string when part_class param is missing (nil -> "")' do
+      allow(Rails.logger).to receive(:info)
+
+      post "/builds/#{build.id}/build_items", params: {
+        build_id: build.id,
+        part_id: cpu_part.id
+        # part_class omitted on purpose
+      }
+
+      expect(Rails.logger).to have_received(:info).with('')
+      expect(Rails.logger).to have_received(:info).with('add')
+      expect(response).to redirect_to(build_path(build))
+    end
+  end
+
 end
