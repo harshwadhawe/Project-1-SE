@@ -1,12 +1,10 @@
-# frozen_string_literal: true
-
 class BuildItemsController < ApplicationController
   def create
     @build = Build.find(params[:build_id])
     @part = Part.find(params[:part_id])
-    @clas = params[:part_class]
-    Rails.logger.info @clas.to_s
-    Rails.logger.info 'add'
+    @clas = (params[:part_class])
+    Rails.logger.info "#{@clas}"
+    Rails.logger.info "add"
     existing_item = @build.build_items.joins(:part).find_by(parts: { type: @part.type })
 
     if existing_item
@@ -17,12 +15,27 @@ class BuildItemsController < ApplicationController
       @build.build_items.create(part: @part)
       flash[:notice] = "#{@part.name} was successfully added to your build."
     end
-
+    
     @sample_parts = {}
     @build.parts.each do |part|
-      @sample_parts[part.class.name] = part
+        @sample_parts[part.class.name] = part
+    end
+    
+    redirect_to build_path(@build)
+    
+  end
+
+  def destroy
+    @build = Build.find(params[:build_id])
+    @build_item = @build.build_items.find(params[:id])
+    part_name = @build_item.part.name
+    
+    if @build_item.destroy
+      flash[:notice] = "#{part_name} was successfully removed from your build."
+    else
+      flash[:alert] = "Failed to remove #{part_name}."
     end
 
-    redirect_to build_path(@build)
+    redirect_to build_path(@build), status: :see_other
   end
 end

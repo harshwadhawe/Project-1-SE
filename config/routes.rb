@@ -58,7 +58,7 @@ Rails.application.routes.draw do
       post :share
       get :shared
     end
-    resources :build_items, only: [:create]
+    resources :build_items, only: [:create, :destroy]
   end
 
   resources :cpus, only: %i[index show]
