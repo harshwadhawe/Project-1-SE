@@ -1,2 +1,0 @@
-class Gpu < Part
-end

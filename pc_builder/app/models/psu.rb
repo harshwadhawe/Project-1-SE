@@ -1,2 +1,0 @@
-class Psu < Part
-end

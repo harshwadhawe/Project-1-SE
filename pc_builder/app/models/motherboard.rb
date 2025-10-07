@@ -1,2 +1,0 @@
-class Motherboard < Part
-end

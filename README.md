@@ -1,14 +1,48 @@
-# PC Builder – Rails Project
+# PC Builder – Ruby on Rails Project
+
+**Live Website:** [https://project-se-1-0d8c6f6dc1ab.herokuapp.com/](https://project-se-1-0d8c6f6dc1ab.herokuapp.com/)
+
+---
+
+## Deployment Instructions (Heroku)
+
+```bash
+# Push code to Heroku
+git push heroku change-repo-structure:main
+
+# Run database migrations
+heroku run rails db:migrate -a project-se-1
+
+# Seed initial data
+heroku run rails db:seed -a project-se-1
+````
+
+Once deployed, visit:
+**[https://project-se-1-0d8c6f6dc1ab.herokuapp.com/](https://project-se-1-0d8c6f6dc1ab.herokuapp.com/)**
+
+---
 
 ## Overview
 
-PC Builder is a Ruby on Rails application that allows users to:
+PC Builder is a full-stack Ruby on Rails web application that allows users to browse, filter, and assemble custom PC builds.
+It provides a modular architecture with clearly separated models, controllers, and views for scalability and maintainability.
 
+<<<<<<< HEAD
 * Browse PC components (CPU, GPU, Motherboard, Memory, Storage, Cooler, Case, PSU).
 * View extra specifications for each part type (e.g. CPU cores/threads, base/boost clocks).
 * Create builds by selecting parts from each category and assigning quantities.
 * Manage users and builds.
 * View sample parts and recent builds on the Home page
+=======
+### Key Features
+
+* Browse PC components (CPU, GPU, Motherboard, Memory, Storage, Cooler, Case, PSU)
+* View detailed specifications per component type
+* Filter by type, brand, and keywords
+* Create and manage PC builds
+* Sample parts and recent builds displayed on the Home page
+* Lightweight login system (Dev login / guest browsing)
+>>>>>>> change-repo-structure
 
 You can find the application here - https://pc-builder-c734d2784345.herokuapp.com/
 ---
@@ -17,93 +51,78 @@ You can find the application here - https://pc-builder-c734d2784345.herokuapp.co
 
 ### Models
 
-* **User**
+#### User
 
-  * Attributes: `name`, `email`
-  * Validations: presence and uniqueness of email
-  * Associations: `has_many :builds`
+* Attributes: `name`, `email`
+* Validations: presence and uniqueness of `email`
+* Associations:
+  `has_many :builds`
 
-* **Build**
+#### Build
 
-  * Attributes: `name`, `total_wattage`, `user_id`
-  * Associations: `belongs_to :user, optional: true`
-  * `has_many :build_items`, `has_many :parts, through: :build_items`
-  * Validates presence of `name`
+* Attributes: `name`, `total_wattage`, `user_id`
+* Associations:
+  `belongs_to :user, optional: true`
+  `has_many :build_items`
+  `has_many :parts, through: :build_items`
+* Validations: presence of `name`
 
-* **BuildItem**
+#### BuildItem
 
-  * Join model between `Build` and `Part`
-  * Attributes: `quantity`, `note`
-  * Validates `quantity > 0`
-  * Associations: `belongs_to :build`, `belongs_to :part`
+* Join model between `Build` and `Part`
+* Attributes: `quantity`, `note`
+* Validations: `quantity > 0`
+* Associations:
+  `belongs_to :build`, `belongs_to :part`
 
-* **Part** (STI base class)
+#### Part (STI Base Class)
 
-  * Attributes (shared): `name`, `brand`, `model_number`, `type`, `price_cents`, `wattage`
-  * Subclasses:
+* Attributes: `name`, `brand`, `model_number`, `type`, `price_cents`, `wattage`
+* Subclasses:
 
-    * `Cpu` – has extra fields: `cpu_cores`, `cpu_threads`, `cpu_base_ghz`, `cpu_boost_ghz`, `cpu_socket`, `cpu_tdp_w`, `cpu_cache_mb`, `cpu_igpu`
-    * `Gpu` – placeholder, extra fields to be added later
-    * `Motherboard` – placeholder
-    * `Memory` – placeholder
-    * `Storage` – placeholder
-    * `Cooler` – placeholder
-    * `PcCase` – renamed from `Case` to avoid Ruby keyword
-    * `Psu` – placeholder
-
----
-
-### Controllers
-
-* **HomeController**
-
-  * `index`: shows sample parts by category and recent builds.
-
-* **UsersController**
-
-  * `index`: list all users
-  * `show`: view user details
-
-* **PartsController**
-
-  * `index`: list all parts, with optional `q` filter by type
-  * `show`: displays part details with type-specific partials
-
-* **BuildsController**
-
-  * `index`: list all builds
-  * `show`: view a build and its parts
-  * `new`: form for creating a build (parts grouped by category, quantities)
-  * `create`: saves build, attaches default user if none logged in, creates `BuildItem`s
+  * `Cpu` – extra fields: cores, threads, base/boost GHz, socket, TDP, cache, iGPU
+  * `Gpu`, `Motherboard`, `Memory`, `Storage`, `Cooler`, `PcCase`, `Psu` – placeholders
+* Note: `PcCase` replaces `Case` to avoid Ruby keyword conflicts.
 
 ---
 
-### Views
+## Controllers
 
-* **Home**
-
-  * Shows parts grouped by category and recent builds
-  * Dev login/logout buttons
-
-* **Users**
-
-  * Index & show pages
-
-* **Parts**
-
-  * Index: lists all parts with optional filter
-  * Show: shows common info + type-specific partial
-  * Partial examples:
-
-    * `_details_cpu.html.erb` (cores, threads, base/boost GHz, socket, TDP, cache, iGPU)
-
-* **Builds**
-
-  * Index, show, and new form (with grouped checkboxes + quantity inputs)
+| Controller       | Description                                                                       |
+| ---------------- | --------------------------------------------------------------------------------- |
+| HomeController   | Displays featured parts and recent builds                                         |
+| UsersController  | Lists all users and user profiles                                                 |
+| PartsController  | Handles browsing and filtering of all PC parts (`index`, `show`)                  |
+| BuildsController | CRUD for builds (`index`, `show`, `new`, `create`) with grouped quantity handling |
 
 ---
 
-### Routes
+## Views
+
+### Home
+
+* Displays sample parts grouped by category
+* Shows recent builds and login/logout buttons
+
+### Users
+
+* `index` and `show` pages for user info
+
+### Parts
+
+* `index.html.erb`: parts table with type, brand, name
+* `show.html.erb`: detailed specs per part
+* Dynamic partials for type-specific details (`_details_cpu.html.erb`, etc.)
+
+### Builds
+
+* `index`: user builds overview
+* `show`: lists selected parts per build
+* `new`: form for creating a build with grouped inputs
+
+---
+
+## Routes
 
 ```ruby
 Rails.application.routes.draw do
@@ -120,33 +139,186 @@ end
 
 ---
 
-### Seeds
+## Seed Data
 
-* Default user: `Harsh (harsh@example.com)`
-* Example CPU (Ryzen 7 7800X3D) with extra fields:
+* Default user: Harsh ([harsh@example.com](mailto:harsh@example.com))
+* Example CPU: Ryzen 7 7800X3D
 
   * 8 cores / 16 threads
   * 4.2 GHz base / 5.0 GHz boost
-  * AM5 socket, 120W TDP, 104 MB cache
-* Similar placeholder data for GPU, Motherboard, Memory, Storage, Cooler, PcCase, PSU
+  * AM5 socket, 120W TDP, 104MB cache
+* Sample placeholder data for other components (GPU, Motherboard, Memory, etc.)
 
 ---
 
 ## Development Notes
 
-* Using **STI** for parts (`type` column in `parts` table).
-* Acronym models (`Cpu`, `Gpu`, `Psu`) are capitalized with only the first letter to play well with Zeitwerk.
-* `parts#show` automatically looks for a type-specific partial (`_details_cpu`, `_details_gpu`, etc.).
-* Default login sets the session to `harsh@example.com`.
-* Build creation handles both `part_ids` and `quantities`.
+* Uses Single Table Inheritance (STI) for parts (`type` column)
+* Acronym models (`Cpu`, `Gpu`, `Psu`) follow Zeitwerk autoloading conventions
+* `parts#show` dynamically loads partials based on part type
+* Dev Login auto-creates a guest session (`harsh@example.com`)
+* Build creation supports both `part_ids` and `quantities`
+
+---
+
+## Local Development Setup
+
+### 1. Clone and Install
+
+```bash
+git clone <repo_url>
+cd pc_builder
+bundle install
+```
+
+### 2. Database Setup
+
+**PostgreSQL (recommended, matches Heroku):**
+
+```bash
+rails db:drop db:create db:migrate db:seed
+```
+
+**SQLite (default local dev):**
+
+```bash
+rails db:prepare
+```
+
+### 3. Start Server
+
+```bash
+bin/rails server
+```
+
+Then visit [http://localhost:3000](http://localhost:3000)
+
+---
+
+## Testing
+
+* Uses RSpec for model, controller, and integration tests.
+* Coverage reports generated via SimpleCov.
+
+Run tests:
+
+```bash
+bundle exec rspec
+```
 
 ---
 
 ## Next Steps
 
+<<<<<<< HEAD
 * Extend extra attributes and partials for `Gpu`, `Motherboard`, `Memory`, `Storage`, `Cooler`, `PcCase`, `Psu`.
 * Add computed fields (e.g. `Build#total_wattage`, `Build#total_price`).
 * Improve authentication (Devise or similar).
 * Add styling (Bootstrap or Tailwind).
 * Write full test coverage (RSpec for controllers + system tests).
 * Optionally expose JSON APIs for builds and parts.
+=======
+* Extend component attributes (GPU, Motherboard, Memory, etc.)
+* Compute `Build#total_price` and `Build#total_wattage`
+* Add authentication with Devise
+* Tailwind CSS for modern UI design
+* Increase test coverage with RSpec
+* Add JSON APIs for builds and parts
+
+---
+
+# Documentation
+
+This repository also includes comprehensive technical documentation for both end-users and developers.
+
+---
+
+## Available Documentation
+
+### User Documentation
+
+* **[User Guide](docs/USER_GUIDE.md)** — Complete guide for end-users on how to use the PC Builder application
+
+### Technical Documentation (Required)
+
+* **[Deployment Guide](docs/DEPLOYMENT_GUIDE.md)** — Detailed instructions for setting up, configuring, and deploying the application
+* **[System Architecture](docs/ARCHITECTURE.md)** — System, class, and component architecture diagrams
+* **[Database Schema](docs/DATABASE_SCHEMA.md)** — Entity-relationship and schema documentation
+
+### Development Documentation
+
+* **[Logging Guide](docs/LOGGING_GUIDE.md)** — Technical documentation for the logging and monitoring system
+
+---
+
+## Documentation Structure
+
+```
+docs/
+├── README.md              # Documentation index (this section)
+├── USER_GUIDE.md          # End-user documentation
+├── DEPLOYMENT_GUIDE.md    # Zero-to-deployed setup guide
+├── ARCHITECTURE.md        # System and component architecture diagrams
+├── DATABASE_SCHEMA.md     # Database structure and ER diagrams
+└── LOGGING_GUIDE.md       # Logging system and configuration details
+```
+
+---
+
+## Quick Navigation
+
+### For End Users
+
+* [Start Here: User Guide](docs/USER_GUIDE.md) – Complete usage guide for PC Builder
+
+### For Developers and DevOps
+
+* [Deployment Guide](docs/DEPLOYMENT_GUIDE.md) – Setup and deploy from scratch
+* [System Architecture](docs/ARCHITECTURE.md) – Understand the architecture and design
+* [Database Schema](docs/DATABASE_SCHEMA.md) – Explore database structure and relationships
+* [Logging Guide](docs/LOGGING_GUIDE.md) – Learn how logging is implemented and used
+
+---
+
+## Documentation Standards
+
+### Architectural Schemas Included
+
+* System Diagram: High-level system architecture with layers
+* Class Diagram: Object-oriented design and relationships
+* Database Diagram: Entity-relationship diagrams and schema
+* Component Architecture: Detailed component interactions
+* API Flow Diagrams: Request/response flow visualization
+
+### Deployment Requirements Covered
+
+* Zero to Deployed: Complete setup from fresh clone
+* Development Setup: Local environment configuration
+* Production Deployment: Docker, Kamal, or manual setups
+* Environment Configuration: Database, SSL, and monitoring
+* Troubleshooting: Common issues and their resolutions
+
+---
+
+## Future Documentation
+
+### Architecture Decision Records
+
+* ADR-001: Technology Stack Selection
+* ADR-002: Database Design Decisions
+* ADR-003: Authentication Strategy
+* ADR-004: API Design Approach
+
+### Additional Technical Documentation
+
+* API Documentation: REST API endpoints and usage
+* Testing Strategy: Testing standards and practices
+* Security Guide: Implementation and hardening guidelines
+* Performance Guide: Optimization and monitoring strategies
+
+---
+
+**Last Updated:** October 6, 2025
+**Project:** PC Builder Rails Application
+**Documentation Version:** 1.0
+>>>>>>> change-repo-structure

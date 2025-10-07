@@ -4,53 +4,31 @@
 # belong in git's global ignore instead:
 # `$XDG_CONFIG_HOME/git/ignore` or `~/.config/git/ignore`
 
-# === Rails project (pc_builder) ===
+# Ignore bundler config.
+/.bundle
 
-# Bundler config
-/pc_builder/.bundle
+# Ignore all environment files.
+/.env*
 
-# Environment files
-/pc_builder/.env*
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
 
-# Logs and tempfiles
-/pc_builder/log/*
-/pc_builder/tmp/*
-!/pc_builder/log/.keep
-!/pc_builder/tmp/.keep
-!/pc_builder/tmp/.kamal
-# PIDs
-/pc_builder/tmp/pids/*
-!/pc_builder/tmp/pids/
-/pc_builder/tmp/pids/.keep
+# Ignore pidfiles, but keep the directory.
+/tmp/pids/*
+!/tmp/pids/
+!/tmp/pids/.keep
 
-# Storage (uploaded files, SQLite, etc.)
-/pc_builder/storage/*
-!/pc_builder/storage/.keep
-/pc_builder/tmp/storage/*
-!/pc_builder/tmp/storage/
-/pc_builder/tmp/storage/.keep
+# Ignore storage (uploaded files in development and any SQLite databases).
+/storage/*
+!/storage/.keep
+/tmp/storage/*
+!/tmp/storage/
+!/tmp/storage/.keep
 
-# Precompiled assets
-/pc_builder/public/assets
+/public/assets
 
-# Rails master key
-/pc_builder/config/master.key
-
-# === General OS/editor cruft ===
-.DS_Store
-Thumbs.db
-*.swp
-*.swo
-*.bak
-
-/pc_builder/db/*.sqlite3
-/pc_builder/db/*.sqlite3-journal
-/pc_builder/log/*
-!/pc_builder/log/.keep
-/pc_builder/tmp/*
-!/pc_builder/tmp/.keep
-/pc_builder/storage/*
-!/pc_builder/storage/.keep
-/pc_builder/public/assets
-/pc_builder/config/master.key
-
+# Ignore master key for decrypting credentials and more.
+/config/master.key
