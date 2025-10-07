@@ -590,3 +590,77 @@
 [00df6fa0-2232-45ab-89f4-385005814194] [IP:127.0.0.1] [User:guest] [SIGNUP FAILED] User creation failed: Password confirmation doesn't match Password, Name can't be blank, Email is invalid, Password is too short (minimum is 6 characters)
 [e91f385a-ddd3-4e05-8494-31420b4b4c1a] [IP:127.0.0.1] [User:guest] [AUTH] Unauthorized access attempt to /users
 [0e32c33f-ef5f-4605-865e-54379da9e364] [IP:127.0.0.1] [User:guest] [AUTH] Unauthorized access attempt to /users/1
+[BUILD_ITEM VALIDATION] Validation failed for BuildItem: Quantity must be greater than 0
+[BUILD_ITEM VALIDATION] Validation failed for BuildItem: Build must exist
+[BUILD_ITEM VALIDATION] Validation failed for BuildItem: Part must exist
+[BUILD_ITEM VALIDATION] Validation failed for BuildItem: Quantity must be greater than 0
+[BUILD_ITEM VALIDATION] Validation failed for BuildItem: Quantity is not a number
+[BUILD VALIDATION] Validation failed for build '': Name can't be blank
+[PART VALIDATION] Validation failed for Cooler ' ': Name can't be blank, Brand can't be blank
+[PART VALIDATION] Validation failed for Cpu 'AMD Ryzen 7 7800X3D': Cpu cores must be greater than 0
+[CPU VALIDATION] CPU validation failed for AMD Ryzen 7 7800X3D: Cpu cores must be greater than 0
+[PART VALIDATION] Validation failed for Cpu 'AMD Ryzen 7 7800X3D': Cpu threads must be greater than 0
+[CPU VALIDATION] CPU validation failed for AMD Ryzen 7 7800X3D: Cpu threads must be greater than 0
+[PART VALIDATION] Validation failed for Cpu 'AMD Ryzen 7 7800X3D': Cpu cores must be greater than 0, Cpu threads must be greater than 0
+[CPU VALIDATION] CPU validation failed for AMD Ryzen 7 7800X3D: Cpu cores must be greater than 0, Cpu threads must be greater than 0
+[PART VALIDATION] Validation failed for Gpu ' ': Name can't be blank, Brand can't be blank
+[PART VALIDATION] Validation failed for Memory ' ': Name can't be blank, Brand can't be blank
+[PART VALIDATION] Validation failed for Motherboard ' ': Name can't be blank, Brand can't be blank
+[PART VALIDATION] Validation failed for Cpu ' ': Name can't be blank, Brand can't be blank
+[CPU VALIDATION] CPU validation failed for  : Name can't be blank, Brand can't be blank
+[PART VALIDATION] Validation failed for PcCase ' ': Name can't be blank, Brand can't be blank
+[PART VALIDATION] Validation failed for Psu ' ': Name can't be blank, Brand can't be blank
+[PART VALIDATION] Validation failed for Storage ' ': Name can't be blank, Brand can't be blank
+[AUTH] Unauthorized access attempt to /ok
+[AUTH] Unauthorized access attempt to /ok
+[ERROR] StandardError: kaboom
+[ERROR BACKTRACE] /Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/spec/requests/app_controller_spec.rb:12:in 'boom'\n/Users/harshwadhawe/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/actionpack-8.0.3/lib/action_controller/metal/basic_implicit_render.rb:8:in 'ActionController::BasicImplicitRender#send_action'\n/Users/harshwadhawe/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/actionpack-8.0.3/lib/abstract_controller/base.rb:215:in 'AbstractController::Base#process_action'\n/Users/harshwadhawe/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/actionpack-8.0.3/lib/action_controller/metal/rendering.rb:193:in 'ActionController::Rendering#process_action'\n/Users/harshwadhawe/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/actionpack-8.0.3/lib/abstract_controller/callbacks.rb:261:in 'block in AbstractController::Callbacks#process_action'\n/Users/harshwadhawe/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/activesupport-8.0.3/lib/active_support/callbacks.rb:120:in 'block in ActiveSupport::Callbacks#run_callbacks'\n/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/app/controllers/application_controller.rb:68:in 'ApplicationController#log_performance'\n/Users/harshwadhawe/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/activesupport-8.0.3/lib/active_support/callbacks.rb:129:in 'block in ActiveSupport::Callbacks#run_callbacks'\n/Users/harshwadhawe/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/turbo-rails-2.0.17/lib/turbo-rails.rb:24:in 'Turbo.with_request_id'\n/Users/harshwadhawe/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/turbo-rails-2.0.17/app/controllers/concerns/turbo/request_id_tracking.rb:10:in 'Turbo::RequestIdTracking#turbo_tracking_request_id'
+[ERROR CONTEXT] Controller: anonymous, Action: boom, Params: {"controller" => "anonymous", "action" => "boom"}
+[ERROR] StandardError: kaboom
+[ERROR BACKTRACE] /Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/spec/requests/app_controller_spec.rb:12:in 'boom'\n/Users/harshwadhawe/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/actionpack-8.0.3/lib/action_controller/metal/basic_implicit_render.rb:8:in 'ActionController::BasicImplicitRender#send_action'\n/Users/harshwadhawe/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/actionpack-8.0.3/lib/abstract_controller/base.rb:215:in 'AbstractController::Base#process_action'\n/Users/harshwadhawe/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/actionpack-8.0.3/lib/action_controller/metal/rendering.rb:193:in 'ActionController::Rendering#process_action'\n/Users/harshwadhawe/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/actionpack-8.0.3/lib/abstract_controller/callbacks.rb:261:in 'block in AbstractController::Callbacks#process_action'\n/Users/harshwadhawe/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/activesupport-8.0.3/lib/active_support/callbacks.rb:120:in 'block in ActiveSupport::Callbacks#run_callbacks'\n/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/app/controllers/application_controller.rb:68:in 'ApplicationController#log_performance'\n/Users/harshwadhawe/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/activesupport-8.0.3/lib/active_support/callbacks.rb:129:in 'block in ActiveSupport::Callbacks#run_callbacks'\n/Users/harshwadhawe/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/turbo-rails-2.0.17/lib/turbo-rails.rb:24:in 'Turbo.with_request_id'\n/Users/harshwadhawe/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/turbo-rails-2.0.17/app/controllers/concerns/turbo/request_id_tracking.rb:10:in 'Turbo::RequestIdTracking#turbo_tracking_request_id'
+[ERROR CONTEXT] Controller: anonymous, Action: boom, Params: {"controller" => "anonymous", "action" => "boom"}
+[RECORD NOT FOUND] ActiveRecord::RecordNotFound: gone - Params: {"controller" => "anonymous", "action" => "missing"}
+[RECORD NOT FOUND] ActiveRecord::RecordNotFound: gone - Params: {"controller" => "anonymous", "action" => "missing"}
+[PARAMETER MISSING] ActionController::ParameterMissing: param is missing or the value is empty or invalid: important_param - Params: {"controller" => "anonymous", "action" => "needs_param"}
+[PARAMETER MISSING] ActionController::ParameterMissing: param is missing or the value is empty or invalid: important_param - Params: {"controller" => "anonymous", "action" => "needs_param"}
+[34ea8635-cabd-4179-96d7-a1757aaa9b04] [IP:127.0.0.1] [User:guest] [USER VALIDATION] Validation failed for user 'John Doe' (invalid-email): Email is invalid
+[34ea8635-cabd-4179-96d7-a1757aaa9b04] [IP:127.0.0.1] [User:guest] [SIGNUP FAILED] User creation failed: Email is invalid
+[b3fb5f37-55a4-47ea-8378-02f09f8e4f8c] [IP:127.0.0.1] [User:guest] [USER VALIDATION] Validation failed for user 'John Doe' (john@example.com): Password confirmation doesn't match Password
+[b3fb5f37-55a4-47ea-8378-02f09f8e4f8c] [IP:127.0.0.1] [User:guest] [SIGNUP FAILED] User creation failed: Password confirmation doesn't match Password
+[37e42bc5-c053-4212-b49b-ac852c3a990c] [IP:127.0.0.1] [User:guest] [LOGIN FAILED] Invalid credentials for email: test@example.com
+[0fbe53b4-fec6-4f43-b3dc-ae145d77528c] [IP:127.0.0.1] [User:guest] [LOGIN FAILED] Invalid credentials for email: nonexistent@example.com
+[365ec6a2-7e36-4d80-83e2-ed24c3ddd04f] [IP:127.0.0.1] [User:guest] [AUTHZ] User 2 not authorized for build 1
+[56cf4cd1-cc1c-4465-b358-3901d3a752a9] [IP:127.0.0.1] [User:guest] [AUTHZ] User 2 not authorized for build 1
+[261b9882-2ea6-4e08-8f0f-d661c4d9aaec] [IP:127.0.0.1] [User:guest] [BUILD VALIDATION] Validation failed for build '': Name can't be blank
+[261b9882-2ea6-4e08-8f0f-d661c4d9aaec] [IP:127.0.0.1] [User:guest] [BUILD UPDATE] Failed update for build ID: 1 - Name can't be blank
+[50433412-2db2-4d6c-8f8a-85d753859c8d] [IP:127.0.0.1] [User:guest] [BUILD DESTROY] Destroying build ID: 2 - 'To Delete' with 0 items
+[50433412-2db2-4d6c-8f8a-85d753859c8d] [IP:127.0.0.1] [User:guest] [BUILD DESTROY] Destroyed build ID: 2 - 'To Delete'
+[5eeeda69-a90d-4db4-b605-e3ea7f1b949e] [IP:127.0.0.1] [User:guest] [BUILD DESTROY] Failed to destroy build ID: 1
+[2e8dcfdb-30fb-4a17-8e66-67cbfc1be5cf] [IP:127.0.0.1] [User:guest] [SHARE] Invalid JSON in components_data: expected object key, got 'invalid_json' at line 1 column 2
+[7af0a478-e0a1-43d4-9aab-a1835e50f7c1] [IP:127.0.0.1] [User:guest] [SHARE] Failed to create share link: boom
+[f3340c44-c073-4b1f-a0d2-2486d9fd8504] [IP:127.0.0.1] [User:guest] [SHARED] Invalid token
+[40c48e3a-654a-4ac7-9122-a9fdf8f3d0a5] [IP:127.0.0.1] [User:guest] [BUILD VALIDATION] Validation failed for build '': Name can't be blank
+[a4f9881c-b091-4bb3-85db-40901f0ccd6f] [IP:127.0.0.1] [User:guest] [BUILD VALIDATION] Validation failed for build '': Name can't be blank
+[BUILD_ITEM DESTROY] Removing BuildItem ID: 1 - AMD Ryzen 7 x from build 'Gaming PC'
+[BUILD_ITEM DESTROY] Removing BuildItem ID: 2 - RTX 4070 x from build 'Gaming PC'
+[BUILD DESTROY] Destroying build ID: 1 - 'Gaming PC' with 0 items
+[BUILD_ITEM DESTROY] Removing BuildItem ID: 3 - Corsair 16GB x from build 'Work PC'
+[BUILD DESTROY] Destroying build ID: 2 - 'Work PC' with 0 items
+[c5291c5b-af52-4d98-9def-10d68f8351a4] [IP:127.0.0.1] [User:guest] [LOGIN FAILED] Invalid credentials for email: harsh@example.com
+[8cc8c55e-457e-411c-ba8a-02c82971aadf] [IP:127.0.0.1] [User:guest] [LOGIN FAILED] Invalid credentials for email: harsh@example.com
+[c11299bd-28dd-42d9-bc97-a184c955cf27] [IP:127.0.0.1] [User:guest] [LOGIN FAILED] Invalid credentials for email: nonexistent@example.com
+[60f9164d-de94-4a38-8029-8adb1610ce9b] [IP:127.0.0.1] [User:guest] [LOGIN FAILED] Invalid credentials for email: harsh@example.com
+[84ebc9a8-7ef6-4cb2-8817-ac4897a22526] [IP:127.0.0.1] [User:guest] [LOGOUT] Logout attempt when no user was logged in
+[20d1a841-2e88-4782-89fb-154452e04ffc] [IP:127.0.0.1] [User:guest] [LOGOUT] Logout attempt when no user was logged in
+[f29e365f-5646-4b4a-9364-f07349896d4f] [IP:127.0.0.1] [User:guest] [LOGOUT] Logout attempt when no user was logged in
+[f7255bb2-317f-44d8-96e9-1d48ec5e0f43] [IP:127.0.0.1] [User:guest] [AUTH] Unauthorized access attempt to /users
+[e91d0ed9-4579-43da-93f3-d376b2018a77] [IP:127.0.0.1] [User:guest] [AUTH] Unauthorized access attempt to /users/1
+[6d4393f2-0b8e-4798-bb27-61e64d6addf6] [IP:127.0.0.1] [User:guest] [RECORD NOT FOUND] ActiveRecord::RecordNotFound: Couldn't find User with 'id'="99999" - Params: {"controller" => "users", "action" => "show", "id" => "99999"}
+[478b93ae-390c-4c2a-9abf-768d5a8b0362] [IP:127.0.0.1] [User:guest] [USER VALIDATION] Validation failed for user '' (invalid-email): Password confirmation doesn't match Password, Name can't be blank, Email is invalid, Password is too short (minimum is 6 characters)
+[478b93ae-390c-4c2a-9abf-768d5a8b0362] [IP:127.0.0.1] [User:guest] [SIGNUP FAILED] User creation failed: Password confirmation doesn't match Password, Name can't be blank, Email is invalid, Password is too short (minimum is 6 characters)
+[6fef52a0-2722-49d7-b8ff-dd43f69c9ca0] [IP:127.0.0.1] [User:guest] [USER VALIDATION] Validation failed for user '' (invalid-email): Password confirmation doesn't match Password, Name can't be blank, Email is invalid, Password is too short (minimum is 6 characters)
+[6fef52a0-2722-49d7-b8ff-dd43f69c9ca0] [IP:127.0.0.1] [User:guest] [SIGNUP FAILED] User creation failed: Password confirmation doesn't match Password, Name can't be blank, Email is invalid, Password is too short (minimum is 6 characters)
+[e2e8613c-e1ba-477c-8ab9-5eabac8ac2bf] [IP:127.0.0.1] [User:guest] [USER VALIDATION] Validation failed for user '' (invalid-email): Password confirmation doesn't match Password, Name can't be blank, Email is invalid, Password is too short (minimum is 6 characters)
+[e2e8613c-e1ba-477c-8ab9-5eabac8ac2bf] [IP:127.0.0.1] [User:guest] [SIGNUP FAILED] User creation failed: Password confirmation doesn't match Password, Name can't be blank, Email is invalid, Password is too short (minimum is 6 characters)
+[817ac1fa-c7d1-4933-abca-7b6faa51f5ed] [IP:127.0.0.1] [User:guest] [AUTH] Unauthorized access attempt to /users
+[eec207f0-9de5-4f76-9772-4578b0c2a6de] [IP:127.0.0.1] [User:guest] [AUTH] Unauthorized access attempt to /users/1
