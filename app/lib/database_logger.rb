@@ -99,4 +99,4 @@ module DatabaseLogger
   end
 end
 
-Rails.logger.info '[INITIALIZER] Database logging module loaded'
+Rails.logger.info "[INITIALIZER] Database logging module loaded"

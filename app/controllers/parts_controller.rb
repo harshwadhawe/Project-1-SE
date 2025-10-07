@@ -70,7 +70,13 @@ class PartsController < ApplicationController
     Rails.logger.info "[PARTS INDEX] Found #{@parts.size} parts after filters"
     return unless @parts.respond_to?(:group)
 
-    type_counts = @parts.group(:type).count
+    type_counts = @parts.reorder(nil).group(:type).order(:type).count
+    @parts.unscope(:order).group(:type).order(:type).count
+    Rails.logger.info "[PARTS INDEX] Found #{@parts.size} parts after filters"
+    return unless @parts.respond_to?(:group)
+
+    # Clear order, then group
+    type_counts = @parts.reorder(nil).group(:type).order(:type).count
     Rails.logger.debug "[PARTS INDEX] Part distribution: #{type_counts.inspect}"
   end
 
