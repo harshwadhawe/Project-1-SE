@@ -37,7 +37,6 @@
       <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Selected Components</h2>
       <div class="grid lg:grid-cols-2 gap-6">
 
-        <%# Loop through all CATEGORIES, not just selected parts %>
         <% @categories.each do |category_name, model_class| %>
           <div class="bg-white rounded-lg shadow-sm border flex flex-col">
             <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 rounded-t-lg">
@@ -59,7 +58,6 @@
               </div>
             </div>
 
-            <%# Check if a part for this category has been selected %>
             <% if part = @sample_parts[category_name] %>
               <div class="p-6 flex-grow">
                 <div class="flex items-center justify-between">
@@ -78,17 +76,27 @@
                   </div>
                 </div>
               </div>
-              <div class="px-6 py-3 bg-gray-50 border-t text-right rounded-b-lg">
-                <a href="#" class="text-red-600 hover:text-red-800 text-sm font-medium mr-4">Remove</a>
-                <a href="#" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">Change</a>
+
+              <div class="px-6 py-3 bg-gray-50 border-t rounded-b-lg">
+                <div class="flex justify-end items-center space-x-4">
+                  <% build_item = @build.build_items.find_by(part_id: part.id) %>
+                  <% if build_item %>
+                    <%# Changed to a link_to with a turbo_method to keep it inline %>
+                    <%= link_to "Remove", build_build_item_path(@build, build_item),
+                          data: { turbo_method: :delete },
+                          class: "text-red-600 hover:text-red-800 text-sm font-medium" %>
+                  <% end %>
+
+                  <% path_name = category_name == "PcCase" ? "pc_cases_path" : "#{category_name.downcase.pluralize}_path" %>
+                  <%= link_to "Change", send(path_name, { build_id: @build_id }), class: "text-indigo-600 hover:text-indigo-800 text-sm font-medium" %>
+                </div>
               </div>
+              <%# --- END OF MODIFIED SECTION --- %>
+
             <% else %>
               <div class="p-6 flex-grow flex flex-col items-center justify-center text-center">
                 <p class="text-gray-500 italic mb-4">No part selected</p>
-                <%
-                  # Logic to generate the correct path for the "Add" link
-                  path_name = category_name == "PcCase" ? "pc_cases_path" : "#{category_name.downcase.pluralize}_path"
-                %>
+                <% path_name = category_name == "PcCase" ? "pc_cases_path" : "#{category_name.downcase.pluralize}_path" %>
                 <%= link_to "Add a #{category_name}", send(path_name, { build_id: @build_id }), class: "bg-indigo-100 hover:bg-indigo-200 text-indigo-800 font-semibold px-4 py-2 rounded-lg transition-colors duration-200" %>
               </div>
             <% end %>

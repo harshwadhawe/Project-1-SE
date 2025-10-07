@@ -24,4 +24,19 @@ class BuildItemsController < ApplicationController
     redirect_to build_path(@build)
     
   end
+
+  # ADDED: New method to handle removing a part from a build
+  def destroy
+    @build = Build.find(params[:build_id])
+    @build_item = @build.build_items.find(params[:id])
+    part_name = @build_item.part.name
+    
+    if @build_item.destroy
+      flash[:notice] = "#{part_name} was successfully removed from your build."
+    else
+      flash[:alert] = "Failed to remove #{part_name}."
+    end
+
+    redirect_to build_path(@build), status: :see_other
+  end
 end

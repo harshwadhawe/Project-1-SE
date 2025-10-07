@@ -8,8 +8,9 @@ PC Builder is a Ruby on Rails application that allows users to:
 * View extra specifications for each part type (e.g. CPU cores/threads, base/boost clocks).
 * Create builds by selecting parts from each category and assigning quantities.
 * Manage users and builds.
-* View sample parts and recent builds on the Home page.
+* View sample parts and recent builds on the Home page
 
+You can find the application here - https://pc-builder-c734d2784345.herokuapp.com/
 ---
 
 ## Project Structure

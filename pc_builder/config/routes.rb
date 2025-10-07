@@ -56,7 +56,8 @@ Rails.application.routes.draw do
       post :share
       get :shared
     end
-    resources :build_items, only: [:create]
+    # CORRECTED: Added :destroy to enable the remove functionality
+    resources :build_items, only: [:create, :destroy]
   end
   
   resources :cpus, only: [:index, :show]
