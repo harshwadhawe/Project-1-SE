@@ -646,7 +646,6 @@
           12,
           11,
           null,
-          null,
           null
         ],
         "branches": {
@@ -2012,7 +2011,7 @@
         "branches": {}
       }
     },
-    "timestamp": 1759801965
+    "timestamp": 1759802494
   },
   "Cucumber Features": {
     "coverage": {
