@@ -1,105 +1,105 @@
 {
   "RSpec": {
     "coverage": {
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/helpers/application_helper.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/helpers/application_helper.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/helpers/build_items_helper.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/helpers/build_items_helper.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/helpers/builds_helper.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/helpers/builds_helper.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/helpers/coolers_helper.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/helpers/coolers_helper.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/helpers/cpus_helper.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/helpers/cpus_helper.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/helpers/gpus_helper.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/helpers/gpus_helper.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/helpers/home_helper.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/helpers/home_helper.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/helpers/memories_helper.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/helpers/memories_helper.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/helpers/motherboards_helper.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/helpers/motherboards_helper.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/helpers/parts_helper.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/helpers/parts_helper.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/helpers/pc_cases_helper.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/helpers/pc_cases_helper.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/helpers/psus_helper.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/helpers/psus_helper.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/helpers/storages_helper.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/helpers/storages_helper.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/helpers/users_helper.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/helpers/users_helper.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/jobs/application_job.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/jobs/application_job.rb": {
         "lines": [
           1,
           null,
@@ -111,7 +111,7 @@
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/lib/database_logger.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/lib/database_logger.rb": {
         "lines": [
           null,
           null,
@@ -241,7 +241,7 @@
           }
         }
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/lib/logging_helpers.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/lib/logging_helpers.rb": {
         "lines": [
           null,
           null,
@@ -449,7 +449,7 @@
           }
         }
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/mailers/application_mailer.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/mailers/application_mailer.rb": {
         "lines": [
           1,
           1,
@@ -458,7 +458,7 @@
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/models/build_item.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/models/build_item.rb": {
         "lines": [
           1,
           1,
@@ -487,52 +487,52 @@
           1,
           null,
           1,
-          69,
+          78,
           null,
           null,
           1,
-          69,
+          78,
+          null,
+          null,
+          1,
+          12,
+          null,
+          null,
+          1,
+          93,
+          6,
+          null,
+          87,
+          null,
           null,
           null,
           1,
           6,
-          null,
-          null,
-          1,
-          83,
           6,
-          null,
-          77,
-          null,
-          null,
-          null,
-          1,
-          5,
-          5,
           null,
           null,
           null
         ],
         "branches": {
           "[:\"&.\", 0, 28, 58, 28, 68]": {
-            "[:then, 1, 28, 58, 28, 68]": 69,
+            "[:then, 1, 28, 58, 28, 68]": 78,
             "[:else, 2, 28, 58, 28, 68]": 0
           },
           "[:\"&.\", 3, 28, 100, 28, 111]": {
-            "[:then, 4, 28, 100, 28, 111]": 69,
+            "[:then, 4, 28, 100, 28, 111]": 78,
             "[:else, 5, 28, 100, 28, 111]": 0
           },
           "[:if, 6, 40, 4, 44, 7]": {
             "[:then, 7, 41, 6, 41, 117]": 6,
-            "[:else, 8, 43, 6, 43, 82]": 77
+            "[:else, 8, 43, 6, 43, 82]": 87
           },
           "[:if, 9, 48, 4, 50, 7]": {
-            "[:then, 10, 49, 6, 49, 131]": 5,
+            "[:then, 10, 49, 6, 49, 131]": 6,
             "[:else, 11, 48, 4, 50, 7]": 0
           }
         }
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/models/application_record.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/models/application_record.rb": {
         "lines": [
           1,
           1,
@@ -540,7 +540,7 @@
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/models/build.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/models/build.rb": {
         "lines": [
           1,
           1,
@@ -623,11 +623,11 @@
           1,
           null,
           1,
-          125,
+          133,
           null,
           null,
           1,
-          125,
+          133,
           null,
           null,
           1,
@@ -635,10 +635,10 @@
           null,
           null,
           1,
-          146,
+          154,
           6,
           null,
-          140,
+          148,
           null,
           null,
           null,
@@ -664,7 +664,7 @@
           },
           "[:if, 9, 94, 4, 98, 7]": {
             "[:then, 10, 95, 6, 95, 118]": 6,
-            "[:else, 11, 97, 6, 97, 83]": 140
+            "[:else, 11, 97, 6, 97, 83]": 148
           },
           "[:if, 12, 102, 4, 104, 7]": {
             "[:then, 13, 103, 6, 103, 122]": 11,
@@ -672,14 +672,14 @@
           }
         }
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/models/cooler.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/models/cooler.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/models/part.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/models/part.rb": {
         "lines": [
           1,
           1,
@@ -711,10 +711,10 @@
           null,
           null,
           1,
-          333,
-          329,
-          329,
-          329,
+          347,
+          343,
+          343,
+          343,
           null,
           null,
           1,
@@ -725,19 +725,19 @@
           null,
           1,
           1,
-          329,
+          343,
           null,
           1,
-          329,
+          343,
           null,
           1,
           1,
           null,
           1,
-          350,
+          364,
           15,
           null,
-          335,
+          349,
           null,
           null,
           1,
@@ -755,12 +755,12 @@
             "[:else, 5, 21, 4, 21, 80]": 1
           },
           "[:unless, 6, 31, 4, 31, 31]": {
-            "[:else, 7, 31, 4, 31, 31]": 329,
+            "[:else, 7, 31, 4, 31, 31]": 343,
             "[:then, 8, 31, 4, 31, 12]": 4
           },
           "[:if, 9, 54, 4, 58, 7]": {
             "[:then, 10, 55, 6, 55, 128]": 15,
-            "[:else, 11, 57, 6, 57, 93]": 335
+            "[:else, 11, 57, 6, 57, 93]": 349
           },
           "[:if, 12, 61, 4, 61, 143]": {
             "[:then, 13, 61, 4, 61, 121]": 1,
@@ -768,7 +768,7 @@
           }
         }
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/models/cpu.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/models/cpu.rb": {
         "lines": [
           1,
           null,
@@ -787,11 +787,11 @@
           1,
           null,
           1,
-          144,
+          150,
           8,
           null,
-          136,
-          136,
+          142,
+          142,
           null,
           null,
           null
@@ -799,36 +799,36 @@
         "branches": {
           "[:if, 0, 18, 4, 23, 7]": {
             "[:then, 1, 19, 6, 19, 121]": 8,
-            "[:else, 2, 21, 6, 22, 168]": 136
+            "[:else, 2, 21, 6, 22, 168]": 142
           },
           "[:if, 3, 22, 6, 22, 168]": {
             "[:then, 4, 22, 6, 22, 140]": 64,
-            "[:else, 5, 22, 6, 22, 168]": 72
+            "[:else, 5, 22, 6, 22, 168]": 78
           }
         }
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/models/gpu.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/models/gpu.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/models/memory.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/models/memory.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/models/motherboard.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/models/motherboard.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/models/pc_case.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/models/pc_case.rb": {
         "lines": [
           1,
           null,
@@ -838,21 +838,21 @@
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/models/psu.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/models/psu.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/models/storage.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/models/storage.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/models/user.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/models/user.rb": {
         "lines": [
           1,
           null,
@@ -868,27 +868,27 @@
           1,
           null,
           null,
-          144,
+          152,
           null,
           1,
           null,
           null,
           1,
-          82,
+          91,
           null,
           null,
           1,
           null,
-          53,
+          59,
           null,
           null,
-          53,
+          59,
           null,
           null,
           1,
+          30,
           27,
-          24,
-          24,
+          27,
           null,
           3,
           null,
@@ -896,17 +896,17 @@
           1,
           null,
           1,
-          143,
-          143,
-          143,
+          151,
+          151,
+          151,
           null,
           null,
           1,
-          131,
+          139,
           null,
           null,
           1,
-          131,
+          139,
           null,
           null,
           1,
@@ -914,10 +914,10 @@
           null,
           null,
           1,
-          143,
+          151,
           10,
           null,
-          133,
+          141,
           null,
           null,
           null
@@ -925,15 +925,15 @@
         "branches": {
           "[:if, 0, 45, 4, 45, 111]": {
             "[:then, 1, 45, 4, 45, 89]": 2,
-            "[:else, 2, 45, 4, 45, 111]": 141
+            "[:else, 2, 45, 4, 45, 111]": 149
           },
           "[:if, 3, 61, 4, 65, 7]": {
             "[:then, 4, 62, 6, 62, 127]": 10,
-            "[:else, 5, 64, 6, 64, 92]": 133
+            "[:else, 5, 64, 6, 64, 92]": 141
           }
         }
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/controllers/application_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/controllers/application_controller.rb": {
         "lines": [
           1,
           null,
@@ -951,29 +951,29 @@
           1,
           null,
           1,
-          389,
+          395,
           null,
-          130,
-          25,
+          146,
+          28,
           null,
-          105,
+          118,
           null,
           null,
-          130,
-          130,
-          null,
-          1,
+          146,
+          146,
           null,
           1,
-          45,
-          7,
           null,
-          7,
-          7,
-          6,
+          1,
+          30,
           6,
           null,
-          7,
+          6,
+          6,
+          5,
+          5,
+          null,
+          6,
           1,
           null,
           null,
@@ -981,47 +981,47 @@
           null,
           null,
           1,
-          155,
+          174,
           null,
-          131,
-          131,
-          null,
-          null,
-          1,
-          null,
-          1,
-          165,
-          165,
-          165,
-          165,
-          null,
-          null,
-          1,
+          147,
           147,
           null,
           null,
           1,
-          158,
-          158,
           null,
-          158,
+          1,
+          181,
+          181,
+          181,
+          181,
           null,
-          149,
-          149,
           null,
-          149,
+          1,
+          159,
+          null,
+          null,
+          1,
+          175,
+          175,
+          null,
+          175,
+          null,
+          161,
+          161,
+          null,
+          161,
           0,
           null,
           null,
           null,
           1,
-          2,
-          2,
-          2,
+          7,
+          7,
+          7,
           null,
-          2,
-          3,
-          3,
+          7,
+          13,
+          8,
           null,
           null,
           null,
@@ -1045,115 +1045,135 @@
           null,
           1,
           null,
-          177,
-          177,
+          198,
+          198,
           null,
           null
         ],
         "branches": {
           "[:if, 0, 17, 4, 17, 51]": {
-            "[:then, 1, 17, 4, 17, 24]": 259,
-            "[:else, 2, 17, 4, 17, 51]": 130
+            "[:then, 1, 17, 4, 17, 24]": 249,
+            "[:else, 2, 17, 4, 17, 51]": 146
           },
           "[:if, 3, 19, 20, 23, 7]": {
-            "[:then, 4, 20, 6, 20, 38]": 25,
-            "[:else, 5, 22, 6, 22, 9]": 105
+            "[:then, 4, 20, 6, 20, 38]": 28,
+            "[:else, 5, 22, 6, 22, 9]": 118
           },
           "[:if, 6, 25, 4, 25, 119]": {
-            "[:then, 7, 25, 4, 25, 102]": 24,
-            "[:else, 8, 25, 4, 25, 119]": 106
+            "[:then, 7, 25, 4, 25, 102]": 27,
+            "[:else, 8, 25, 4, 25, 119]": 119
           },
           "[:\"&.\", 9, 25, 47, 25, 64]": {
-            "[:then, 10, 25, 47, 25, 64]": 24,
+            "[:then, 10, 25, 47, 25, 64]": 27,
             "[:else, 11, 25, 47, 25, 64]": 0
           },
           "[:\"&.\", 12, 25, 79, 25, 99]": {
-            "[:then, 13, 25, 79, 25, 99]": 24,
+            "[:then, 13, 25, 79, 25, 99]": 27,
             "[:else, 14, 25, 79, 25, 99]": 0
           },
           "[:unless, 15, 31, 4, 43, 7]": {
-            "[:else, 16, 31, 4, 43, 7]": 38,
-            "[:then, 17, 32, 6, 42, 9]": 7
+            "[:else, 16, 31, 4, 43, 7]": 24,
+            "[:then, 17, 32, 6, 42, 9]": 6
           },
           "[:if, 18, 47, 4, 47, 45]": {
-            "[:then, 19, 47, 4, 47, 21]": 24,
-            "[:else, 20, 47, 4, 47, 45]": 131
+            "[:then, 19, 47, 4, 47, 21]": 27,
+            "[:else, 20, 47, 4, 47, 45]": 147
           },
           "[:if, 21, 49, 13, 49, 64]": {
-            "[:then, 22, 49, 44, 49, 58]": 131,
+            "[:then, 22, 49, 44, 49, 58]": 147,
             "[:else, 23, 49, 61, 49, 64]": 0
           },
           "[:\"&.\", 24, 56, 120, 56, 153]": {
             "[:then, 25, 56, 120, 56, 153]": 11,
-            "[:else, 26, 56, 120, 56, 153]": 154
+            "[:else, 26, 56, 120, 56, 153]": 170
           },
           "[:unless, 27, 57, 4, 57, 81]": {
             "[:else, 28, 57, 4, 57, 81]": 0,
-            "[:then, 29, 57, 4, 57, 60]": 165
+            "[:then, 29, 57, 4, 57, 60]": 181
           },
           "[:if, 30, 58, 21, 58, 89]": {
-            "[:then, 31, 58, 53, 58, 68]": 165,
+            "[:then, 31, 58, 53, 58, 68]": 181,
             "[:else, 32, 58, 71, 58, 89]": 0
           },
           "[:\"&.\", 33, 59, 49, 59, 65]": {
-            "[:then, 34, 59, 49, 59, 65]": 46,
-            "[:else, 35, 59, 49, 59, 65]": 119
+            "[:then, 34, 59, 49, 59, 65]": 49,
+            "[:else, 35, 59, 49, 59, 65]": 132
           },
           "[:\"&.\", 36, 59, 93, 59, 121]": {
-            "[:then, 37, 59, 93, 59, 121]": 165,
+            "[:then, 37, 59, 93, 59, 121]": 181,
             "[:else, 38, 59, 93, 59, 121]": 0
           },
           "[:if, 39, 75, 4, 77, 7]": {
             "[:then, 40, 76, 6, 76, 110]": 0,
-            "[:else, 41, 75, 4, 77, 7]": 149
+            "[:else, 41, 75, 4, 77, 7]": 161
           },
           "[:\"&.\", 42, 82, 44, 82, 74]": {
-            "[:then, 43, 82, 44, 82, 74]": 2,
+            "[:then, 43, 82, 44, 82, 74]": 7,
             "[:else, 44, 82, 44, 82, 74]": 0
           },
           "[:\"&.\", 45, 82, 44, 82, 86]": {
-            "[:then, 46, 82, 44, 82, 86]": 2,
+            "[:then, 46, 82, 44, 82, 86]": 7,
             "[:else, 47, 82, 44, 82, 86]": 0
           }
         }
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/controllers/build_items_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/controllers/build_items_controller.rb": {
         "lines": [
           1,
+          24,
           1,
-          14,
-          13,
-          12,
-          12,
-          12,
-          12,
+          17,
+          16,
+          15,
+          15,
+          15,
+          15,
           null,
-          12,
-          4,
-          4,
-          4,
+          15,
+          5,
+          5,
+          5,
           null,
-          8,
-          8,
-          null,
-          null,
-          12,
-          12,
-          14,
+          10,
+          10,
           null,
           null,
-          12,
+          15,
+          15,
+          17,
           null,
+          null,
+          15,
+          null,
+          null,
+          null,
+          null,
+          1,
+          6,
+          6,
+          6,
+          null,
+          6,
+          6,
+          null,
+          0,
+          null,
+          null,
+          6,
           null
         ],
         "branches": {
-          "[:if, 0, 10, 4, 17, 7]": {
-            "[:then, 1, 11, 6, 13, 74]": 4,
-            "[:else, 2, 15, 6, 16, 76]": 8
+          "[:if, 0, 11, 4, 18, 7]": {
+            "[:then, 1, 12, 6, 14, 74]": 5,
+            "[:else, 2, 16, 6, 17, 76]": 10
+          },
+          "[:if, 3, 35, 4, 39, 7]": {
+            "[:then, 4, 36, 6, 36, 79]": 6,
+            "[:else, 5, 38, 6, 38, 54]": 0
           }
         }
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/controllers/sessions_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/controllers/sessions_controller.rb": {
         "lines": [
           1,
           null,
@@ -1165,22 +1185,22 @@
           null,
           null,
           1,
-          32,
+          40,
           null,
-          32,
-          26,
-          null,
-          null,
-          26,
+          35,
+          29,
           null,
           null,
+          29,
           null,
           null,
           null,
           null,
-          26,
-          26,
-          26,
+          null,
+          null,
+          29,
+          29,
+          29,
           null,
           6,
           6,
@@ -1218,11 +1238,11 @@
         ],
         "branches": {
           "[:\"&.\", 0, 13, 7, 13, 54]": {
-            "[:then, 1, 13, 7, 13, 54]": 30,
+            "[:then, 1, 13, 7, 13, 54]": 33,
             "[:else, 2, 13, 7, 13, 54]": 2
           },
           "[:if, 3, 13, 4, 31, 7]": {
-            "[:then, 4, 14, 6, 26, 27]": 26,
+            "[:then, 4, 14, 6, 26, 27]": 29,
             "[:else, 5, 28, 6, 30, 49]": 6
           },
           "[:if, 6, 35, 4, 48, 7]": {
@@ -1231,7 +1251,7 @@
           }
         }
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/controllers/builds_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/controllers/builds_controller.rb": {
         "lines": [
           1,
           null,
@@ -1545,7 +1565,7 @@
           }
         }
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/controllers/parts_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/controllers/parts_controller.rb": {
         "lines": [
           1,
           null,
@@ -1694,7 +1714,7 @@
           }
         }
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/controllers/users_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/controllers/users_controller.rb": {
         "lines": [
           1,
           null,
@@ -1788,7 +1808,7 @@
           }
         }
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/controllers/coolers_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/controllers/coolers_controller.rb": {
         "lines": [
           1,
           1,
@@ -1804,7 +1824,7 @@
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/controllers/cpus_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/controllers/cpus_controller.rb": {
         "lines": [
           1,
           1,
@@ -1820,7 +1840,7 @@
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/controllers/gpus_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/controllers/gpus_controller.rb": {
         "lines": [
           1,
           1,
@@ -1836,7 +1856,7 @@
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/controllers/home_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/controllers/home_controller.rb": {
         "lines": [
           1,
           null,
@@ -1912,7 +1932,7 @@
           }
         }
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/controllers/memories_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/controllers/memories_controller.rb": {
         "lines": [
           1,
           1,
@@ -1928,7 +1948,7 @@
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/controllers/motherboards_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/controllers/motherboards_controller.rb": {
         "lines": [
           1,
           1,
@@ -1944,7 +1964,7 @@
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/controllers/pc_cases_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/controllers/pc_cases_controller.rb": {
         "lines": [
           1,
           1,
@@ -1960,7 +1980,7 @@
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/controllers/psus_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/controllers/psus_controller.rb": {
         "lines": [
           1,
           1,
@@ -1975,7 +1995,7 @@
         ],
         "branches": {}
       },
-      "/Users/harshwadhawe/Code/Fall 25/SE/Project 1/Project-1-SE/pc_builder/app/controllers/storages_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/PJ1/Project-1-SE/pc_builder/app/controllers/storages_controller.rb": {
         "lines": [
           1,
           1,
@@ -1992,7 +2012,7 @@
         "branches": {}
       }
     },
-    "timestamp": 1759783038
+    "timestamp": 1759801965
   },
   "Cucumber Features": {
     "coverage": {

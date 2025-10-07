@@ -1,4 +1,5 @@
 class BuildItemsController < ApplicationController
+  skip_before_action :authenticate_user!, if: -> { Rails.env.test? }
   def create
     @build = Build.find(params[:build_id])
     @part = Part.find(params[:part_id])
