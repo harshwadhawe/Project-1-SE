@@ -25,10 +25,6 @@ class BuildItemsController < ApplicationController
     
   end
 
-<<<<<<< HEAD:pc_builder/app/controllers/build_items_controller.rb
-  # ADDED: New method to handle removing a part from a build
-=======
->>>>>>> change-repo-structure:app/controllers/build_items_controller.rb
   def destroy
     @build = Build.find(params[:build_id])
     @build_item = @build.build_items.find(params[:id])

@@ -27,13 +27,6 @@ Once deployed, visit:
 PC Builder is a full-stack Ruby on Rails web application that allows users to browse, filter, and assemble custom PC builds.
 It provides a modular architecture with clearly separated models, controllers, and views for scalability and maintainability.
 
-<<<<<<< HEAD
-* Browse PC components (CPU, GPU, Motherboard, Memory, Storage, Cooler, Case, PSU).
-* View extra specifications for each part type (e.g. CPU cores/threads, base/boost clocks).
-* Create builds by selecting parts from each category and assigning quantities.
-* Manage users and builds.
-* View sample parts and recent builds on the Home page
-=======
 ### Key Features
 
 * Browse PC components (CPU, GPU, Motherboard, Memory, Storage, Cooler, Case, PSU)
@@ -42,9 +35,7 @@ It provides a modular architecture with clearly separated models, controllers, a
 * Create and manage PC builds
 * Sample parts and recent builds displayed on the Home page
 * Lightweight login system (Dev login / guest browsing)
->>>>>>> change-repo-structure
 
-You can find the application here - https://pc-builder-c734d2784345.herokuapp.com/
 ---
 
 ## Project Structure
@@ -210,14 +201,6 @@ bundle exec rspec
 
 ## Next Steps
 
-<<<<<<< HEAD
-* Extend extra attributes and partials for `Gpu`, `Motherboard`, `Memory`, `Storage`, `Cooler`, `PcCase`, `Psu`.
-* Add computed fields (e.g. `Build#total_wattage`, `Build#total_price`).
-* Improve authentication (Devise or similar).
-* Add styling (Bootstrap or Tailwind).
-* Write full test coverage (RSpec for controllers + system tests).
-* Optionally expose JSON APIs for builds and parts.
-=======
 * Extend component attributes (GPU, Motherboard, Memory, etc.)
 * Compute `Build#total_price` and `Build#total_wattage`
 * Add authentication with Devise
@@ -321,4 +304,3 @@ docs/
 **Last Updated:** October 6, 2025
 **Project:** PC Builder Rails Application
 **Documentation Version:** 1.0
->>>>>>> change-repo-structure
