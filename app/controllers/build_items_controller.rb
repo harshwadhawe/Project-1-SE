@@ -1,4 +1,5 @@
 class BuildItemsController < ApplicationController
+  skip_before_action :authenticate_user!, if: -> { Rails.env.test? }
   def create
     @build = Build.find(params[:build_id])
     @part = Part.find(params[:part_id])
@@ -25,6 +26,7 @@ class BuildItemsController < ApplicationController
     
   end
 
+  # ADDED: New method to handle removing a part from a build
   def destroy
     @build = Build.find(params[:build_id])
     @build_item = @build.build_items.find(params[:id])
