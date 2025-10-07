@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Build < ApplicationRecord
   belongs_to :user, optional: true
   has_many :build_items, dependent: :destroy
@@ -47,14 +49,14 @@ class Build < ApplicationRecord
       total_cost: total_cost,
       total_wattage: total_wattage,
       parts_count: parts.count,
-      user_name: user&.name || "Anonymous",
+      user_name: user&.name || 'Anonymous',
       created_at: created_at,
       shared_at: Time.current
     }
-    
+
     self.shared_data = build_data.to_json
     generate_share_token!
-    
+
     Rails.logger.info "[BUILD #{id}] Created shareable data with #{components_data.keys.count} components"
     build_data
   end
@@ -63,13 +65,15 @@ class Build < ApplicationRecord
     share_token.present? && shared_at.present?
   end
 
-  def share_url(base_url = "")
+  def share_url(base_url = '')
     return nil unless shared?
+
     "#{base_url}/builds/#{id}/shared?token=#{share_token}"
   end
 
   def parsed_shared_data
     return {} unless shared_data.present?
+
     JSON.parse(shared_data)
   rescue JSON::ParserError => e
     Rails.logger.error "[BUILD #{id}] Failed to parse shared data: #{e.message}"
@@ -99,8 +103,8 @@ class Build < ApplicationRecord
   end
 
   def log_build_updated
-    if saved_changes.any?
-      Rails.logger.info "[BUILD UPDATED] Build ID: #{id} updated - Changes: #{saved_changes.except('updated_at').inspect}"
-    end
+    return unless saved_changes.any?
+
+    Rails.logger.info "[BUILD UPDATED] Build ID: #{id} updated - Changes: #{saved_changes.except('updated_at').inspect}"
   end
 end

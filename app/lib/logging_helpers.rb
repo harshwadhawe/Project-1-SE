@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Application-wide logging utilities and helpers
 # This module provides consistent logging patterns across the PC Builder application
 
@@ -10,59 +12,59 @@ module LoggingHelpers
 
   module ClassMethods
     def log_class_action(action, details = {})
-      Rails.logger.info "[#{self.name.upcase}] #{action}: #{details.inspect}"
+      Rails.logger.info "[#{name.upcase}] #{action}: #{details.inspect}"
     end
   end
 
   # Instance methods for consistent logging
   def log_action(action, details = {})
     class_name = self.class.name
-    id_info = respond_to?(:id) && id ? " ID:#{id}" : ""
+    id_info = respond_to?(:id) && id ? " ID:#{id}" : ''
     Rails.logger.info "[#{class_name.upcase}#{id_info}] #{action}: #{details.inspect}"
   end
 
   def log_error(error, context = {})
     class_name = self.class.name
-    id_info = respond_to?(:id) && id ? " ID:#{id}" : ""
+    id_info = respond_to?(:id) && id ? " ID:#{id}" : ''
     Rails.logger.error "[#{class_name.upcase}#{id_info}] ERROR: #{error.message}"
     Rails.logger.error "[#{class_name.upcase}#{id_info}] CONTEXT: #{context.inspect}" if context.any?
     Rails.logger.error "[#{class_name.upcase}#{id_info}] BACKTRACE: #{error.backtrace&.first(5)&.join("\n")}"
   end
 
-  def log_performance(operation_name, &block)
+  def log_performance(operation_name)
     start_time = Time.current
     result = yield
     duration = (Time.current - start_time) * 1000
-    
+
     class_name = self.class.name
-    id_info = respond_to?(:id) && id ? " ID:#{id}" : ""
-    
+    id_info = respond_to?(:id) && id ? " ID:#{id}" : ''
+
     if duration > 100 # Log operations taking more than 100ms
       Rails.logger.warn "[#{class_name.upcase}#{id_info}] SLOW_OPERATION: #{operation_name} took #{duration.round(2)}ms"
     else
       Rails.logger.debug "[#{class_name.upcase}#{id_info}] PERFORMANCE: #{operation_name} took #{duration.round(2)}ms"
     end
-    
+
     result
   end
 
-  def log_database_query(query_description, &block)
+  def log_database_query(query_description)
     start_time = Time.current
     result = yield
     duration = (Time.current - start_time) * 1000
-    
+
     Rails.logger.debug "[DATABASE] #{query_description} - #{duration.round(2)}ms"
-    
+
     if duration > 500 # Log slow database queries (> 500ms)
       Rails.logger.warn "[SLOW_QUERY] #{query_description} took #{duration.round(2)}ms"
     end
-    
+
     result
   end
 
   # User activity logging
   def log_user_activity(user_id, activity, details = {})
-    user_info = user_id ? "User:#{user_id}" : "Guest"
+    user_info = user_id ? "User:#{user_id}" : 'Guest'
     Rails.logger.info "[USER_ACTIVITY] #{user_info} - #{activity}: #{details.inspect}"
   end
 
@@ -95,41 +97,39 @@ end
 
 # Memory usage monitoring
 class MemoryLogger
-  def self.log_memory_usage(context = "")
-    if defined?(GC)
-      gc_stat = GC.stat
-      memory_usage = if RUBY_PLATFORM !~ /mswin|mingw|cygwin/
-                       ps_output = `ps -o pid,vsz,rss -p #{Process.pid}`.split("\n").last
-                       ps_output&.split
-                     end
-      
-      Rails.logger.info "[MEMORY#{context.present? ? " #{context}" : ""}] " \
-                       "Objects: #{gc_stat[:heap_live_slots]}, " \
-                       "GC Count: #{gc_stat[:count]}, " \
-                       "Memory: #{memory_usage ? "#{memory_usage[2]}KB RSS" : "unknown"}"
-    end
+  def self.log_memory_usage(context = '')
+    return unless defined?(GC)
+
+    gc_stat = GC.stat
+    memory_usage = if RUBY_PLATFORM !~ /mswin|mingw|cygwin/
+                     ps_output = `ps -o pid,vsz,rss -p #{Process.pid}`.split("\n").last
+                     ps_output&.split
+                   end
+
+    Rails.logger.info "[MEMORY#{context.present? ? " #{context}" : ''}] " \
+                     "Objects: #{gc_stat[:heap_live_slots]}, " \
+                     "GC Count: #{gc_stat[:count]}, " \
+                     "Memory: #{memory_usage ? "#{memory_usage[2]}KB RSS" : 'unknown'}"
   end
 end
 
 # Performance monitoring
 class PerformanceMonitor
-  def self.monitor_action(controller, action, &block)
+  def self.monitor_action(controller, action)
     start_time = Time.current
-    start_memory = MemoryLogger.log_memory_usage("START #{controller}##{action}")
-    
+    MemoryLogger.log_memory_usage("START #{controller}##{action}")
+
     result = yield
-    
+
     duration = (Time.current - start_time) * 1000
-    end_memory = MemoryLogger.log_memory_usage("END #{controller}##{action}")
-    
+    MemoryLogger.log_memory_usage("END #{controller}##{action}")
+
     Rails.logger.info "[PERFORMANCE] #{controller}##{action} completed in #{duration.round(2)}ms"
-    
-    if duration > 500
-      Rails.logger.warn "[SLOW_ACTION] #{controller}##{action} took #{duration.round(2)}ms"
-    end
-    
+
+    Rails.logger.warn "[SLOW_ACTION] #{controller}##{action} took #{duration.round(2)}ms" if duration > 500
+
     result
   end
 end
 
-Rails.logger.info "[INITIALIZER] Application logging helpers loaded"
+Rails.logger.info '[INITIALIZER] Application logging helpers loaded'

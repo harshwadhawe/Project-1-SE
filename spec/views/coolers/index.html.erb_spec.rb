@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "coolers/index.html.erb", type: :view do
+RSpec.describe 'coolers/index.html.erb', type: :view do
   before do
     assign(:coolers, [
-      cooler(brand: 'Noctua', name: 'NH-D15', price_cents: 9500),
-      cooler(brand: 'Corsair', name: 'H100i', price_cents: 12000)
-    ])
+             cooler(brand: 'Noctua', name: 'NH-D15', price_cents: 9500),
+             cooler(brand: 'Corsair', name: 'H100i', price_cents: 12_000)
+           ])
   end
 
   it 'renders the coolers catalog title' do

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "memories/show.html.erb", type: :view do
+RSpec.describe 'memories/show.html.erb', type: :view do
   before do
     @memory = assign(:memory, memory(brand: 'Corsair', name: 'Vengeance LPX'))
   end

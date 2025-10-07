@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Part < ApplicationRecord
   self.inheritance_column = :type
   has_many :build_items
@@ -29,6 +31,7 @@ class Part < ApplicationRecord
   # Instance methods with logging
   def price_in_dollars
     return 0 unless price_cents
+
     dollars = price_cents / 100.0
     Rails.logger.debug "[PART #{id}] Price conversion: #{price_cents} cents = $#{dollars}"
     dollars
@@ -41,15 +44,19 @@ class Part < ApplicationRecord
   end
 
   private
+
   def log_part_creation
     Rails.logger.info "[PART CREATE] Creating new #{type || 'Part'}: #{brand} #{name} - $#{price_in_dollars}, #{wattage || 0}W"
   end
+
   def log_part_created
     Rails.logger.info "[PART CREATED] Successfully created #{type} ID: #{id} - #{brand} #{name}"
   end
+
   def log_part_destruction
     Rails.logger.warn "[PART DESTROY] Destroying #{type} ID: #{id} - #{brand} #{name} (used in #{build_items.count} builds)"
   end
+
   def log_validation_results
     if errors.any?
       Rails.logger.warn "[PART VALIDATION] Validation failed for #{type} '#{brand} #{name}': #{errors.full_messages.join(', ')}"
@@ -57,7 +64,10 @@ class Part < ApplicationRecord
       Rails.logger.debug "[PART VALIDATION] Validation passed for #{type} '#{brand} #{name}'"
     end
   end
+
   def log_part_updated
-    Rails.logger.info "[PART UPDATED] #{type} ID: #{id} updated - Changes: #{saved_changes.except('updated_at').inspect}" if saved_changes.any?
+    return unless saved_changes.any?
+
+    Rails.logger.info "[PART UPDATED] #{type} ID: #{id} updated - Changes: #{saved_changes.except('updated_at').inspect}"
   end
 end

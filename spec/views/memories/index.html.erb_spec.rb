@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "memories/index.html.erb", type: :view do
+RSpec.describe 'memories/index.html.erb', type: :view do
   before do
     assign(:memories, [
-      memory(brand: 'Corsair', name: 'Vengeance LPX', price_cents: 8000),
-      memory(brand: 'G.Skill', name: 'Trident Z', price_cents: 9500)
-    ])
+             memory(brand: 'Corsair', name: 'Vengeance LPX', price_cents: 8000),
+             memory(brand: 'G.Skill', name: 'Trident Z', price_cents: 9500)
+           ])
   end
 
   it 'renders the memory catalog title' do

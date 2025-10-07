@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BuildItem < ApplicationRecord
   belongs_to :build
   belongs_to :part
@@ -40,13 +42,13 @@ class BuildItem < ApplicationRecord
     if errors.any?
       Rails.logger.warn "[BUILD_ITEM VALIDATION] Validation failed for BuildItem: #{errors.full_messages.join(', ')}"
     else
-      Rails.logger.debug "[BUILD_ITEM VALIDATION] Validation passed for BuildItem"
+      Rails.logger.debug '[BUILD_ITEM VALIDATION] Validation passed for BuildItem'
     end
   end
 
   def log_build_item_updated
-    if saved_changes.any?
-      Rails.logger.info "[BUILD_ITEM UPDATED] BuildItem ID: #{id} updated - Changes: #{saved_changes.except('updated_at').inspect}"
-    end
+    return unless saved_changes.any?
+
+    Rails.logger.info "[BUILD_ITEM UPDATED] BuildItem ID: #{id} updated - Changes: #{saved_changes.except('updated_at').inspect}"
   end
 end

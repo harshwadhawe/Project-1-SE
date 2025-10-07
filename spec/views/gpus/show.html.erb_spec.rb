@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "gpus/show.html.erb", type: :view do
+RSpec.describe 'gpus/show.html.erb', type: :view do
   before do
     @gpu = assign(:gpu, gpu(brand: 'NVIDIA', name: 'RTX 4080'))
   end

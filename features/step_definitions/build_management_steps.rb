@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # PC Build Management step definitions
 
 When(/^I create a new build named "([^"]*)"$/) do |build_name|
@@ -22,11 +24,11 @@ end
 
 When(/^I add the following components to my build:$/) do |table|
   visit "/builds/#{@build.id}"
-  
+
   table.hashes.each do |row|
     part = Part.find_by(name: row['component'])
     expect(part).not_to be_nil, "Part '#{row['component']}' not found"
-    
+
     # Click add component button for this part
     within("#part_#{part.id}") do
       fill_in 'Quantity', with: row['quantity']
@@ -38,7 +40,7 @@ end
 When(/^I try to add a component with quantity (\d+)$/) do |quantity|
   visit "/builds/#{@build.id}"
   part = Part.first
-  
+
   within("#part_#{part.id}") do
     fill_in 'Quantity', with: quantity
     click_button 'Add to Build'
@@ -52,7 +54,7 @@ end
 When(/^I remove the "([^"]*)" from my build$/) do |component_name|
   part = Part.find_by(name: component_name)
   build_item = BuildItem.find_by(build: @build, part: part)
-  
+
   visit "/builds/#{@build.id}"
   within("#build_item_#{build_item.id}") do
     click_button 'Remove'
@@ -125,7 +127,7 @@ Then(/^the build totals should be recalculated$/) do
   visit "/builds/#{@build.id}"
   new_cost = @build.reload.total_cost
   new_wattage = @build.total_wattage
-  
+
   expect(page).to have_content("$#{new_cost / 100}")
   expect(page).to have_content("#{new_wattage}W")
 end
@@ -146,7 +148,7 @@ Given(/^another user has a build named "([^"]*)"$/) do |build_name|
     password: 'password123',
     password_confirmation: 'password123'
   )
-  
+
   Build.create!(
     name: build_name,
     user: other_user

@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "storages/index.html.erb", type: :view do
+RSpec.describe 'storages/index.html.erb', type: :view do
   before do
     assign(:storages, [
-      storage(brand: 'Samsung', name: '980 PRO', price_cents: 15000),
-      storage(brand: 'WD', name: 'Black SN850', price_cents: 13000)
-    ])
+             storage(brand: 'Samsung', name: '980 PRO', price_cents: 15_000),
+             storage(brand: 'WD', name: 'Black SN850', price_cents: 13_000)
+           ])
   end
 
   it 'renders the storage catalog title' do

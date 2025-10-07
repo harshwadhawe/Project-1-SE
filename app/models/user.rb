@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   # Authentication
   has_secure_password
-  
+
   before_validation :normalize_email
   before_create :log_user_creation
   after_create :log_user_created
   before_destroy :log_user_destruction
   after_validation :log_validation_results
-  
+
   validates :name, presence: true
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false },
@@ -15,12 +17,12 @@ class User < ApplicationRecord
   validates :password, length: { minimum: 6 }, if: -> { new_record? || !password.nil? }
 
   has_many :builds, dependent: :nullify
-  
+
   # JWT token methods
   def self.jwt_secret
     Rails.application.secret_key_base
   end
-  
+
   def generate_jwt_token
     payload = {
       user_id: id,
@@ -28,7 +30,7 @@ class User < ApplicationRecord
     }
     JWT.encode(payload, self.class.jwt_secret, 'HS256')
   end
-  
+
   def self.decode_jwt_token(token)
     decoded = JWT.decode(token, jwt_secret, true, { algorithm: 'HS256' })
     user_id = decoded[0]['user_id']

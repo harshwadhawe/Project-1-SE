@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # User Authentication step definitions
 
 Given(/^I am on the (?:registration|signup) page$/) do
@@ -19,7 +21,7 @@ end
 
 When(/^I register with valid credentials:$/) do |table|
   credentials = table.hashes.first
-  
+
   fill_in 'Name', with: credentials['name']
   fill_in 'Email', with: credentials['email']
   fill_in 'Password', with: credentials['password']
@@ -29,7 +31,7 @@ end
 
 When(/^I register with invalid email "([^"]*)":$/) do |invalid_email, table|
   credentials = table.hashes.first
-  
+
   fill_in 'Name', with: credentials['name']
   fill_in 'Email', with: invalid_email
   fill_in 'Password', with: credentials['password']
@@ -39,7 +41,7 @@ end
 
 When(/^I register with weak password "([^"]*)":$/) do |weak_password, table|
   credentials = table.hashes.first
-  
+
   fill_in 'Name', with: credentials['name']
   fill_in 'Email', with: credentials['email']
   fill_in 'Password', with: weak_password
@@ -49,7 +51,7 @@ end
 
 When(/^I register with email "([^"]*)":$/) do |email, table|
   credentials = table.hashes.first
-  
+
   fill_in 'Name', with: credentials['name']
   fill_in 'Email', with: email
   fill_in 'Password', with: credentials['password']
@@ -108,10 +110,12 @@ end
 
 Then(/^the account should not be created$/) do
   # Check that the last attempted email wasn't actually created
-  last_email = page.find_field('Email').value rescue nil
-  if last_email
-    expect(User.find_by(email: last_email)).to be_nil
+  last_email = begin
+    page.find_field('Email').value
+  rescue StandardError
+    nil
   end
+  expect(User.find_by(email: last_email)).to be_nil if last_email
 end
 
 Then(/^I should remain on the login page$/) do

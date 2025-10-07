@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Error Handling step definitions
 
 Given(/^I am logged in as a user$/) do
@@ -14,7 +16,7 @@ Given(/^I am viewing the parts catalog$/) do
 end
 
 Given(/^I have a build with a "([^"]*)" processor$/) do |processor_name|
-  step "I have a build named \"Test Build\""
+  step 'I have a build named "Test Build"'
   cpu = find_or_create_part(processor_name)
   BuildItem.create!(build: @build, part: cpu, quantity: 1)
 end
@@ -27,10 +29,10 @@ end
 
 Given(/^I have a build with the maximum allowed components$/) do
   step 'I have a build named "Full Build"'
-  
+
   # Add maximum components (assuming 10 is the limit)
   10.times do |i|
-    part = find_or_create_part("Component #{i+1}")
+    part = find_or_create_part("Component #{i + 1}")
     BuildItem.create!(build: @build, part: part, quantity: 1)
   end
 end
@@ -54,7 +56,7 @@ end
 
 When(/^a server error occurs during build creation$/) do
   # Mock a server error by submitting invalid data that causes an exception
-  allow_any_instance_of(BuildsController).to receive(:create).and_raise(StandardError, "Database connection failed")
+  allow_any_instance_of(BuildsController).to receive(:create).and_raise(StandardError, 'Database connection failed')
   fill_in 'Name', with: 'Server Error Test'
   click_button 'Create Build'
 end
@@ -80,7 +82,7 @@ end
 
 When(/^I try to add another "([^"]*)" processor$/) do |processor_name|
   visit "/builds/#{@build.id}"
-  
+
   # Try to add the same processor again
   cpu = Part.find_by(name: processor_name)
   within("#part_#{cpu.id}") do
@@ -92,7 +94,7 @@ end
 When(/^my session expires$/) do
   # Clear session cookies to simulate expiration
   page.driver.browser.manage.delete_all_cookies
-  
+
   # Try to perform an action
   fill_in 'Name', with: 'Session Test'
   click_button 'Save'
@@ -100,7 +102,7 @@ end
 
 When(/^I try to add one more component$/) do
   visit "/builds/#{@build.id}"
-  
+
   extra_part = find_or_create_part('Extra Component')
   within("#part_#{extra_part.id}") do
     fill_in 'Quantity', with: '1'
@@ -128,15 +130,15 @@ When(/^I try to add incompatible components$/) do
   intel_motherboard = Motherboard.create!(
     name: 'Intel Z790',
     brand: 'Intel',
-    price_cents: 20000,
+    price_cents: 20_000,
     wattage: 15,
     motherboard_socket: 'LGA1700',
     motherboard_chipset: 'Z790',
     model_number: 'Z790'
   )
-  
+
   visit "/builds/#{@build.id}"
-  
+
   # Add both incompatible components
   [amd_cpu, intel_motherboard].each do |part|
     within("#part_#{part.id}") do
@@ -181,7 +183,7 @@ end
 
 Then(/^I should be able to retry when connection is restored$/) do
   # Reset network simulation
-  page.execute_script("delete window.fetch")
+  page.execute_script('delete window.fetch')
   expect(page).to have_button('Try Again')
 end
 

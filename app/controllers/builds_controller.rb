@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 class BuildsController < ApplicationController
   # Public pages
-  skip_before_action :authenticate_user!, only: [:index, :show, :new, :create, :shared]
+  skip_before_action :authenticate_user!, only: %i[index show new create shared]
 
   before_action :log_build_action
-  before_action :set_build, only: [:show, :edit, :update, :destroy]
-  before_action :authorize_owner!, only: [:edit, :update, :destroy]
-  before_action :load_categories, only: [:new, :create, :edit, :update]
+  before_action :set_build, only: %i[show edit update destroy]
+  before_action :authorize_owner!, only: %i[edit update destroy]
+  before_action :load_categories, only: %i[new create edit update]
 
   def index
     Rails.logger.info "[BUILDS INDEX] Loading builds list for user: #{current_user&.id || 'guest'}"
@@ -15,19 +17,19 @@ class BuildsController < ApplicationController
 
   def show
     Rails.logger.info "[BUILD SHOW] Loading build ID: #{params[:id]} for user: #{current_user&.id || 'guest'}"
-    @build_id = @build["id"]
+    @build_id = @build['id']
     @sample_parts = {}
     @categories = {
-      "Cpu" => Cpu, "Gpu" => Gpu, "Motherboard" => Motherboard, "Memory" => Memory,
-      "Storage" => Storage, "Cooler" => Cooler, "PcCase" => PcCase, "Psu" => Psu
+      'Cpu' => Cpu, 'Gpu' => Gpu, 'Motherboard' => Motherboard, 'Memory' => Memory,
+      'Storage' => Storage, 'Cooler' => Cooler, 'PcCase' => PcCase, 'Psu' => Psu
     }
     @build.parts.each do |part|
       @sample_parts[part.class.name] = part
-      Rails.logger.info "#{part.name}"
-      Rails.logger.info "#{part.brand}"
-      Rails.logger.info "#{part.class.name}"
+      Rails.logger.info part.name.to_s
+      Rails.logger.info part.brand.to_s
+      Rails.logger.info part.class.name.to_s
     end
-    Rails.logger.info "#{@sample_parts}"
+    Rails.logger.info @sample_parts.to_s
     Rails.logger.info "[BUILD SHOW] Successfully loaded build '#{@build.name}' with #{@build.parts.count} parts"
   end
 
@@ -49,7 +51,9 @@ class BuildsController < ApplicationController
     else
       respond_to do |format|
         format.html { render :new, status: :unprocessable_content }
-        format.json { render json: { success: false, errors: @build.errors.full_messages }, status: :unprocessable_content }
+        format.json do
+          render json: { success: false, errors: @build.errors.full_messages }, status: :unprocessable_content
+        end
       end
     end
   end
@@ -59,14 +63,13 @@ class BuildsController < ApplicationController
     render :new
   end
 
-
   def update
     if @build.update(build_params)
       Rails.logger.info "[BUILD UPDATE] Updated build ID: #{@build.id} by user: #{current_user&.id}"
       redirect_to @build, notice: 'Build was successfully updated.'
     else
-      Rails.logger.warn "[BUILD UPDATE] Failed update for build ID: #{@build.id} - #{ @build.errors.full_messages.join(', ') }"
-      render :new, status: :unprocessable_content   # ← was :edit
+      Rails.logger.warn "[BUILD UPDATE] Failed update for build ID: #{@build.id} - #{@build.errors.full_messages.join(', ')}"
+      render :new, status: :unprocessable_content # ← was :edit
     end
   end
 
@@ -81,13 +84,11 @@ class BuildsController < ApplicationController
     end
   end
 
-
   # ---------- /NEW STUFF ----------
-
 
   def share
     @build = Build.find_by(id: params[:id]) ||
-            Build.create!(name: params.dig(:build, :name).presence || 'Untitled Build', user: current_user)
+             Build.create!(name: params.dig(:build, :name).presence || 'Untitled Build', user: current_user)
 
     # Normalize incoming components
     raw = params[:components_data]
@@ -108,22 +109,26 @@ class BuildsController < ApplicationController
     build_data = @build.create_shareable_data!(components_data) # keep your existing aggregator if you have it
 
     payload = {
-      "name"           => build_data["name"] || @build.name || "Untitled Build",
-      "components"     => build_data["components"] || components_data,
-      "parts_count"    => build_data["parts_count"] || (components_data&.size || 0),
-      "total_cost"     => build_data["total_cost"] || 0,       # cents
-      "total_wattage"  => build_data["total_wattage"] || 0,
-      "created_at"     => (@build.created_at || Time.current).iso8601,
-      "shared_at"      => Time.current.iso8601,
-      "user_name"      => (current_user&.respond_to?(:display_name) && current_user.display_name.presence) ||
-                          current_user&.email ||
-                          "Guest"
+      'name' => build_data['name'] || @build.name || 'Untitled Build',
+      'components' => build_data['components'] || components_data,
+      'parts_count' => build_data['parts_count'] || (components_data&.size || 0),
+      'total_cost' => build_data['total_cost'] || 0, # cents
+      'total_wattage' => build_data['total_wattage'] || 0,
+      'created_at' => (@build.created_at || Time.current).iso8601,
+      'shared_at' => Time.current.iso8601,
+      'user_name' => (current_user.respond_to?(:display_name) && current_user.display_name.presence) ||
+                     current_user&.email ||
+                     'Guest'
     }
 
     token = Rails.application.message_verifier(:build_share).generate(payload)
 
     # Optional: persist for analytics/back-compat; not required for rendering
-    @build.update_columns(share_token: token, shared_data: payload.to_json, shared_at: Time.current) rescue nil
+    begin
+      @build.update_columns(share_token: token, shared_data: payload.to_json, shared_at: Time.current)
+    rescue StandardError
+      nil
+    end
 
     share_url = url_for(controller: :builds, action: :shared, id: @build.id, token: token, only_path: false)
 
@@ -131,12 +136,10 @@ class BuildsController < ApplicationController
   rescue JSON::ParserError => e
     Rails.logger.error "[SHARE] Invalid JSON in components_data: #{e.message}"
     render json: { error: 'Invalid component data' }, status: :bad_request
-  rescue => e
+  rescue StandardError => e
     Rails.logger.error "[SHARE] Failed to create share link: #{e.message}"
     render json: { error: 'Failed to create share link' }, status: :internal_server_error
   end
-
-
 
   def shared
     @shared_data = {}
@@ -145,7 +148,7 @@ class BuildsController < ApplicationController
       begin
         @shared_data = Rails.application.message_verifier(:build_share).verify(params[:token]) || {}
       rescue ActiveSupport::MessageVerifier::InvalidSignature
-        Rails.logger.warn "[SHARED] Invalid token"
+        Rails.logger.warn '[SHARED] Invalid token'
       end
     end
 
@@ -153,16 +156,18 @@ class BuildsController < ApplicationController
     if @shared_data.blank?
       @build = Build.find_by(id: params[:id])
       if @build&.shared_data.present?
-        @shared_data = JSON.parse(@build.shared_data) rescue {}
+        @shared_data = begin
+          JSON.parse(@build.shared_data)
+        rescue StandardError
+          {}
+        end
       end
     end
 
-    if @shared_data.blank?
-      return render file: Rails.root.join('public/404.html'), status: :not_found, layout: true
-    end
+    return render file: Rails.root.join('public/404.html'), status: :not_found, layout: true if @shared_data.blank?
 
     # If you also want @build for counts, this is safe (nil if DB dropped)
-    @build ||= Build.find_by(id: params[:id])
+    @shared ||= Build.find_by(id: params[:id])
   end
 
   private
@@ -172,12 +177,12 @@ class BuildsController < ApplicationController
   end
 
   def authorize_owner!
-    unless current_user && (@build.user_id == current_user.id || @build.user_id.nil?)
-      Rails.logger.warn "[AUTHZ] User #{current_user&.id || 'guest'} not authorized for build #{@build&.id}"
-      respond_to do |format|
-        format.html { redirect_to(@build ? build_path(@build) : builds_path, alert: 'Unauthorized') }
-        format.json { render json: { error: 'Unauthorized' }, status: :unauthorized }
-      end
+    return if current_user && (@build.user_id == current_user.id || @build.user_id.nil?)
+
+    Rails.logger.warn "[AUTHZ] User #{current_user&.id || 'guest'} not authorized for build #{@build&.id}"
+    respond_to do |format|
+      format.html { redirect_to(@build ? build_path(@build) : builds_path, alert: 'Unauthorized') }
+      format.json { render json: { error: 'Unauthorized' }, status: :unauthorized }
     end
   end
 
@@ -192,10 +197,10 @@ class BuildsController < ApplicationController
   end
 
   def load_categories
-    Rails.logger.debug "[LOAD CATEGORIES] Loading part categories and parts"
+    Rails.logger.debug '[LOAD CATEGORIES] Loading part categories and parts'
     @categories = {
-      "CPU" => Cpu, "GPU" => Gpu, "Motherboard" => Motherboard, "Memory" => Memory,
-      "Storage" => Storage, "Cooler" => Cooler, "PcCase" => PcCase, "PSU" => Psu
+      'CPU' => Cpu, 'GPU' => Gpu, 'Motherboard' => Motherboard, 'Memory' => Memory,
+      'Storage' => Storage, 'Cooler' => Cooler, 'PcCase' => PcCase, 'PSU' => Psu
     }
     @parts_by_category = @categories.transform_values { |k| k.order(:brand, :name).limit(50) }
     total_parts = @parts_by_category.values.flatten.count

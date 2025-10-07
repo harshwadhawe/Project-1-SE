@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddCoolerFieldsToParts < ActiveRecord::Migration[8.0]
   def change
     add_column :parts, :cooler_type, :string

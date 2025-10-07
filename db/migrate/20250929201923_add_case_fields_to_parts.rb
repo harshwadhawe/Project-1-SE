@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddCaseFieldsToParts < ActiveRecord::Migration[8.0]
   def change
     add_column :parts, :case_type, :string

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Parts Browsing step definitions
 
 When(/^I visit the parts catalog$/) do
@@ -36,8 +38,8 @@ end
 
 When(/^I add "([^"]*)" to "([^"]*)"$/) do |part_name, build_name|
   part = Part.find_by(name: part_name)
-  build = Build.find_by(name: build_name)
-  
+  Build.find_by(name: build_name)
+
   within("#part_#{part.id}") do
     select build_name, from: 'Build'
     click_button 'Add to Build'
@@ -46,7 +48,7 @@ end
 
 When(/^I try to add "([^"]*)" without selecting a build$/) do |part_name|
   part = Part.find_by(name: part_name)
-  
+
   within("#part_#{part.id}") do
     click_button 'Add to Build'
   end
@@ -111,7 +113,7 @@ Then(/^"([^"]*)" should appear before "([^"]*)"$/) do |first_part, second_part|
   page_text = page.text
   first_index = page_text.index(first_part)
   second_index = page_text.index(second_part)
-  
+
   expect(first_index).to be < second_index
 end
 
@@ -129,7 +131,7 @@ end
 
 Then(/^the part should be added to my build$/) do
   # Check that a build item was created
-  expect(@build.reload.build_items.count).to be > 0
+  expect(@build.reload.build_items.count).to be.positive?
 end
 
 Then(/^I should see a success message$/) do

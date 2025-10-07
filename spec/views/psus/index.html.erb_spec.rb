@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "psus/index.html.erb", type: :view do
+RSpec.describe 'psus/index.html.erb', type: :view do
   before do
     assign(:psus, [
-      psu(brand: 'Corsair', name: 'RM850x', price_cents: 14000),
-      psu(brand: 'EVGA', name: 'SuperNOVA 750 G3', price_cents: 12000)
-    ])
+             psu(brand: 'Corsair', name: 'RM850x', price_cents: 14_000),
+             psu(brand: 'EVGA', name: 'SuperNOVA 750 G3', price_cents: 12_000)
+           ])
   end
 
   it 'renders the PSU catalog title' do

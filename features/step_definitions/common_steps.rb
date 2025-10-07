@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Common steps shared across multiple features
 
 # Authentication steps
@@ -17,7 +19,7 @@ Given(/^I am logged in as "([^"]*)"$/) do |email|
     password: 'password123',
     password_confirmation: 'password123'
   )
-  
+
   # For API-based authentication with JWT
   if page.driver.class.name.include?('Selenium')
     visit '/login'
@@ -36,9 +38,7 @@ end
 
 Given(/^I am not logged in$/) do
   # Clear any existing session
-  if page.respond_to?(:reset_session!)
-    page.reset_session!
-  end
+  page.reset_session! if page.respond_to?(:reset_session!)
 end
 
 # Build steps
@@ -49,7 +49,7 @@ Given(/^I have a build named "([^"]*)"$/) do |build_name|
     password: 'password123',
     password_confirmation: 'password123'
   )
-  
+
   @build = Build.create!(
     name: build_name,
     user: @user
@@ -58,7 +58,7 @@ end
 
 Given(/^I have a completed build named "([^"]*)" with:$/) do |build_name, table|
   step "I have a build named \"#{build_name}\""
-  
+
   table.hashes.each do |row|
     part = find_or_create_part(row['component'])
     BuildItem.create!(
@@ -71,14 +71,14 @@ end
 
 Given(/^I have a build with (?:a )?(?:"([^"]*)" )?components?$/) do |component_name|
   step 'I have a build named "Test Build"'
-  
+
   if component_name
     part = find_or_create_part(component_name)
     BuildItem.create!(build: @build, part: part, quantity: 1)
   else
     # Create a build with some default components
     cpu = find_or_create_part('Ryzen 7 7800X3D')
-    gpu = find_or_create_part('RTX 4070') 
+    gpu = find_or_create_part('RTX 4070')
     BuildItem.create!(build: @build, part: cpu, quantity: 1)
     BuildItem.create!(build: @build, part: gpu, quantity: 1)
   end
@@ -96,14 +96,14 @@ def find_or_create_part(name)
   # Try to find existing part first
   part = Part.find_by(name: name)
   return part if part
-  
+
   # Create based on name patterns
   case name.downcase
   when /ryzen|amd/
     Cpu.create!(
       name: name,
       brand: 'AMD',
-      price_cents: 39900,
+      price_cents: 39_900,
       wattage: 120,
       cpu_core_clock: 4.2,
       cpu_boost_clock: 5.0,
@@ -115,7 +115,7 @@ def find_or_create_part(name)
     Cpu.create!(
       name: name,
       brand: 'Intel',
-      price_cents: 41900,
+      price_cents: 41_900,
       wattage: 125,
       cpu_core_clock: 3.4,
       cpu_boost_clock: 5.4,
@@ -127,7 +127,7 @@ def find_or_create_part(name)
     Gpu.create!(
       name: name,
       brand: 'NVIDIA',
-      price_cents: 59900,
+      price_cents: 59_900,
       wattage: 200,
       gpu_memory: 12,
       gpu_memory_type: 'GDDR6X',
@@ -139,7 +139,7 @@ def find_or_create_part(name)
     Memory.create!(
       name: name,
       brand: 'Corsair',
-      price_cents: 12900,
+      price_cents: 12_900,
       wattage: 10,
       memory_capacity: 16,
       memory_speed: 3600,
@@ -162,7 +162,7 @@ def find_or_create_part(name)
     Cpu.create!(
       name: name,
       brand: 'Generic',
-      price_cents: 10000,
+      price_cents: 10_000,
       wattage: 50,
       cpu_core_clock: 3.0,
       cpu_boost_clock: 4.0,
@@ -175,14 +175,14 @@ end
 
 def create_part_from_hash(hash)
   type_class = hash['type'].constantize
-  
+
   attributes = {
     name: hash['name'],
     brand: hash['brand'],
     price_cents: (hash['price'].to_f * 100).to_i,
     wattage: hash['wattage'].to_i
   }
-  
+
   # Add type-specific attributes
   case hash['type']
   when 'Cpu'
@@ -216,6 +216,6 @@ def create_part_from_hash(hash)
       model_number: hash['name'].gsub(/[^0-9A-Z]/i, '')
     )
   end
-  
+
   type_class.create!(attributes)
 end

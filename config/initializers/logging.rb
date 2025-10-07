@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Enhanced logging configuration for PC Builder application
 # This file sets up additional logging capabilities and custom loggers
 
@@ -5,8 +7,8 @@ Rails.application.configure do
   # Custom log formatters
   class DetailedFormatter < Logger::Formatter
     def call(severity, time, progname, msg)
-      formatted_time = time.strftime("%Y-%m-%d %H:%M:%S.%3N")
-      thread_id = Thread.current.object_id.to_s(36)[-4..-1]
+      formatted_time = time.strftime('%Y-%m-%d %H:%M:%S.%3N')
+      thread_id = Thread.current.object_id.to_s(36)[-4..]
       "[#{formatted_time}] #{severity.ljust(5)} [#{thread_id}] #{progname}: #{msg}\n"
     end
   end
@@ -42,29 +44,27 @@ Rails.application.configure do
   end
 
   # Include custom logging in ApplicationRecord and ApplicationController
-  ActiveRecord::Base.send(:include, CustomLogging) if defined?(ActiveRecord::Base)
-  if defined?(ApplicationController)
-    ApplicationController.send(:include, CustomLogging)
-  end
+  ActiveRecord::Base.include CustomLogging if defined?(ActiveRecord::Base)
+  ApplicationController.include CustomLogging if defined?(ApplicationController)
 
   # Configure different log levels based on environment
   case Rails.env
   when 'development'
     Rails.logger.level = Logger::DEBUG
-    
+
   when 'test'
     Rails.logger.level = Logger::WARN
-    
+
   when 'production'
     Rails.logger.level = Logger::INFO
-    
+
     # Log important application metrics
     Rails.application.config.after_initialize do
-      Rails.logger.info "[APPLICATION] PC Builder application started"
+      Rails.logger.info '[APPLICATION] PC Builder application started'
       Rails.logger.info "[APPLICATION] Rails version: #{Rails.version}"
       Rails.logger.info "[APPLICATION] Ruby version: #{RUBY_VERSION}"
       Rails.logger.info "[APPLICATION] Environment: #{Rails.env}"
-      
+
       # Log database configuration (safely)
       if defined?(ActiveRecord::Base)
         db_config = ActiveRecord::Base.connection_db_config
@@ -80,7 +80,7 @@ Rails.application.configure do
       Rails.logger.error "[ERROR_TRACKER] #{exception.class}: #{exception.message}"
       Rails.logger.error "[ERROR_CONTEXT] #{context.inspect}" if context.any?
       Rails.logger.error "[ERROR_BACKTRACE] #{exception.backtrace&.first(10)&.join("\n")}"
-      
+
       # Here you could integrate with external services like Sentry, Bugsnag, etc.
       # Example: Sentry.capture_exception(exception, extra: context)
     end
@@ -91,4 +91,4 @@ Rails.application.configure do
 end
 
 # Log application startup
-Rails.logger.info "[INITIALIZER] Enhanced logging configuration loaded" if Rails.logger
+Rails.logger&.info '[INITIALIZER] Enhanced logging configuration loaded'

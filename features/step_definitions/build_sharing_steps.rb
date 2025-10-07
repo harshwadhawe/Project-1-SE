@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Build Sharing step definitions
 
 When(/^I view my "([^"]*)" build$/) do |build_name|
@@ -18,16 +20,16 @@ end
 When(/^I am viewing their shared build$/) do
   other_user = User.create!(
     name: 'Other Builder',
-    email: 'other@example.com', 
+    email: 'other@example.com',
     password: 'password123',
     password_confirmation: 'password123'
   )
-  
+
   @shared_build = Build.create!(
     name: 'Shared Gaming Build',
     user: other_user
   )
-  
+
   @shared_build.generate_share_token!
   visit "/shared_builds/#{@shared_build.share_token}"
 end
@@ -47,7 +49,7 @@ When(/^I make the build private$/) do
 end
 
 When(/^someone tries to visit the old shared link$/) do
-  visit "/shared_builds/expired_token"
+  visit '/shared_builds/expired_token'
 end
 
 When(/^I visit the public builds gallery$/) do
@@ -65,7 +67,7 @@ When(/^I try to share the build$/) do
 end
 
 Then(/^a shareable link should be generated$/) do
-  expect(page).to have_css('input[readonly]', text: /http.*\/shared_builds\//)
+  expect(page).to have_css('input[readonly]', text: %r{http.*/shared_builds/})
 end
 
 Then(/^I should see "([^"]*)"$/) do |message|
@@ -112,7 +114,7 @@ end
 
 Then(/^all components should be copied over$/) do
   copied_build = @user.builds.order(:created_at).last
-  expect(copied_build.build_items.count).to be > 0
+  expect(copied_build.build_items.count).to be.positive?
 end
 
 Then(/^I should be able to modify the copied build$/) do
@@ -139,8 +141,8 @@ end
 
 Then(/^I should see builds with "([^"]*)" in the name or description$/) do |search_term|
   build_items = page.all('.shared-build-item')
-  expect(build_items.count).to be > 0
-  
+  expect(build_items.count).to be.positive?
+
   build_items.each do |item|
     expect(item.text.downcase).to include(search_term.downcase)
   end
@@ -165,10 +167,10 @@ Given(/^another user has a private build "([^"]*)"$/) do |build_name|
   other_user = User.create!(
     name: 'Private User',
     email: 'private@example.com',
-    password: 'password123', 
+    password: 'password123',
     password_confirmation: 'password123'
   )
-  
+
   Build.create!(
     name: build_name,
     user: other_user
@@ -178,17 +180,17 @@ end
 Given(/^multiple users have shared their builds$/) do
   3.times do |i|
     user = User.create!(
-      name: "User #{i+1}",
-      email: "user#{i+1}@example.com",
+      name: "User #{i + 1}",
+      email: "user#{i + 1}@example.com",
       password: 'password123',
       password_confirmation: 'password123'
     )
-    
+
     build = Build.create!(
-      name: "Gaming Build #{i+1}",
+      name: "Gaming Build #{i + 1}",
       user: user
     )
-    
+
     build.generate_share_token!
   end
 end
@@ -204,19 +206,20 @@ end
 Given('another user has shared a build publicly') do
   # Create another user and their shared build
   @other_user = User.create!(
-    name: "Other Builder",
-    email: "other@example.com", 
-    password: "password123"
+    name: 'Other Builder',
+    email: 'other@example.com',
+    password: 'password123'
   )
-  
+
   @shared_build = Build.create!(
-    name: "Shared Gaming Build",
+    name: 'Shared Gaming Build',
     user: @other_user,
     shared: true
   )
-  
+
   # Add some components to make it realistic
-  cpu = Part.find_by(name: "Ryzen 7 7800X3D") || Part.create!(name: "Ryzen 7 7800X3D", type: "Cpu", brand: "AMD", price: 399, wattage: 120)
+  cpu = Part.find_by(name: 'Ryzen 7 7800X3D') || Part.create!(name: 'Ryzen 7 7800X3D', type: 'Cpu', brand: 'AMD',
+                                                              price: 399, wattage: 120)
   BuildItem.create!(build: @shared_build, part: cpu, quantity: 1)
 end
 

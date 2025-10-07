@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "cpus/index.html.erb", type: :view do
+RSpec.describe 'cpus/index.html.erb', type: :view do
   before do
     assign(:cpus, [
-      cpu(brand: 'AMD', name: 'Ryzen 7 5800X', price_cents: 35000),
-      cpu(brand: 'Intel', name: 'i7-11700K', price_cents: 32000)
-    ])
+             cpu(brand: 'AMD', name: 'Ryzen 7 5800X', price_cents: 35_000),
+             cpu(brand: 'Intel', name: 'i7-11700K', price_cents: 32_000)
+           ])
   end
 
   it 'renders the CPUs catalog title' do

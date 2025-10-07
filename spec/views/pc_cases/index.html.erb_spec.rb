@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "pc_cases/index.html.erb", type: :view do
+RSpec.describe 'pc_cases/index.html.erb', type: :view do
   before do
     assign(:pc_cases, [
-      pc_case(brand: 'Fractal Design', name: 'Define 7', price_cents: 15000),
-      pc_case(brand: 'NZXT', name: 'H510', price_cents: 8000)
-    ])
+             pc_case(brand: 'Fractal Design', name: 'Define 7', price_cents: 15_000),
+             pc_case(brand: 'NZXT', name: 'H510', price_cents: 8000)
+           ])
   end
 
   it 'renders the PC case catalog title' do

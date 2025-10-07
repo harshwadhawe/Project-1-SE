@@ -1,22 +1,24 @@
-require "test_helper"
+# frozen_string_literal: true
+
+require 'test_helper'
 
 class BuildsControllerTest < ActionDispatch::IntegrationTest
-  test "should get index" do
+  test 'should get index' do
     get builds_index_url
     assert_response :success
   end
 
-  test "should get show" do
+  test 'should get show' do
     get builds_show_url
     assert_response :success
   end
 
-  test "should get new" do
+  test 'should get new' do
     get builds_new_url
     assert_response :success
   end
 
-  test "should get create" do
+  test 'should get create' do
     get builds_create_url
     assert_response :success
   end

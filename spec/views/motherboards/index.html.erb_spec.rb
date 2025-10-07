@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "motherboards/index.html.erb", type: :view do
+RSpec.describe 'motherboards/index.html.erb', type: :view do
   before do
     assign(:motherboards, [
-      motherboard(brand: 'ASUS', name: 'ROG Strix B550-F', price_cents: 18000),
-      motherboard(brand: 'MSI', name: 'B450 Tomahawk', price_cents: 12000)
-    ])
+             motherboard(brand: 'ASUS', name: 'ROG Strix B550-F', price_cents: 18_000),
+             motherboard(brand: 'MSI', name: 'B450 Tomahawk', price_cents: 12_000)
+           ])
   end
 
   it 'renders the motherboard catalog title' do

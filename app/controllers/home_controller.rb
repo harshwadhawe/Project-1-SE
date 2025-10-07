@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class HomeController < ApplicationController
   # Allow home page access without authentication
   skip_before_action :authenticate_user!, only: [:index]
@@ -5,18 +7,18 @@ class HomeController < ApplicationController
 
   def index
     Rails.logger.info "[HOME INDEX] Loading homepage for user: #{current_user&.id || 'guest'}"
-    
+
     @categories = {
-      "Cpu"        => Cpu,
-      "GPU"        => Gpu,
-      "Motherboard"=> Motherboard,
-      "Memory"     => Memory,
-      "Storage"    => Storage,
-      "Cooler"     => Cooler,
-      "PcCase"       => PcCase,
-      "PSU"        => Psu
+      'Cpu' => Cpu,
+      'GPU' => Gpu,
+      'Motherboard' => Motherboard,
+      'Memory' => Memory,
+      'Storage' => Storage,
+      'Cooler' => Cooler,
+      'PcCase' => PcCase,
+      'PSU' => Psu
     }
-    
+
     Rails.logger.info "[HOME INDEX] Loading sample parts from #{@categories.count} categories"
 
     # load a few parts from each category
@@ -28,26 +30,25 @@ class HomeController < ApplicationController
       total_sample_parts += count
       Rails.logger.debug "[HOME INDEX] Loaded #{count} sample #{name} parts"
     end
-    
+
     Rails.logger.info "[HOME INDEX] Loaded #{total_sample_parts} total sample parts"
 
     @recent_builds = Build.order(created_at: :desc).limit(3)
     Rails.logger.info "[HOME INDEX] Loaded #{@recent_builds.count} recent builds"
-    
+
     # Log recent build details
     @recent_builds.each do |build|
       Rails.logger.debug "[HOME INDEX] Recent build: '#{build.name}' by user #{build.user_id} with #{build.parts.count} parts"
     end
 
-        # Current user's builds (only if logged in)
-    if current_user
-      @user_builds = current_user.builds
-                      .includes(:build_items, :parts)
-                      .order(updated_at: :desc)
-                      .limit(4)
-      Rails.logger.info "[HOME INDEX] Loaded #{@user_builds.count} builds for user #{current_user.id}"
-    end
+    # Current user's builds (only if logged in)
+    return unless current_user
 
+    @user_builds = current_user.builds
+                               .includes(:build_items, :parts)
+                               .order(updated_at: :desc)
+                               .limit(4)
+    Rails.logger.info "[HOME INDEX] Loaded #{@user_builds.count} builds for user #{current_user.id}"
   end
 
   private

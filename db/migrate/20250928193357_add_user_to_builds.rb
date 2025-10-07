@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddUserToBuilds < ActiveRecord::Migration[7.1]
   def change
     if !column_exists?(:builds, :user_id)

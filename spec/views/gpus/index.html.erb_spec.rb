@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "gpus/index.html.erb", type: :view do
+RSpec.describe 'gpus/index.html.erb', type: :view do
   before do
     assign(:gpus, [
-      gpu(brand: 'NVIDIA', name: 'RTX 4080', price_cents: 120000),
-      gpu(brand: 'AMD', name: 'RX 7800 XT', price_cents: 50000)
-    ])
+             gpu(brand: 'NVIDIA', name: 'RTX 4080', price_cents: 120_000),
+             gpu(brand: 'AMD', name: 'RX 7800 XT', price_cents: 50_000)
+           ])
   end
 
   it 'renders the GPUs catalog title' do

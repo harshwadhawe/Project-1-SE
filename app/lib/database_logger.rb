@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Database Query Logger
 # Monitors and logs database performance and query patterns
 
@@ -15,30 +17,28 @@ module DatabaseLogger
 
   module ClassMethods
     def log_query(query_type, conditions = {})
-      Rails.logger.debug "[#{self.name.upcase}_QUERY] #{query_type}: #{conditions.inspect}"
+      Rails.logger.debug "[#{name.upcase}_QUERY] #{query_type}: #{conditions.inspect}"
     end
 
-    def with_query_logging(description, &block)
+    def with_query_logging(description)
       start_time = Time.current
-      Rails.logger.debug "[#{self.name.upcase}_QUERY] Starting: #{description}"
-      
+      Rails.logger.debug "[#{name.upcase}_QUERY] Starting: #{description}"
+
       result = yield
-      
+
       duration = (Time.current - start_time) * 1000
       count = if result.respond_to?(:count) && !result.is_a?(String)
-                result.count 
+                result.count
               elsif result.is_a?(Array)
                 result.size
               else
                 1
               end
-      
-      Rails.logger.debug "[#{self.name.upcase}_QUERY] Completed: #{description} - #{count} records in #{duration.round(2)}ms"
-      
-      if duration > 100
-        Rails.logger.warn "[#{self.name.upcase}_SLOW_QUERY] #{description} took #{duration.round(2)}ms"
-      end
-      
+
+      Rails.logger.debug "[#{name.upcase}_QUERY] Completed: #{description} - #{count} records in #{duration.round(2)}ms"
+
+      Rails.logger.warn "[#{name.upcase}_SLOW_QUERY] #{description} took #{duration.round(2)}ms" if duration > 100
+
       result
     end
   end
@@ -82,13 +82,21 @@ module DatabaseLogger
     when 'Build'
       "#{name} by User:#{user_id}"
     when 'Part', 'Cpu', 'Gpu', 'Motherboard', 'Memory', 'Storage', 'Cooler', 'PcCase', 'Psu'
-      "#{brand} #{name} - $#{price_in_dollars rescue 'N/A'}"
+      "#{brand} #{name} - $#{begin
+        price_in_dollars
+      rescue StandardError
+        'N/A'
+      end}"
     when 'BuildItem'
       "#{part&.name} x#{quantity} in Build:#{build_id}"
     else
-      "ID:#{id rescue 'new'}"
+      "ID:#{begin
+        id
+      rescue StandardError
+        'new'
+      end}"
     end
   end
 end
 
-Rails.logger.info "[INITIALIZER] Database logging module loaded"
+Rails.logger.info '[INITIALIZER] Database logging module loaded'

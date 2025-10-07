@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe ApplicationJob, type: :job do
@@ -46,9 +48,9 @@ RSpec.describe ApplicationJob, type: :job do
     end
 
     it 'can enqueue jobs for later execution' do
-      expect {
+      expect do
         test_job_class.perform_later('test message')
-      }.to have_enqueued_job(test_job_class).with('test message')
+      end.to have_enqueued_job(test_job_class).with('test message')
     end
   end
 
@@ -120,7 +122,7 @@ RSpec.describe ApplicationJob, type: :job do
 
       job_data = { 'test' => 'value' }
       job = simple_job.new(job_data)
-      
+
       # Test that job can be serialized
       expect(job.serialize).to include('job_class' => simple_job.name)
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddGpuFieldsToParts < ActiveRecord::Migration[8.0]
   def change
     add_column :parts, :gpu_memory, :integer

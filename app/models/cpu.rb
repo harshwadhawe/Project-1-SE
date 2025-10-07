@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Cpu < Part
   # light validations – only when present so seeds/forms can be partial
   validates :cpu_cores, :cpu_threads, numericality: { greater_than: 0 }, allow_nil: true
@@ -19,7 +21,9 @@ class Cpu < Part
       Rails.logger.warn "[CPU VALIDATION] CPU validation failed for #{brand} #{name}: #{errors.full_messages.join(', ')}"
     else
       Rails.logger.debug "[CPU VALIDATION] CPU validation passed for #{brand} #{name}"
-      Rails.logger.debug "[CPU SPECS] #{brand} #{name}: #{cpu_cores}C/#{cpu_threads}T, #{cpu_core_clock}/#{cpu_boost_clock}GHz, #{wattage}W" if cpu_cores && cpu_threads
+      if cpu_cores && cpu_threads
+        Rails.logger.debug "[CPU SPECS] #{brand} #{name}: #{cpu_cores}C/#{cpu_threads}T, #{cpu_core_clock}/#{cpu_boost_clock}GHz, #{wattage}W"
+      end
     end
   end
 end

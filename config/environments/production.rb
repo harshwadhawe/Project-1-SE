@@ -1,4 +1,6 @@
-require "active_support/core_ext/integer/time"
+# frozen_string_literal: true
+
+require 'active_support/core_ext/integer/time'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -16,7 +18,7 @@ Rails.application.configure do
   config.action_controller.perform_caching = true
 
   # Cache assets for far-future expiry since they are all digest stamped.
-  config.public_file_server.headers = { "cache-control" => "public, max-age=#{1.year.to_i}" }
+  config.public_file_server.headers = { 'cache-control' => "public, max-age=#{1.year.to_i}" }
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
@@ -35,15 +37,15 @@ Rails.application.configure do
 
   # Enhanced logging configuration for production
   config.log_tags = [
-    :request_id, 
+    :request_id,
     :remote_ip,
     ->(request) { "User-Agent: #{request.user_agent&.truncate(50)}" },
     ->(request) { "Referer: #{request.referer&.truncate(50)}" if request.referer }
   ].compact
-  
+
   # Structured JSON logging for production
   config.logger = ActiveSupport::TaggedLogging.new(
-    ActiveSupport::Logger.new(STDOUT, formatter: proc do |severity, datetime, progname, msg|
+    ActiveSupport::Logger.new($stdout, formatter: proc do |severity, datetime, _progname, msg|
       {
         timestamp: datetime.utc.iso8601,
         level: severity,
@@ -56,10 +58,10 @@ Rails.application.configure do
   )
 
   # Change to "debug" to log everything (including potentially personally-identifiable information!)
-  config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
+  config.log_level = ENV.fetch('RAILS_LOG_LEVEL', 'info')
 
   # Prevent health checks from clogging up the logs.
-  config.silence_healthcheck_path = "/up"
+  config.silence_healthcheck_path = '/up'
 
   # Don't log any deprecations.
   config.active_support.report_deprecations = false
@@ -76,7 +78,7 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "example.com" }
+  config.action_mailer.default_url_options = { host: 'example.com' }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
   # config.action_mailer.smtp_settings = {
@@ -95,19 +97,19 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Only use :id for inspections in production.
-  config.active_record.attributes_for_inspect = [ :id ]
+  config.active_record.attributes_for_inspect = [:id]
 
   # Enhanced production logging settings
   # Enable query log tags for better debugging
   config.active_record.query_log_tags_enabled = true
   config.active_record.query_log_tags = [
     :application, :controller, :action,
-    current_user_id: ->(context) { context[:current_user_id] }
+    { current_user_id: ->(context) { context[:current_user_id] } }
   ]
-  
+
   # Log rotation to prevent disk space issues
   config.logger.level = Logger.const_get(config.log_level.to_s.upcase)
-  
+
   # Security and monitoring
   config.force_ssl = true
   config.ssl_options = {
